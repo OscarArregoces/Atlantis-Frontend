@@ -1,10 +1,18 @@
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Avatar, Card, IconButton, Tooltip, Typography } from "@material-tailwind/react";
 import { TABLE_ROWS } from "../../../../core/const/TABLE_ROWS";
+import { useState } from "react";
+import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
+import { UsuariosFormDelete } from "./UsuariosFormDelete";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
 
 export const UsuariosTable = () => {
+
+    const [openFormUpdate, setOpenFormUpdate] = useState(false);
+    const [openFormDelete, setOpenFormDelete] = useState(false);
+    const [dataValue, setDataValue] = useState();
+
     return (
         <Card className="h-full w-full max-h-[calc(100vh-221.5px)] rounded-none overflow-scroll">
             <table className="w-full min-w-max table-auto text-left">
@@ -89,12 +97,12 @@ export const UsuariosTable = () => {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip content="Editar usuario">
-                                        <IconButton variant="text">
+                                        <IconButton variant="text" onClick={() => setOpenFormUpdate(!openFormUpdate)}>
                                             <PencilIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip content="Eliminar usuario">
-                                        <IconButton variant="text">
+                                        <IconButton variant="text" onClick={() => setOpenFormDelete(!openFormDelete)}>
                                             <TrashIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -105,6 +113,15 @@ export const UsuariosTable = () => {
                     })}
                 </tbody>
             </table>
+            <UsuariosFormUpdate
+                dataValue={dataValue}
+                openFormUpdate={openFormUpdate}
+                setOpenFormUpdate={setOpenFormUpdate}
+            />
+            <UsuariosFormDelete
+                openFormDelete={openFormDelete}
+                setOpenFormDelete={setOpenFormDelete}
+            />
         </Card>
     );
 }

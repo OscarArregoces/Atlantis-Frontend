@@ -31,7 +31,7 @@ export const PrivateLayout = () => {
   return (
     <>
       <div className="flex">
-        <div className="h-full max-h-screen">
+        <div className="h-full min-h-screen">
           <Sidebar>
             <SidebarItem icon={<HomeIcon className="h-5 w-5" />} text="Inicio" path="dashboard" />
             <SidebarItem icon={<UserIcon className="h-5 w-5" />} text="Usuarios" path="usuarios" />

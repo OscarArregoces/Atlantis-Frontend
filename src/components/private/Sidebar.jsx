@@ -11,8 +11,8 @@ export const Sidebar = ({ children }) => {
     const [expanded, setExpanded] = useState(true)
 
     return (
-        <aside className="min-h-screen">
-            <nav className="h-screen max-h-screen flex flex-col bg-white border-r shadow-sm">
+        <aside className="min-h-screen h-full">
+            <nav className="h-full min-h-screen flex flex-col bg-white border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
                     <img
                         src="https://img.logoipsum.com/243.svg"
@@ -20,7 +20,7 @@ export const Sidebar = ({ children }) => {
                             }`}
                         alt=""
                     />
-                     {/* <h1 className={`text-base font-sans font-semibold overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}>Feliz día</h1> */}
+                    {/* <h1 className={`text-base font-sans font-semibold overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}>Feliz día</h1> */}
                     <button
                         onClick={() => setExpanded((curr) => !curr)}
                         className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
@@ -55,14 +55,14 @@ export const Sidebar = ({ children }) => {
     )
 }
 
-export function SidebarItem({ icon, text, path,  active, alert }) {
+export function SidebarItem({ icon, text, path, active, alert }) {
     const navigate = useNavigate();
 
     const { expanded } = useContext(SidebarContext)
 
     return (
         <li
-        onClick={ () => navigate(path)}
+            onClick={() => navigate(path)}
             className={`
         relative flex items-center py-2 px-3 my-1
         font-medium rounded-md cursor-pointer

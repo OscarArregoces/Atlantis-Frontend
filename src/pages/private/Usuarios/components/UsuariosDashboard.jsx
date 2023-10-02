@@ -7,8 +7,13 @@ import {
     Typography,
     Button,
 } from "@material-tailwind/react";
+import { useState } from "react";
+import { UsuariosFormCreate } from "./UsuariosFormCreate";
 
 export const UsuariosDashboard = () => {
+
+    const [openFormCreate, setOpenFormCreate] = useState(false);
+
     return (
         <>
             <Card className="w-full rounded-none">
@@ -26,7 +31,7 @@ export const UsuariosDashboard = () => {
                             <Button variant="outlined" size="sm">
                                 Ver todos
                             </Button>
-                            <Button className="flex items-center gap-3" size="sm">
+                            <Button className="flex items-center gap-3" size="sm" onClick={() => setOpenFormCreate(!openFormCreate)}>
                                 <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Añadir usuario
                             </Button>
                         </div>
@@ -41,6 +46,10 @@ export const UsuariosDashboard = () => {
                     </div>
                 </CardHeader>
             </Card>
+            <UsuariosFormCreate
+                openFormCreate={openFormCreate}
+                setOpenFormCreate={setOpenFormCreate}
+            />
         </>
     )
 }
