@@ -33,7 +33,7 @@ export const UsuariosFormDelete = ({ openFormDelete, setOpenFormDelete }) => {
                         />
                     </svg>
                     <Typography color="black" variant="h4">
-                        ¡Deberías leer esto!
+                        ¡Atención   !
                     </Typography>
                     <Typography className="text-center font-normal">
                         ¿Estas seguro que deseas eliminar este usuario?

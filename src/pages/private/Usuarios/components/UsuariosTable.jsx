@@ -4,6 +4,7 @@ import { TABLE_ROWS } from "../../../../core/const/TABLE_ROWS";
 import { useState } from "react";
 import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
 import { UsuariosFormDelete } from "./UsuariosFormDelete";
+import { UsuariosDetails } from "./UsuariosDetails";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
 
@@ -11,6 +12,7 @@ export const UsuariosTable = () => {
 
     const [openFormUpdate, setOpenFormUpdate] = useState(false);
     const [openFormDelete, setOpenFormDelete] = useState(false);
+    const [openDetails, setOpenDetails] = useState(false);
     const [dataValue, setDataValue] = useState();
 
     return (
@@ -92,7 +94,7 @@ export const UsuariosTable = () => {
                                 </td>
                                 <td className={classes}>
                                     <Tooltip content="Ver detalles">
-                                        <IconButton variant="text">
+                                        <IconButton variant="text" onClick={() => setOpenDetails(!openDetails)}>
                                             <EyeIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -121,6 +123,10 @@ export const UsuariosTable = () => {
             <UsuariosFormDelete
                 openFormDelete={openFormDelete}
                 setOpenFormDelete={setOpenFormDelete}
+            />
+            <UsuariosDetails
+                openDetails={openDetails}
+                setOpenDetails={setOpenDetails}
             />
         </Card>
     );
