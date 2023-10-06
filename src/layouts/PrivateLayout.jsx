@@ -30,23 +30,8 @@ export const PrivateLayout = () => {
 
   return (
     <>
-      <div className="flex">
-        <div className="h-full min-h-screen">
-          <Sidebar>
-            <SidebarItem icon={<HomeIcon className="h-5 w-5" />} text="Inicio" path="dashboard" />
-            <SidebarItem icon={<UserIcon className="h-5 w-5" />} text="Usuarios" path="usuarios" />
-            <SidebarItem icon={<ShieldCheckIcon className="h-5 w-5" />} text="Admin" path="admin" />
-          </Sidebar>
-        </div>
-        <div className="w-full">
-          <div className="w-full h-14">
-            <Navbar />
-          </div>
-          <div className="w-full h-full max-h-[calc(100vh-3.5rem)]">
-            <Outlet />
-          </div>
-        </div>
-      </div>
+      <Navbar />
+      <Outlet />
     </>
   )
 }

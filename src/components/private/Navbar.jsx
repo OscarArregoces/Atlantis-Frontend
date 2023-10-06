@@ -1,10 +1,10 @@
 import { Avatar, Menu, MenuHandler, MenuItem, MenuList, Typography, ListItem, ListItemPrefix } from '@material-tailwind/react'
 import { UserCircleIcon, Cog6ToothIcon, PowerIcon, } from "@heroicons/react/24/solid";
 import { useNavigate } from 'react-router-dom';
+import { SidebarBtn } from './SidebarBtn';
 
 export const Navbar = () => {
     const navigate = useNavigate();
-
     const handleLogOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -14,13 +14,14 @@ export const Navbar = () => {
         <header>
             <nav className='w-full h-14 bg-cyan-600 flex justify-center items-center'>
                 <div className='w-1/2 h-full flex justify-start items-center ml-4'>
-                    <Typography
+                    <SidebarBtn />
+                    {/* <Typography
                         variant="h5"
                         color="white"
                         className='hover:scale-110 ease-in duration-200 block'
                     >
                         EMPRESA
-                    </Typography>
+                    </Typography> */}
                 </div>
                 <div className='w-1/2 h-full flex justify-end items-center'>
                     <Menu>

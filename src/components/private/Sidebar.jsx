@@ -1,9 +1,4 @@
 import { useContext, createContext, useState } from "react"
-
-import {
-    Bars3Icon,
-    ChevronDoubleLeftIcon,
-} from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 const SidebarContext = createContext()
 
@@ -11,42 +6,28 @@ export const Sidebar = ({ children }) => {
     const [expanded, setExpanded] = useState(true)
 
     return (
-        <aside className="min-h-screen h-full">
-            <nav className="h-full min-h-screen flex flex-col bg-white border-r shadow-sm">
-                <div className="p-4 pb-2 flex justify-between items-center">
-                    <img
-                        src="https://img.logoipsum.com/243.svg"
-                        className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"
-                            }`}
-                        alt=""
-                    />
-                    {/* <h1 className={`text-base font-sans font-semibold overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}>Feliz día</h1> */}
-                    <button
-                        onClick={() => setExpanded((curr) => !curr)}
-                        className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
-                    >
-                        {expanded ? <ChevronDoubleLeftIcon className="h-5 w-5" /> : <Bars3Icon className="h-5 w-5" />}
-                    </button>
-                </div>
-
+        <aside className="h-[calc(100vh-3rem)]">
+            <nav className="h-[calc(100vh-3rem)] flex flex-col items-end">
                 <SidebarContext.Provider value={{ expanded }}>
-                    <ul className="flex-1 px-3">{children}</ul>
+                    <ul className="flex-1 px-3 h-full overflow-auto">{children}</ul>
                 </SidebarContext.Provider>
 
-                <div className="border-t flex p-3">
-                    <img
-                        src="/assets/img/avatar.jpg"
-                        alt=""
-                        className="w-10 h-10 rounded-md"
-                    />
-                    <div
-                        className={`
+                <div className="relative bottom-0">
+                    <div className="border-t flex p-3">
+                        <img
+                            src="/assets/img/avatar.jpg"
+                            alt=""
+                            className="w-10 h-10 rounded-md"
+                        />
+                        <div
+                            className={`
                             flex justify-between items-center overflow-hidden transition-all 
                             ${expanded ? "w-52 ml-3" : "w-0"}`
-                        }>
-                        <div className="leading-4">
-                            <h4 className="font-semibold">Admin</h4>
-                            <span className="text-xs text-gray-600">admin@gmail.com</span>
+                            }>
+                            <div className="leading-4">
+                                <h4 className="font-semibold">Admin</h4>
+                                <span className="text-xs text-gray-600">admin@gmail.com</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,14 +36,18 @@ export const Sidebar = ({ children }) => {
     )
 }
 
-export function SidebarItem({ icon, text, path, active, alert }) {
+export function SidebarItem({ icon, text, path, active, alert, closeDrawer }) {
     const navigate = useNavigate();
 
-    const { expanded } = useContext(SidebarContext)
+    const { expanded } = useContext(SidebarContext);
+    const handleClose = (path) => {
+        navigate(path)
+        closeDrawer();
+    };
 
     return (
         <li
-            onClick={() => navigate(path)}
+            onClick={() => handleClose(path)}
             className={`
         relative flex items-center py-2 px-3 my-1
         font-medium rounded-md cursor-pointer
