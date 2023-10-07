@@ -6,6 +6,8 @@ import { Dashboard } from '../pages/private/Dashboard/Dashboard';
 import { Perfil } from "../pages/private/Perfil/Perfil";
 import { Usuarios } from "../pages/private/Usuarios/Usuarios";
 import { Admin } from "../pages/private/Admin/Admin";
+import { Tienda } from "../pages/private/Tienda/Tienda";
+import { NotFound } from "../components/common/NotFound";
 
 export const router = createBrowserRouter([
     {
@@ -14,7 +16,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "*",
-        element: <h1>PAGE NOT FOUND</h1>
+        element:  <NotFound />
 
     },
     {
@@ -34,13 +36,17 @@ export const router = createBrowserRouter([
                 element: <Perfil />
             },
             {
-                path: 'Admin',
+                path: 'admin',
                 element: <Admin />
             },
             {
-                path: 'Usuarios',
+                path: 'usuarios',
                 element: <Usuarios />
             },
+            {
+                path: 'tienda',
+                element: <Tienda />
+            }
         ]
     },
 ]);

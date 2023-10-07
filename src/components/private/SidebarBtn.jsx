@@ -5,7 +5,7 @@ import {
     IconButton,
 } from "@material-tailwind/react";
 import { Sidebar, SidebarItem } from "./Sidebar";
-import { HomeIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/solid";
+import { CurrencyDollarIcon, HomeIcon, ShieldCheckIcon, ShoppingBagIcon, UserIcon } from "@heroicons/react/24/solid";
 
 export const SidebarBtn = () => {
     const [open, setOpen] = useState(false);
@@ -52,6 +52,8 @@ export const SidebarBtn = () => {
                     <SidebarItem icon={<HomeIcon className="h-5 w-5" />} text="Inicio" path="dashboard" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<UserIcon className="h-5 w-5" />} text="Usuarios" path="usuarios" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<ShieldCheckIcon className="h-5 w-5" />} text="Admin" path="admin" closeDrawer={closeDrawer} />
+                    <SidebarItem icon={<ShoppingBagIcon className="h-5 w-5" />} text="Tienda" path="tienda" closeDrawer={closeDrawer} />
+                    <SidebarItem icon={<CurrencyDollarIcon className="h-5 w-5" />} text="Economia" path="economia" closeDrawer={closeDrawer} />
                 </Sidebar>
             </Drawer>
         </>
