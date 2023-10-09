@@ -13,7 +13,6 @@ export const SidebarBtn = () => {
     const openDrawer = () => setOpen(true);
     const closeDrawer = () => {
         setOpen(false)
-        console.log('CloseDrawer called')
     };
 
     return (

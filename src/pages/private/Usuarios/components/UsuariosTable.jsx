@@ -1,22 +1,30 @@
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Avatar, Card, IconButton, Tooltip, Typography } from "@material-tailwind/react";
-import { TABLE_ROWS } from "../../../../core/const/TABLE_ROWS";
-import { useState } from "react";
+import { TABLE_ROWS } from "../../../../const/TABLE_ROWS";
+import { useEffect, useState } from "react";
 import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
 import { UsuariosFormDelete } from "./UsuariosFormDelete";
 import { UsuariosDetails } from "./UsuariosDetails";
+import { useAxios } from "../../../../utils/axios.instance";
+import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
 
-export const UsuariosTable = () => {
+export const UsuariosTable = ({ data, getUser }) => {
 
     const [openFormUpdate, setOpenFormUpdate] = useState(false);
     const [openFormDelete, setOpenFormDelete] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
-    const [dataValue, setDataValue] = useState();
-
+    const [userId, setUserId] = useState(null);
+    const handelDelete = (id) =>{
+        setOpenFormDelete(true);
+        setUserId(id)
+    }
+    const deleteUser = async (id) => {
+        const { data } = await useAxios.delete(`/person/${id}`)
+    }
     return (
-        <Card className="h-full w-full max-h-[calc(100vh-221.5px)] rounded-none overflow-scroll">
+        <Card className="h-[calc(100vh-221.5px)] w-full max-h-[calc(100vh-221.5px)] rounded-none overflow-scroll">
             <table className="w-full min-w-max table-auto text-left">
                 <thead>
                     <tr>
@@ -37,14 +45,16 @@ export const UsuariosTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {TABLE_ROWS.map(({ nombre, pais, ciudad, correo, telefono, avatarUrl }, index) => {
+                    {data.map(({ email, person }, index) => {
+                        const { name, surname, no_document, country, city, phone, img_url } = person;
                         const isLast = index === TABLE_ROWS.length - 1;
-                        const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+                        const classes = isLast ? "p-4 border-b border-blue-gray-50" : "p-4 border-b border-blue-gray-50";
                         return (
-                            <tr key={nombre}>
+                            <tr key={email}>
                                 <td className={`${classes} flex justify-start items-center`}>
                                     <Avatar
-                                        src={avatarUrl}
+                                        src={img_url ? `${BASE_URL_MEDIA}${img_url}` : '/assets/img/img_notFound.png'}
+                                        title={img_url ? 'Perfil' : 'Sin perfil'}
                                         alt="avatar"
                                         size="md"
                                     />
@@ -53,7 +63,7 @@ export const UsuariosTable = () => {
                                         color="blue-gray"
                                         className="font-normal ml-2"
                                     >
-                                        {nombre}
+                                        {(name & surname) ? `${name} ${surname}` : name ? name : '-----'}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -62,7 +72,7 @@ export const UsuariosTable = () => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {pais}
+                                        {country ? country : '-----'}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -71,7 +81,7 @@ export const UsuariosTable = () => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {ciudad}
+                                        {city ? city : '-----'}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -80,7 +90,7 @@ export const UsuariosTable = () => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {correo}
+                                        {email ? email : '-----'}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -89,7 +99,7 @@ export const UsuariosTable = () => {
                                         color="blue-gray"
                                         className="font-normal"
                                     >
-                                        {telefono}
+                                        {phone ? phone : '-----'}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
@@ -104,7 +114,7 @@ export const UsuariosTable = () => {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip content="Eliminar usuario">
-                                        <IconButton variant="text" onClick={() => setOpenFormDelete(!openFormDelete)}>
+                                        <IconButton variant="text" onClick={() => handelDelete()}>
                                             <TrashIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -116,7 +126,7 @@ export const UsuariosTable = () => {
                 </tbody>
             </table>
             <UsuariosFormUpdate
-                dataValue={dataValue}
+                data={data}
                 openFormUpdate={openFormUpdate}
                 setOpenFormUpdate={setOpenFormUpdate}
             />

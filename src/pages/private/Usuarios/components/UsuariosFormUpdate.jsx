@@ -14,7 +14,7 @@ import {
 import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
 
-export const UsuariosFormUpdate = ({ dataValue, openFormUpdate, setOpenFormUpdate }) => {
+export const UsuariosFormUpdate = ({ data, openFormUpdate, setOpenFormUpdate }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, reset, control } = useForm({
         defaultValues: {

@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 
 import { useForm } from "react-hook-form";
-import { UseAxios } from "../../core/utils/axios.instance";
+import { useAxios } from "../../utils/axios.instance";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -16,24 +16,8 @@ export const Login = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = async (body) => {
-    try {
-      const { data } = await UseAxios.post('auth/login', body);
-      if (data) {
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        reset()
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: `Bienvenido ${data.user.name}`,
-          showConfirmButton: false,
-          timer: 1500
-        })
-        setTimeout(() => {
-          navigate('/private/dashboard')
-        }, 1500);
-      }
-    } catch (error) {
+    const { data } = await useAxios.post('/auth/login', body);
+    if (data.error) {
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -41,10 +25,23 @@ export const Login = () => {
         showConfirmButton: false,
         timer: 1500
       })
-      console.log(error)
+    } else {
+      localStorage.setItem('token', data.data.token)
+      localStorage.setItem('user', JSON.stringify(data.data.user))
+      reset()
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Bienvenido ${data.data.user.name}`,
+        showConfirmButton: false,
+        timer: 1500
+      })
+      setTimeout(() => {
+        navigate('/private/dashboard')
+      }, 1500);
     }
-  };
 
+  }
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
@@ -67,5 +64,5 @@ export const Login = () => {
       </Card>
     </div>
 
-  );
+  )
 }

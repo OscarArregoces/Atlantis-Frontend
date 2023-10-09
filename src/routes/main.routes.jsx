@@ -6,8 +6,8 @@ import { Dashboard } from '../pages/private/Dashboard/Dashboard';
 import { Perfil } from "../pages/private/Perfil/Perfil";
 import { Usuarios } from "../pages/private/Usuarios/Usuarios";
 import { Admin } from "../pages/private/Admin/Admin";
-import { Tienda } from "../pages/private/Tienda/Tienda";
 import { NotFound } from "../components/common/NotFound";
+import { Tienda } from "../pages/private/Tienda/Tiends";
 
 export const router = createBrowserRouter([
     {

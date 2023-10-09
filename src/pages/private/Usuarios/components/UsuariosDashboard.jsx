@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { UsuariosFormCreate } from "./UsuariosFormCreate";
 
-export const UsuariosDashboard = () => {
+export const UsuariosDashboard = ({ getUsers }) => {
 
     const [openFormCreate, setOpenFormCreate] = useState(false);
 
@@ -49,6 +49,7 @@ export const UsuariosDashboard = () => {
             <UsuariosFormCreate
                 openFormCreate={openFormCreate}
                 setOpenFormCreate={setOpenFormCreate}
+                getUsers={getUsers}
             />
         </>
     )

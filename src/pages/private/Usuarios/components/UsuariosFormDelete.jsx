@@ -7,8 +7,19 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export const UsuariosFormDelete = ({ openFormDelete, setOpenFormDelete }) => {
+export const UsuariosFormDelete = ({
+    openFormDelete,
+    setOpenFormDelete,
+    deleteFnc,
+    refreshFnc,
+    customMessage = '¿Estas seguro que deseas eliminar este registro?'
+}) => {
 
+    const handleDelete = () => {
+        deleteFnc();
+        refreshFnc();
+        setOpenFormDelete(false);
+    }
     return (
         <>
             <Dialog
@@ -16,7 +27,7 @@ export const UsuariosFormDelete = ({ openFormDelete, setOpenFormDelete }) => {
             >
                 <DialogHeader>
                     <Typography variant="h5" color="blue-gray">
-                      Notificación
+                        Notificación
                     </Typography>
                 </DialogHeader>
                 <DialogBody divider className="grid place-items-center gap-4">
@@ -36,14 +47,14 @@ export const UsuariosFormDelete = ({ openFormDelete, setOpenFormDelete }) => {
                         ¡Atención   !
                     </Typography>
                     <Typography className="text-center font-normal">
-                        ¿Estas seguro que deseas eliminar este usuario?
+                        {customMessage}
                     </Typography>
                 </DialogBody>
                 <DialogFooter className="space-x-2">
                     <Button variant="text" color="blue-gray" onClick={() => setOpenFormDelete(!openFormDelete)}>
                         Cancelar
                     </Button>
-                    <Button variant="gradient" color="red" onClick={() => setOpenFormDelete(!openFormDelete)}>
+                    <Button variant="gradient" color="red" onClick={handleDelete}>
                         Eliminar
                     </Button>
                 </DialogFooter>

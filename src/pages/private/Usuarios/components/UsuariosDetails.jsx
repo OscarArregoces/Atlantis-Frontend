@@ -11,7 +11,7 @@ import {
     Select,
     Typography,
 } from "@material-tailwind/react";
-import { CameraIcon, CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon, } from "@heroicons/react/24/solid";
+import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon, } from "@heroicons/react/24/solid";
 import { Controller, useForm } from "react-hook-form";
 
 export const UsuariosDetails = ({ openDetails, setOpenDetails }) => {
@@ -150,4 +150,3 @@ export const UsuariosDetails = ({ openDetails, setOpenDetails }) => {
         </>
     );
 }
-
