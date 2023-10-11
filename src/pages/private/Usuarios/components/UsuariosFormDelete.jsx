@@ -11,13 +11,11 @@ export const UsuariosFormDelete = ({
     openFormDelete,
     setOpenFormDelete,
     deleteFnc,
-    refreshFnc,
     customMessage = '¿Estas seguro que deseas eliminar este registro?'
 }) => {
 
-    const handleDelete = () => {
-        deleteFnc();
-        refreshFnc();
+    const handleDelete = async () => {
+        await deleteFnc();
         setOpenFormDelete(false);
     }
     return (

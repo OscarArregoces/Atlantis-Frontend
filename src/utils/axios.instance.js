@@ -5,8 +5,27 @@ export const useAxios = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
+        // 'Content-Type': 'multipart/form-data'
     }
 });
+export const useAxiosWithFile = (method, url, data) => {
+    switch (method) {
+        case 'post':
+            return useAxios.post(url, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+        case 'patch':
+            return useAxios.patch(url, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            })
+        default:
+            break;
+    }
+}
 
 useAxios.interceptors.request.use(
     (config) => {
