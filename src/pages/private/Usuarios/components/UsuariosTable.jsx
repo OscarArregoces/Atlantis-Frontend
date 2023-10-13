@@ -1,13 +1,12 @@
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Avatar, Card, IconButton, Tooltip, Typography } from "@material-tailwind/react";
-import { TABLE_ROWS } from "../../../../const/TABLE_ROWS";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
-import { UsuariosFormDelete } from "./UsuariosFormDelete";
 import { UsuariosDetails } from "./UsuariosDetails";
 import { useAxios } from "../../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import Swal from "sweetalert2";
+import { ModalDelete } from "../../../../components/private/ModalDelete";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
 
@@ -17,9 +16,14 @@ export const UsuariosTable = ({ data, getUsers }) => {
     const [openFormDelete, setOpenFormDelete] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const handelDelete = (id) => {
         setOpenFormDelete(true);
         setUserId(id)
+    }
+    const handleUpdate = (user) => {
+        setOpenFormUpdate(!openFormUpdate);
+        setCurrentUser(user)
     }
     const deleteUser = async () => {
         if (userId) {
@@ -67,9 +71,10 @@ export const UsuariosTable = ({ data, getUsers }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map(({ _id, email, person }, index) => {
+                    {data.map((member, index) => {
+                        const { _id, email, person } = member;
                         const { name, surname, no_document, country, city, phone, img_url } = person;
-                        const isLast = index === TABLE_ROWS.length - 1;
+                        const isLast = index === data.length - 1;
                         const classes = isLast ? "p-4 border-b border-blue-gray-50" : "p-4 border-b border-blue-gray-50";
                         return (
                             <tr key={email}>
@@ -131,7 +136,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip content="Editar usuario">
-                                        <IconButton variant="text" onClick={() => setOpenFormUpdate(!openFormUpdate)}>
+                                        <IconButton variant="text" onClick={() => handleUpdate(member)}>
                                             <PencilIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -148,13 +153,14 @@ export const UsuariosTable = ({ data, getUsers }) => {
                 </tbody>
             </table>
             <UsuariosFormUpdate
-                data={data}
+                data={currentUser}
                 openFormUpdate={openFormUpdate}
                 setOpenFormUpdate={setOpenFormUpdate}
+                getUsers={getUsers}
             />
-            <UsuariosFormDelete
-                openFormDelete={openFormDelete}
-                setOpenFormDelete={setOpenFormDelete}
+            <ModalDelete
+                display={openFormDelete}
+                setDisplay={setOpenFormDelete}
                 deleteFnc={deleteUser}
             />
             <UsuariosDetails

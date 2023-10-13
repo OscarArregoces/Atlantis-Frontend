@@ -13,11 +13,11 @@ import {
 } from "@material-tailwind/react";
 import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
-import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
+import { useAxiosWithFile } from "../../../../utils/axios.instance";
 
 export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers }) => {
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, reset, control, setValue } = useForm({
+    const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
         defaultValues: {
             email: '',
             password: '',
@@ -34,22 +34,31 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
     });
     const onSubmit = async (dataValue) => {
         const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
-        console.log(newDataValue);
-
         const formData = new FormData();
-
         for (let clave in newDataValue) {
             formData.append(clave, newDataValue[clave]);
         }
 
-        // const { data } = await useAxios.post('/person/createMember', formData);
         const { data } = await useAxiosWithFile('post', '/person/createMember', formData);
         if (data.error) {
-            console.log(data)
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Error en consulta',
+                showConfirmButton: false,
+                timer: 1500
+            })
         } else {
             reset();
             setOpenFormCreate(false);
             await getUsers();
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Usuario creado',
+                showConfirmButton: false,
+                timer: 1500
+            })
         }
     }
     const handleUpload = () => {
@@ -77,8 +86,9 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                     unmount: { scale: 0.9, y: -100 },
                 }}
                 size="md"
+                className="overflow-y-auto max-h-[90vh]"
             >
-                <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader
                         className="text-gray-700"
                     >
@@ -99,13 +109,11 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                     <Input
                                         type="file"
                                         label="Subir archivo"
+                                        accept="image/*"
                                         id="inputUpload"
-                                        {...register('img_url')}
-                                    // onChange={(e) => {
-                                    //     setValue("img_url", e.target.files[0]);
-                                    // }}
-
+                                        {...register('img_url', { required: true })}
                                     />
+
                                 </div>
                                 <Button
                                     variant="text"
@@ -115,6 +123,9 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                     <CloudArrowUpIcon className="h-5 w-5" />
                                     Subir foto
                                 </Button>
+                                {errors.img_url && errors.img_url.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Debes cargar una foto</span>
+                                )}
                             </div>
                             <div className="grid gap-4">
                                 <div className="flex gap-2 mb-5">
@@ -127,24 +138,36 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                     </Typography>
 
                                 </div>
-                                <Input
-                                    type="text"
-                                    label="Correo electronico"
-                                    {...register('email')} />
+                                <div>
+                                    <Input
+                                        type="email"
+                                        label="Correo electronico"
+                                        {...register('email', { required: true })}
+                                    />
+                                    {errors.email && errors.email.type === "required" && (
+                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                    )}
+                                </div>
 
-                                <Input
-                                    label="Contraseña"
-                                    {...register('password')}
-                                    type={
-                                        showPassword ? 'text' : 'password'
-                                    }
-                                    icon={
-                                        showPassword
-                                            ?
-                                            <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                            :
-                                            <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                    } />
+                                <div>
+                                    <Input
+                                        label="Contraseña"
+                                        {...register('password', { required: true })}
+                                        type={
+                                            showPassword ? 'text' : 'password'
+                                        }
+                                        icon={
+                                            showPassword
+                                                ?
+                                                <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
+                                                :
+                                                <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
+                                        }
+                                    />
+                                    {errors.password && errors.password.type === "required" && (
+                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </DialogBody>
@@ -159,33 +182,119 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                             </Typography>
                         </div>
                         <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
-                            <Input type="text" label="Nombres" {...register('name')} />
-                            <Input type="text" label="Apellidos" {...register('surname')} />
-
-                            <Controller
-                                control={control}
-                                name="type_document"
-                                render={({ field: { onChange, onBlur } }) => (
-
-                                    <Select
-                                        label="Tipo de documento"
-                                        {...register('type_document')}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                    >
-                                        <Option value="cc">Cedula Ciudadania</Option>
-                                        <Option value="ti">Tarjeta de identidad</Option>
-                                        <Option value="nit">NIT</Option>
-                                        <Option value="pa">Pasaporte</Option>
-                                    </Select>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Nombres"
+                                    {...register('name', { required: true })}
+                                />
+                                {errors.name && errors.name.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
-                            />
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Apellidos"
+                                    {...register('surname', { required: true })}
+                                />
+                                {errors.surname && errors.surname.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
 
-                            <Input type="text" label="No documento" {...register('no_document')} />
-                            <Input type="text" label="Pais" {...register('country')} />
-                            <Input type="text" label="Ciudad" {...register('city')} />
-                            <Input type="text" label="Celular" {...register('phone')} />
-                            <Input type="text" label="Fecha de nacimiento" {...register('birthday')} />
+                            <div>
+                                {/* <Controller
+                                    control={control}
+                                    name="type_document"
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <Select
+                                            label="Tipo de documento"
+                                            {...register('type_document', { required: true })}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                        >
+                                            <Option value="cc">Cedula Ciudadania</Option>
+                                            <Option value="ti">Tarjeta de identidad</Option>
+                                            <Option value="nit">NIT</Option>
+                                            <Option value="pa">Pasaporte</Option>
+                                        </Select>
+                                    )}
+                                /> */}
+                                <Controller
+                                    render={({ field }) => (
+                                        <Select
+                                            label="Tipo de documento"
+                                            {...field}
+                                        >
+                                            <Option value="cc">Cedula Ciudadania</Option>
+                                            <Option value="ti">Tarjeta de identidad</Option>
+                                            <Option value="nit">NIT</Option>
+                                            <Option value="pa">Pasaporte</Option>
+                                        </Select>
+                                    )}
+                                    rules={{ required: true }}
+                                    name="type_document"
+                                    control={control}
+                                    defaultValue=""
+                                />
+                                {errors.type_document && errors.type_document.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="No documento"
+                                    {...register('no_document', { required: true })}
+                                />
+                                {errors.no_document && errors.no_document.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Pais"
+                                    {...register('country', { required: true })}
+                                />
+                                {errors.country && errors.country.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Ciudad"
+                                    {...register('city', { required: true })}
+                                />
+                                {errors.city && errors.city.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Celular"
+                                    {...register('phone', { required: true })}
+                                />
+                                {errors.phone && errors.phone.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Fecha de nacimiento"
+                                    {...register('birthday', { required: true })}
+                                />
+                                {errors.birthday && errors.birthday.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
                         </div>
                     </DialogBody>
                     <DialogFooter>
