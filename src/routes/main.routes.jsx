@@ -7,7 +7,8 @@ import { Perfil } from "../pages/private/Perfil/Perfil";
 import { Usuarios } from "../pages/private/Usuarios/Usuarios";
 import { Admin } from "../pages/private/Admin/Admin";
 import { NotFound } from "../components/common/NotFound";
-import { Tienda } from "../pages/private/Tienda/Tiends";
+import { Ventas } from "../pages/private/Ventas/Ventas";
+import { Almacen } from "../pages/private/Almacen/Almacen";
 
 export const router = createBrowserRouter([
     {
@@ -44,9 +45,13 @@ export const router = createBrowserRouter([
                 element: <Usuarios />
             },
             {
-                path: 'tienda',
-                element: <Tienda />
-            }
+                path: 'ventas',
+                element: <Ventas />
+            },
+            {
+                path: 'almacen',
+                element: <Almacen />
+            },
         ]
     },
 ]);

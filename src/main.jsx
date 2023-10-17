@@ -11,7 +11,7 @@ import { router } from './routes/main.routes';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </ThemeProvider>
   </React.StrictMode>,
 )

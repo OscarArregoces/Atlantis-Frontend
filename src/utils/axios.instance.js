@@ -5,7 +5,6 @@ export const useAxios = axios.create({
     baseURL: BASE_URL,
     headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'multipart/form-data'
     }
 });
 export const useAxiosWithFile = (method, url, data) => {

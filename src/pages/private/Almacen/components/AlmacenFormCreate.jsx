@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
     Button,
     Dialog,
@@ -11,36 +12,60 @@ import {
     Option,
     Avatar,
 } from "@material-tailwind/react";
-import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
-import { Controller, useForm } from "react-hook-form";
-import { useAxiosWithFile } from "../../../../utils/axios.instance";
-import { TYPE_DOCUMENT } from "../../../../const/TABLE_ROWS";
+import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
+import { ShoppingBagIcon } from "@heroicons/react/24/solid";
+import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
+import Swal from "sweetalert2";
 
-export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers }) => {
-    const [showPassword, setShowPassword] = useState(false);
+export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) => {
+
+    const [categories, setCategories] = useState([null]);
+    useEffect(() => {
+        const getCategories = async () => {
+            const { data } = await useAxios.get('/category');
+            if (data.error) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Error en consulta',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            } else {
+                setCategories(data.data)
+            }
+        }
+        getCategories();
+    }, [])
+
     const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
         defaultValues: {
-            email: '',
-            password: '',
             name: '',
-            surname: '',
-            birthday: '',
-            type_document: '',
-            no_document: '',
-            country: '',
-            city: '',
-            phone: '',
-            img_url: ''
+            brand: '',
+            quantity: '',
+            total_price: '',
+            unit_price: '',
+            unit_cost: '',
+            supplier: '',
+            img_url: '',
+            category: '',
         }
     });
     const onSubmit = async (dataValue) => {
-        const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
-        const formData = new FormData();
-        for (let clave in newDataValue) {
-            formData.append(clave, newDataValue[clave]);
-        }
+        const newDataValue = {
+            ...dataValue,
+            img_url: dataValue.img_url[0],
+            quantity: Number(dataValue.quantity),
+            total_price: Number(dataValue.total_price),
+            unit_price: Number(dataValue.unit_price),
+            unit_cost: Number(dataValue.unit_cost),
 
-        const { data } = await useAxiosWithFile('post', '/person/createMember', formData);
+        }
+        const formData = new FormData();
+        for (const fileName in newDataValue) {
+            formData.append(fileName, newDataValue[fileName]);
+        }
+        const { data } = await useAxiosWithFile('post', '/product', formData);
         if (data.error) {
             Swal.fire({
                 position: 'top-end',
@@ -51,17 +76,18 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
             })
         } else {
             reset();
-            setOpenFormCreate(false);
-            await getUsers();
+            setDisplayForm(false);
+            getProducts();
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Usuario creado',
+                title: 'Venta registrada',
                 showConfirmButton: false,
                 timer: 1500
             })
         }
     }
+
     const handleUpload = () => {
         const inputUpload = document.querySelector('#inputUpload');
         inputUpload.click();
@@ -78,10 +104,11 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
             }
         })
     }
+
     return (
         <>
             <Dialog
-                open={openFormCreate}
+                open={displayForm}
                 animate={{
                     mount: { scale: 1, y: 0 },
                     unmount: { scale: 0.9, y: -100 },
@@ -93,7 +120,7 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                     <DialogHeader
                         className="text-gray-700"
                     >
-                        Registrando usuario
+                        Guardando productos
                     </DialogHeader>
                     <DialogBody>
 
@@ -103,6 +130,7 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                     src="/assets/img/sinFoto.png"
                                     alt="avatar"
                                     id="avatar"
+                                    variant="rounded"
                                     size="xxl"
                                     className="m-auto"
                                 />
@@ -130,163 +158,125 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                             </div>
                             <div className="grid gap-4">
                                 <div className="flex gap-2 mb-5">
-                                    <ShieldCheckIcon className="h-5 w-5" />
+                                    <ShoppingBagIcon className="h-5 w-5" />
                                     <Typography
                                         variant="small"
                                         className="font-semibold text-gray-700"
                                     >
-                                        Credenciales de acceso
+                                        Datos del producto
                                     </Typography>
 
                                 </div>
                                 <div>
                                     <Input
-                                        type="email"
-                                        label="Correo electronico"
-                                        {...register('email', { required: true })}
+                                        type="text"
+                                        label="Nombre"
+                                        {...register('name', { required: true })}
                                     />
-                                    {errors.email && errors.email.type === "required" && (
+                                    {errors.name && errors.name.type === "required" && (
                                         <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                     )}
                                 </div>
 
                                 <div>
                                     <Input
-                                        label="Contraseña"
-                                        {...register('password', { required: true })}
-                                        type={
-                                            showPassword ? 'text' : 'password'
-                                        }
-                                        icon={
-                                            showPassword
-                                                ?
-                                                <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                                :
-                                                <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                        }
+                                        type="text"
+                                        label="Marca"
+                                        {...register('brand', { required: true })}
                                     />
-                                    {errors.password && errors.password.type === "required" && (
+                                    {errors.brand && errors.brand.type === "required" && (
                                         <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                     )}
                                 </div>
                             </div>
                         </div>
                     </DialogBody>
+
                     <DialogBody>
-                        <div className="flex gap-2 mb-5">
-                            <UserIcon className="h-5 w-5" />
-                            <Typography
-                                variant="small"
-                                className="font-semibold text-gray-700"
-                            >
-                                Datos personales
-                            </Typography>
-                        </div>
                         <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                             <div>
                                 <Input
-                                    type="text"
-                                    label="Nombres"
-                                    {...register('name', { required: true })}
+                                    type="number"
+                                    label="Cantidad"
+                                    {...register('quantity', { required: true })}
                                 />
-                                {errors.name && errors.name.type === "required" && (
+                                {errors.quantity && errors.quantity.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
                             <div>
                                 <Input
-                                    type="text"
-                                    label="Apellidos"
-                                    {...register('surname', { required: true })}
+                                    type="number"
+                                    label="Precio total"
+                                    {...register('total_price', { required: true })}
                                 />
-                                {errors.surname && errors.surname.type === "required" && (
+                                {errors.total_price && errors.total_price.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
 
+                            <div>
+                                <Input
+                                    type="number"
+                                    label="Precio unidad"
+                                    {...register('unit_price', { required: true })}
+                                />
+                                {errors.unit_price && errors.unit_price.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+
+                            <div>
+                                <Input
+                                    type="number"
+                                    label="Costo unidad"
+                                    {...register('unit_cost', { required: true })}
+                                />
+                                {errors.unit_cost && errors.unit_cost.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Provedor"
+                                    {...register('supplier', { required: true })}
+                                />
+                                {errors.supplier && errors.supplier.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
+                            </div>
                             <div>
                                 <Controller
                                     render={({ field }) => (
                                         <Select
-                                            label="Tipo de documento"
+                                            label="Selecciona una categoria"
                                             {...field}
                                         >
                                             {
-                                            TYPE_DOCUMENT.map(document => (
-                                                <Option key={document.value} value={document.value}>{document.title}</Option>
-                                            ))
-                                        }
+                                                categories.map(category => (
+                                                    <Option key={category.name} value={category._id}>{category.name}</Option>
+                                                ))
+                                            }
                                         </Select>
                                     )}
                                     rules={{ required: true }}
-                                    name="type_document"
+                                    name="category"
                                     control={control}
                                     defaultValue=""
                                 />
-                                {errors.type_document && errors.type_document.type === "required" && (
+                                {errors.category && errors.category.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
 
-                            <div>
-                                <Input
-                                    type="text"
-                                    label="No documento"
-                                    {...register('no_document', { required: true })}
-                                />
-                                {errors.no_document && errors.no_document.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                )}
-                            </div>
-                            <div>
-                                <Input
-                                    type="text"
-                                    label="Pais"
-                                    {...register('country', { required: true })}
-                                />
-                                {errors.country && errors.country.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                )}
-                            </div>
-
-                            <div>
-                                <Input
-                                    type="text"
-                                    label="Ciudad"
-                                    {...register('city', { required: true })}
-                                />
-                                {errors.city && errors.city.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                )}
-                            </div>
-
-                            <div>
-                                <Input
-                                    type="text"
-                                    label="Celular"
-                                    {...register('phone', { required: true })}
-                                />
-                                {errors.phone && errors.phone.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                )}
-                            </div>
-                            <div>
-                                <Input
-                                    type="text"
-                                    label="Fecha de nacimiento"
-                                    {...register('birthday', { required: true })}
-                                />
-                                {errors.birthday && errors.birthday.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                )}
-                            </div>
                         </div>
                     </DialogBody>
                     <DialogFooter>
                         <Button
                             variant="text"
                             color="red"
-                            onClick={() => setOpenFormCreate(!openFormCreate)}
+                            onClick={() => setDisplayForm(!displayForm)}
                             className="mr-1"
                         >
                             <span>Cancelar</span>

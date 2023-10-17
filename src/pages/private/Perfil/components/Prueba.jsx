@@ -1,46 +1,29 @@
-import React, { useState } from "react";
+import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
-    Input,
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
     Typography,
+    Button,
+    Avatar,
+    Input,
     Select,
     Option,
-    Avatar,
 } from "@material-tailwind/react";
-import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useAxiosWithFile } from "../../../../utils/axios.instance";
 import { TYPE_DOCUMENT } from "../../../../const/TABLE_ROWS";
+import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
+import Swal from "sweetalert2";
+import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 
-export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers }) => {
+export function Prueba() {
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
-        defaultValues: {
-            email: '',
-            password: '',
-            name: '',
-            surname: '',
-            birthday: '',
-            type_document: '',
-            no_document: '',
-            country: '',
-            city: '',
-            phone: '',
-            img_url: ''
-        }
-    });
-    const onSubmit = async (dataValue) => {
-        const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
-        const formData = new FormData();
-        for (let clave in newDataValue) {
-            formData.append(clave, newDataValue[clave]);
-        }
-
-        const { data } = await useAxiosWithFile('post', '/person/createMember', formData);
+    const [user, setUser] = useState(null);
+    const { register, handleSubmit, control, formState: { errors }, setValue } = useForm();
+    const handleGetUser = async (idUser) => {
+        const { data } = await useAxios.get(`/person/${idUser}`);
         if (data.error) {
             Swal.fire({
                 position: 'top-end',
@@ -50,18 +33,62 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                 timer: 1500
             })
         } else {
-            reset();
-            setOpenFormCreate(false);
-            await getUsers();
+            setUser(data.data)
+        }
+    }
+    useEffect(() => {
+        const userSession = JSON.parse(localStorage.getItem('user'));
+        handleGetUser(userSession._id)
+    }, []);
+    useEffect(() => {
+        if (user) {
+            const newData = {
+                email: user.email,
+                password: user.password,
+                name: user.person.name,
+                surname: user.person.surname,
+                type_document: user.person.type_document,
+                no_document: user.person.no_document,
+                country: user.person.country,
+                city: user.person.city,
+                phone: user.person.phone,
+                birthday: user.person.birthday,
+                img_url: user.person.img_url,
+            }
+            Object.keys(newData).forEach((fieldName) => {
+                setValue(fieldName, newData[fieldName]);
+            });
+
+        }
+    }, [user]);
+
+    const onSubmit = async (dataValue) => {
+        const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
+        const formData = new FormData();
+        for (let fileName in newDataValue) {
+            formData.append(fileName, newDataValue[fileName]);
+        };
+        const { data } = await useAxiosWithFile('patch', `/person/${user._id}`, formData)
+        if (data.error) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Error en consulta',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        } else {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Usuario creado',
+                title: 'Datos actualizados',
                 showConfirmButton: false,
                 timer: 1500
             })
         }
-    }
+    };
+
+
     const handleUpload = () => {
         const inputUpload = document.querySelector('#inputUpload');
         inputUpload.click();
@@ -79,100 +106,94 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
         })
     }
     return (
-        <>
-            <Dialog
-                open={openFormCreate}
-                animate={{
-                    mount: { scale: 1, y: 0 },
-                    unmount: { scale: 0.9, y: -100 },
-                }}
-                size="md"
-                className="overflow-y-auto max-h-[90vh]"
-            >
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <DialogHeader
-                        className="text-gray-700"
-                    >
-                        Registrando usuario
-                    </DialogHeader>
-                    <DialogBody>
-
-                        <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
-                            <div className="grid grid-cols-1">
-                                <Avatar
-                                    src="/assets/img/sinFoto.png"
-                                    alt="avatar"
-                                    id="avatar"
-                                    size="xxl"
-                                    className="m-auto"
+        <Card className="w-full max-w-[834px]">
+            <CardHeader color="cyan" variant="gradient">
+                <Typography
+                    variant="h1"
+                    className="font-semibold text-white text-center"
+                >
+                    Perfil
+                </Typography>
+            </CardHeader>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <CardBody>
+                    <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
+                        <div className="grid grid-cols-1">
+                            <Avatar
+                                 src={user ? `${BASE_URL_MEDIA}/${user.person.img_url}` : '/assets/img/sinFoto.png'}
+                                alt="avatar"
+                                id="avatar"
+                                size="xxl"
+                                className="m-auto"
+                            />
+                            <div className="hidden" >
+                                <Input
+                                    type="file"
+                                    label="Subir archivo"
+                                    accept="image/*"
+                                    id="inputUpload"
+                                    {...register('img_url', { required: true })}
                                 />
-                                <div className="hidden" >
-                                    <Input
-                                        type="file"
-                                        label="Subir archivo"
-                                        accept="image/*"
-                                        id="inputUpload"
-                                        {...register('img_url', { required: true })}
-                                    />
 
-                                </div>
-                                <Button
-                                    variant="text"
-                                    className="flex items-center gap-3 max-w-[200px] m-auto mt-2"
-                                    onClick={handleUpload}
+                            </div>
+                            <Button
+                                variant="text"
+                                className="flex items-center gap-3 max-w-[200px] m-auto mt-2"
+                                onClick={handleUpload}
+                            >
+                                <CloudArrowUpIcon className="h-5 w-5" />
+                                Subir foto
+                            </Button>
+                            {errors.img_url && errors.img_url.type === "required" && (
+                                <span className="text-center text-red-500 text-sm">Debes cargar una foto</span>
+                            )}
+                        </div>
+                        <div className="grid gap-4">
+                            <div className="flex gap-2 mb-5">
+                                <ShieldCheckIcon className="h-5 w-5" />
+                                <Typography
+                                    variant="small"
+                                    className="font-semibold text-gray-700"
                                 >
-                                    <CloudArrowUpIcon className="h-5 w-5" />
-                                    Subir foto
-                                </Button>
-                                {errors.img_url && errors.img_url.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Debes cargar una foto</span>
+                                    Credenciales de acceso
+                                </Typography>
+
+                            </div>
+                            <div>
+                                <Input
+                                    type="email"
+                                    label="Correo electronico"
+                                    {...register('email', { required: true })}
+                                />
+                                {errors.email && errors.email.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
-                            <div className="grid gap-4">
-                                <div className="flex gap-2 mb-5">
-                                    <ShieldCheckIcon className="h-5 w-5" />
-                                    <Typography
-                                        variant="small"
-                                        className="font-semibold text-gray-700"
-                                    >
-                                        Credenciales de acceso
-                                    </Typography>
 
-                                </div>
-                                <div>
-                                    <Input
-                                        type="email"
-                                        label="Correo electronico"
-                                        {...register('email', { required: true })}
-                                    />
-                                    {errors.email && errors.email.type === "required" && (
-                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Input
-                                        label="Contraseña"
-                                        {...register('password', { required: true })}
-                                        type={
-                                            showPassword ? 'text' : 'password'
-                                        }
-                                        icon={
-                                            showPassword
-                                                ?
-                                                <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                                :
-                                                <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                        }
-                                    />
-                                    {errors.password && errors.password.type === "required" && (
-                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
-                                    )}
-                                </div>
+                            <div>
+                                <Input
+                                    label="Contraseña"
+                                    {...register('password', { required: true })}
+                                    type={
+                                        showPassword ? 'text' : 'password'
+                                    }
+                                    icon={
+                                        showPassword
+                                            ?
+                                            <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
+                                            :
+                                            <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
+                                    }
+                                />
+                                {errors.password && errors.password.type === "required" && (
+                                    <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                )}
                             </div>
                         </div>
-                    </DialogBody>
-                    <DialogBody>
+                    </div>
+                </CardBody>
+                <CardBody>
+                    <div>
                         <div className="flex gap-2 mb-5">
                             <UserIcon className="h-5 w-5" />
                             <Typography
@@ -212,10 +233,10 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                             {...field}
                                         >
                                             {
-                                            TYPE_DOCUMENT.map(document => (
-                                                <Option key={document.value} value={document.value}>{document.title}</Option>
-                                            ))
-                                        }
+                                                TYPE_DOCUMENT.map(document => (
+                                                    <Option key={document.value} value={document.value}>{document.title}</Option>
+                                                ))
+                                            }
                                         </Select>
                                     )}
                                     rules={{ required: true }}
@@ -281,22 +302,15 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                 )}
                             </div>
                         </div>
-                    </DialogBody>
-                    <DialogFooter>
-                        <Button
-                            variant="text"
-                            color="red"
-                            onClick={() => setOpenFormCreate(!openFormCreate)}
-                            className="mr-1"
-                        >
-                            <span>Cancelar</span>
-                        </Button>
-                        <Button type="submit" variant="gradient" color="green">
-                            <span>Guardar</span>
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </Dialog>
-        </>
+                    </div>
+
+                </CardBody>
+                <CardFooter className="flex justify-end pt-0">
+                    <Button type="submit" variant="gradient" >
+                        <span>Actualizar</span>
+                    </Button>
+                </CardFooter>
+            </form>
+        </Card>
     );
 }

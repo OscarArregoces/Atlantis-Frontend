@@ -15,13 +15,6 @@ export const Navbar = () => {
             <nav className='w-full h-14 bg-cyan-600 flex justify-center items-center'>
                 <div className='w-1/2 h-full flex justify-start items-center ml-4'>
                     <SidebarBtn />
-                    {/* <Typography
-                        variant="h5"
-                        color="white"
-                        className='hover:scale-110 ease-in duration-200 block'
-                    >
-                        EMPRESA
-                    </Typography> */}
                 </div>
                 <div className='w-1/2 h-full flex justify-end items-center'>
                     <Menu>

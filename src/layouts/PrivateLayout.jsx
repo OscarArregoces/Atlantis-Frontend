@@ -29,9 +29,9 @@ export const PrivateLayout = () => {
 
 
   return (
-    <>
+    <div className="bg-gray-200">
       <Navbar />
       <Outlet />
-    </>
+    </div>
   )
 }
