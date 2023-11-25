@@ -6,7 +6,7 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 import { useAxios } from "../../../utils/axios.instance";
 import { UsuariosTable } from "./components/UsuariosTable"
 import { UsuariosFormCreate } from "./components/UsuariosFormCreate";
-
+import toast, { Toaster } from "react-hot-toast";
 
 
 function UsuariosDashboard({ getUsers }) {
@@ -57,13 +57,7 @@ export const Usuarios = () => {
   const getUsers = async () => {
     const { data } = await useAxios.get('/person');
     if (data.erorr) {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Error en consulta',
-        showConfirmButton: false,
-        timer: 1500
-      })
+      toast.error("Error en consulta");
     } else {
       if (typeof data.data === String) return;
       setData(data.data);
@@ -82,6 +76,10 @@ export const Usuarios = () => {
       <UsuariosTable
         data={data}
         getUsers={getUsers}
+      />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
       />
     </>
   )

@@ -14,7 +14,8 @@ import {
 import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
 import { useAxiosWithFile } from "../../../../utils/axios.instance";
-import { TYPE_DOCUMENT } from "../../../../const/TABLE_ROWS";
+import { TYPE_DOCUMENT } from "../../../../const/TYPE_DOCUMENT";
+import toast, { Toaster } from "react-hot-toast";
 
 export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -42,24 +43,12 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
 
         const { data } = await useAxiosWithFile('post', '/person/createMember', formData);
         if (data.error) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Error en consulta',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Error en consulta");
         } else {
             reset();
             setOpenFormCreate(false);
             await getUsers();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Usuario creado',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Error en consulta");
         }
     }
     const handleUpload = () => {
@@ -212,10 +201,10 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                                             {...field}
                                         >
                                             {
-                                            TYPE_DOCUMENT.map(document => (
-                                                <Option key={document.value} value={document.value}>{document.title}</Option>
-                                            ))
-                                        }
+                                                TYPE_DOCUMENT.map(document => (
+                                                    <Option key={document.value} value={document.value}>{document.title}</Option>
+                                                ))
+                                            }
                                         </Select>
                                     )}
                                     rules={{ required: true }}
@@ -272,7 +261,7 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                             </div>
                             <div>
                                 <Input
-                                    type="text"
+                                    type="date"
                                     label="Fecha de nacimiento"
                                     {...register('birthday', { required: true })}
                                 />
@@ -297,6 +286,10 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
                     </DialogFooter>
                 </form>
             </Dialog>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </>
     );
 }

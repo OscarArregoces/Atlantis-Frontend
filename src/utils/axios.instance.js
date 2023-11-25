@@ -1,6 +1,5 @@
 import axios from "axios";
 import { BASE_URL } from "../environment/env-dev";
-
 export const useAxios = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -47,4 +46,5 @@ useAxios.interceptors.response.use(
         // return Promise.reject(error.response.data);
     }
 );
+
 

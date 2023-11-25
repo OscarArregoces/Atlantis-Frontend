@@ -13,17 +13,15 @@ import {
 } from "@material-tailwind/react";
 import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
-import { TYPE_DOCUMENT } from "../../../../const/TABLE_ROWS";
+import { TYPE_DOCUMENT } from "../../../../const/TYPE_DOCUMENT";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import { useAxiosWithFile } from "../../../../utils/axios.instance";
-import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
 
-export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenFormUpdate, getUsers }) => {
-    const [showPassword, setShowPassword] = useState(false);
+export const UsuariosFormUpdate = ({ dataUser, openFormUpdate, setOpenFormUpdate, getUsers }) => {
     const { register, handleSubmit, reset, control, setValue } = useForm({
         defaultValues: {
             email: '',
-            // password: '',
             name: '',
             surname: '',
             type_document: '',
@@ -36,10 +34,8 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
     });
     useEffect(() => {
         if (dataUser) {
-            console.log(dataUser);
             const newData = {
                 email: dataUser.email,
-                // password: dataUser.password,
                 name: dataUser.person.name,
                 surname: dataUser.person.surname,
                 type_document: dataUser.person.type_document,
@@ -75,31 +71,22 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
     }
 
     const onSubmit = async (dataValue) => {
-        const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
+        const newDataValue = {
+            ...dataValue,
+            img_url: typeof (dataValue.img_url) === 'object' ? dataValue.img_url[0] : dataUser.person.img_url
+        };
         const formData = new FormData();
         for (let fileName in newDataValue) {
             formData.append(fileName, newDataValue[fileName]);
         };
         const { data } = await useAxiosWithFile('patch', `/person/${dataUser._id}`, formData)
         if (data.error) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Error en consulta',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Error en consulta");
         } else {
             reset();
             setOpenFormUpdate(false);
             await getUsers();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Usuario actualizado',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.success('Usuario actualizado')
         }
     };
 
@@ -113,6 +100,7 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
                 }}
                 handler={() => setOpenFormUpdate(!openFormUpdate)}
                 size="md"
+                className="overflow-y-auto max-h-[90vh]"
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader
@@ -161,20 +149,6 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
 
                                 </div>
                                 <Input type="text" label="Correo electronico" {...register('email')} />
-{/* 
-                                <Input
-                                    label="Contraseña"
-                                    {...register('password')}
-                                    type={
-                                        showPassword ? 'text' : 'password'
-                                    }
-                                    icon={
-                                        showPassword
-                                            ?
-                                            <EyeSlashIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                            :
-                                            <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
-                                    } /> */}
                             </div>
                         </div>
                     </DialogBody>
@@ -218,7 +192,7 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
                             <Input type="text" label="Pais" {...register('country')} />
                             <Input type="text" label="Ciudad" {...register('city')} />
                             <Input type="text" label="Celular" {...register('phone')} />
-                            <Input type="text" label="Fecha de nacimiento" {...register('birthday')} />
+                            <Input type="date" label="Fecha de nacimiento" {...register('birthday')} />
                         </div>
                     </DialogBody>
                     <DialogFooter>
@@ -236,6 +210,10 @@ export const UsuariosFormUpdate = ({ data: dataUser, openFormUpdate, setOpenForm
                     </DialogFooter>
                 </form>
             </Dialog>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </>
     );
 }

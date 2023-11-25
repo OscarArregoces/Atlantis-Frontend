@@ -6,12 +6,14 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+// import { router } from './routes/main.routes';
 import { router } from './routes/main.routes';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>
-        <RouterProvider router={router} />
+      {/* <MainRoutes /> */}
+      <RouterProvider router={router} />
     </ThemeProvider>
   </React.StrictMode>,
 )

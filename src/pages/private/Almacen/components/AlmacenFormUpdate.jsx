@@ -15,72 +15,97 @@ import {
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
-import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 
 export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, getProducts }) => {
-    const { register, handleSubmit, reset, control, formState: { errors }, setValue } = useForm({
+    const { register, handleSubmit, reset, control, formState: { errors }, setValue, resetField } = useForm({
         defaultValues: {
             name: '',
             brand: '',
             quantity: '',
-            total_price: '',
             unit_price: '',
             unit_cost: '',
             supplier: '',
             img_url: '',
             category: '',
+            subcategory: '',
+            reference: '',
         }
     });
 
-    const [categories, setCategories] = useState([null]);
-    useEffect(() => {
-        const getCategories = async () => {
-            const { data } = await useAxios.get('/category');
-            if (data.error) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Error en consulta',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            } else {
-                setCategories(data.data)
-            }
+    const [categories, setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
+
+    const getCategories = async () => {
+        const { data } = await useAxios.get('/category');
+        if (data.error) {
+            toast.error("Error en consulta");
+        } else {
+            setCategories(data.data)
         }
+    }
+    const getSuppliers = async () => {
+        const { data } = await useAxios.get('/supplier');
+        if (data.error) {
+            toast.error("Error en consulta");
+        } else {
+            setSuppliers(data.data)
+        }
+    }
+    useEffect(() => {
         getCategories();
+        getSuppliers();
     }, [])
+
+    const onChangeCategory = async (category_id) => {
+        if (!category_id) {
+            setValue("category", "");
+        }
+        resetField("subcategory")
+        const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
+        setSubcategories(data.data);
+    }
+
+
     useEffect(() => {
         if (dataProduct) {
             const newData = {
                 name: dataProduct.name,
                 brand: dataProduct.brand,
                 quantity: dataProduct.quantity,
-                total_price: dataProduct.total_price,
                 unit_price: dataProduct.unit_price,
                 unit_cost: dataProduct.unit_cost,
                 supplier: dataProduct.supplier,
                 img_url: dataProduct.img_url,
-                category: dataProduct.category._id,
+                category: dataProduct.subcategory.category._id,
+                subcategory: dataProduct.subcategory._id,
+                reference: dataProduct.reference,
             }
             Object.keys(newData).forEach((fieldName) => {
                 setValue(fieldName, newData[fieldName]);
             });
-
         }
+
+        if (dataProduct) {
+            async function getSubcategory() {
+                const { data } = await useAxios.get(`/subcategory/byCategory/${dataProduct.subcategory.category._id}`);
+                setSubcategories(data.data);
+            }
+            getSubcategory();
+        }
+
     }, [dataProduct])
 
     const onSubmit = async (dataValue) => {
-        console.log(dataValue);
         const newDataValue = {
             ...dataValue,
-            img_url: dataValue.img_url[0],
+            img_url: typeof (dataValue.img_url) === 'object' ? dataValue.img_url[0] : dataProduct.img_url,
             quantity: Number(dataValue.quantity),
-            total_price: Number(dataValue.total_price),
             unit_price: Number(dataValue.unit_price),
             unit_cost: Number(dataValue.unit_cost),
-
+            supplier: dataValue.supplier._id,
         }
         const formData = new FormData();
         for (const fileName in newDataValue) {
@@ -88,24 +113,12 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
         }
         const { data } = await useAxiosWithFile('patch', `/product/${dataProduct._id}`, formData);
         if (data.error) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Error en consulta',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Hubo un problema");
         } else {
             reset();
             setDisplayForm(false);
             getProducts();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Venta actualizada',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.success('Producto actualizado')
         }
     }
 
@@ -143,15 +156,16 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                     >
                         Guardando productos
                     </DialogHeader>
+
                     <DialogBody>
 
                         <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                             <div className="grid grid-cols-1">
                                 <Avatar
-                                    src={dataProduct ? `${BASE_URL_MEDIA}/${dataProduct.img_url}` : '/assets/img/sinFoto.png'}
+                                    src={BASE_URL_MEDIA + dataProduct?.img_url || '/assets/img/sinFoto.png'}
                                     alt="avatar"
                                     id="avatar"
-                                    variant="rounded"
+                                    variant="square"
                                     size="xxl"
                                     className="m-auto"
                                 />
@@ -171,11 +185,8 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                     onClick={handleUpload}
                                 >
                                     <CloudArrowUpIcon className="h-5 w-5" />
-                                    Subir foto
+                                    Cargar foto
                                 </Button>
-                                {errors.img_url && errors.img_url.type === "required" && (
-                                    <span className="text-center text-red-500 text-sm">Debes cargar una foto</span>
-                                )}
                             </div>
                             <div className="grid gap-4">
                                 <div className="flex gap-2 mb-5">
@@ -209,6 +220,16 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                         <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                     )}
                                 </div>
+                                <div>
+                                    <Input
+                                        type="text"
+                                        label="Codigo referencia"
+                                        {...register('reference', { required: true })}
+                                    />
+                                    {errors.reference && errors.reference.type === "required" && (
+                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </DialogBody>
@@ -216,26 +237,62 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                     <DialogBody>
                         <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                             <div>
-                                <Input
-                                    type="number"
-                                    label="Cantidad"
-                                    {...register('quantity', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="category"
+                                    rules={{ required: true }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <Select
+                                            label="Categoria"
+                                            onChange={(value) => {
+                                                onChange(value);
+                                                onChangeCategory(value);
+                                            }}
+                                            value={dataProduct.subcategory.category._id}
+                                            onBlur={onBlur}
+                                        >
+                                            {
+                                                categories.map(category => (
+                                                    <Option key={category._id} value={category._id}>{category.name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
                                 />
-                                {errors.quantity && errors.quantity.type === "required" && (
+                                {errors.category && errors.category.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
                             <div>
-                                <Input
-                                    type="number"
-                                    label="Precio total"
-                                    {...register('total_price', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="subcategory"
+                                    rules={{ required: true }}
+                                    defaultValue=""
+                                    // render={({ field: { onChange, onBlur, value } }) => {
+                                    render={({ field }) => {
+                                        return (
+                                            <Select
+                                                label="Subcategoria"
+                                                value={dataProduct.subcategory._id}
+                                                // onChange={onChange}
+                                                // onBlur={onBlur}
+                                                // value={value}
+                                                {...field}
+                                            >
+                                                {
+                                                    subcategories.map(subcategorie => (
+                                                        <Option key={subcategorie._id} value={subcategorie._id}>{subcategorie.name}</Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                        )
+                                    }}
                                 />
-                                {errors.total_price && errors.total_price.type === "required" && (
+                                {errors.subcategory && errors.subcategory.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
-
                             <div>
                                 <Input
                                     type="number"
@@ -258,42 +315,42 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                 )}
                             </div>
                             <div>
-                                <Input
-                                    type="text"
-                                    label="Provedor"
-                                    {...register('supplier', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="supplier"
+                                    rules={{ required: true }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <Select
+                                            label="Proveedor"
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={dataProduct.supplier._id}
+                                        >
+                                            {
+                                                suppliers.map(supplier => (
+                                                    <Option key={supplier._id} value={supplier._id}>{supplier.name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
                                 />
                                 {errors.supplier && errors.supplier.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
                             <div>
-                                <Controller
-                                    render={({ field }) => (
-                                        <Select
-                                            label="Selecciona una categoria"
-                                            {...field}
-                                            value={dataProduct.category._id}
-                                        >
-                                            {
-                                                categories.map(category => (
-                                                    <Option key={category.name} value={category._id}>{category.name}</Option>
-                                                ))
-                                            }
-                                        </Select>
-                                    )}
-                                    rules={{ required: true }}
-                                    name="category"
-                                    control={control}
-                                    defaultValue=""
+                                <Input
+                                    type="number"
+                                    label="Cantidad"
+                                    {...register('quantity', { required: true })}
                                 />
-                                {errors.category && errors.category.type === "required" && (
+                                {errors.quantity && errors.quantity.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
-
                         </div>
                     </DialogBody>
+
                     <DialogFooter>
                         <Button
                             variant="text"
@@ -309,6 +366,10 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                     </DialogFooter>
                 </form>
             </Dialog>
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
+            />
         </>
     );
 }

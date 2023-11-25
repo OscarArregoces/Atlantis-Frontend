@@ -1,13 +1,13 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { Avatar, Card, IconButton, Tooltip, Typography } from "@material-tailwind/react";
+import { Avatar, Card, Chip, IconButton, Tooltip, Typography } from "@material-tailwind/react";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import { useState } from "react";
 import { useAxios } from "../../../../utils/axios.instance";
-import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
 import { AlmacenFormUpdate } from "./AlmacenFormUpdate";
 
-const TABLE_HEAD = ["Producto", "Categoria", "Marca", "Cantidad", "Precio total", "Precio unidad", "Costo unidad", "Provedor", ""];
+const TABLE_HEAD = ["Producto", "Categoria", "Subcategoria", "Marca", "Cantidad", "Estado", "Precio unidad", "Costo unidad", "Provedor",  ""];
 
 export const AlmacenTable = ({ products, getProducts }) => {
     const [idProduct, setIdProduct] = useState(null);
@@ -25,13 +25,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
     const handleDelete = async () => {
         const { data } = await useAxios.delete(`/product/${idProduct}`);
         if (data.error) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Error en consulta',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Error en consulta");
         } else {
             getProducts();
         }
@@ -73,7 +67,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                 </tr>
                                 :
                                 products.map((product, index) => {
-                                    const { _id, name, brand, quantity, total_price, unit_price, unit_cost, supplier, img_url, category } = product;
+                                    const { _id, name, brand, quantity, unit_price, unit_cost, supplier, img_url, subcategory } = product;
                                     const isLast = index === product.length - 1;
                                     const classes = isLast ? "p-4 border-b border-blue-gray-50" : "p-4 border-b border-blue-gray-50";
                                     return (
@@ -84,6 +78,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                                     title={img_url ? 'Perfil' : 'Sin perfil'}
                                                     alt="avatar"
                                                     size="md"
+                                                    variant="square"
                                                 />
                                                 <Typography
                                                     variant="small"
@@ -99,7 +94,16 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {category.name}
+                                                    {subcategory.name}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {subcategory.category.name}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
@@ -117,7 +121,26 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {quantity}
+                                                    {quantity.toLocaleString()}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <div className="w-max">
+                                                    <Chip
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        value={quantity === 0 ? "No disponible" : quantity > 1 && quantity <= 5 ? "Pocas unidades" : "Disponible"}
+                                                        color={quantity === 0 ? "red" : quantity > 1 && quantity <= 5 ? "yellow" : "green"}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {unit_price.toLocaleString()}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
@@ -126,7 +149,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {total_price}
+                                                    {unit_cost.toLocaleString()}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
@@ -135,25 +158,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {unit_price}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {unit_cost}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {supplier}
+                                                    {supplier.name}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
@@ -185,6 +190,10 @@ export const AlmacenTable = ({ products, getProducts }) => {
                 displayForm={showUpdate}
                 setDisplayForm={setShowUpdate}
                 getProducts={getProducts}
+            />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
             />
         </>
     );

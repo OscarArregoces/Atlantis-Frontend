@@ -1,5 +1,4 @@
-import { createBrowserRouter, } from "react-router-dom";
-import  App  from '../App';
+import { BrowserRouter, Route, Routes, createBrowserRouter, } from "react-router-dom";
 import { PublicLayout } from '../layouts/PublicLayout';
 import { PrivateLayout } from '../layouts/PrivateLayout';
 import { Dashboard } from '../pages/private/Dashboard/Dashboard';
@@ -9,11 +8,14 @@ import { Admin } from "../pages/private/Admin/Admin";
 import { NotFound } from "../components/common/NotFound";
 import { Ventas } from "../pages/private/Ventas/Ventas";
 import { Almacen } from "../pages/private/Almacen/Almacen";
+import { Login } from "../pages/public/Login";
+import { Economia } from "../pages/private/Economia/Economia";
+
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <App />,
+        element: <PublicLayout />,
     },
     {
         path: "*",
@@ -22,7 +24,7 @@ export const router = createBrowserRouter([
     },
     {
         path: "login",
-        element: <PublicLayout />,
+        element: <Login />,
     },
     {
         path: "private",
@@ -52,6 +54,11 @@ export const router = createBrowserRouter([
                 path: 'almacen',
                 element: <Almacen />
             },
+            {
+                path: 'economia',
+                element: <Economia />
+            },
         ]
     },
 ]);
+

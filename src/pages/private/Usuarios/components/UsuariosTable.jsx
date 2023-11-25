@@ -5,7 +5,7 @@ import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
 import { UsuariosDetails } from "./UsuariosDetails";
 import { useAxios } from "../../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
-import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
@@ -17,6 +17,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
     const [openDetails, setOpenDetails] = useState(false);
     const [userId, setUserId] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+
     const handelDelete = (id) => {
         setOpenFormDelete(true);
         setUserId(id)
@@ -25,26 +26,18 @@ export const UsuariosTable = ({ data, getUsers }) => {
         setOpenFormUpdate(!openFormUpdate);
         setCurrentUser(user)
     }
+    const handleDetails = (user) => {
+        setOpenDetails(!openDetails);
+        setCurrentUser(user)
+    }
     const deleteUser = async () => {
         if (userId) {
             const { data } = await useAxios.delete(`/person/${userId}`)
             if (data.error) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Error en consulta',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                toast.error("Error en consulta");
             }
             setTimeout(() => {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Eliminado exitosamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                toast.success('Eliminaddo exitosamente')
             }, 1000);
             await getUsers()
         }
@@ -131,7 +124,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
                                 </td>
                                 <td className={classes}>
                                     <Tooltip content="Ver detalles">
-                                        <IconButton variant="text" onClick={() => setOpenDetails(!openDetails)}>
+                                        <IconButton variant="text" onClick={() => handleDetails(member)}>
                                             <EyeIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -153,7 +146,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
                 </tbody>
             </table>
             <UsuariosFormUpdate
-                data={currentUser}
+                dataUser={currentUser}
                 openFormUpdate={openFormUpdate}
                 setOpenFormUpdate={setOpenFormUpdate}
                 getUsers={getUsers}
@@ -166,6 +159,11 @@ export const UsuariosTable = ({ data, getUsers }) => {
             <UsuariosDetails
                 openDetails={openDetails}
                 setOpenDetails={setOpenDetails}
+                dataUser={currentUser}
+            />
+            <Toaster
+                position="top-right"
+                reverseOrder={false}
             />
         </Card>
     );

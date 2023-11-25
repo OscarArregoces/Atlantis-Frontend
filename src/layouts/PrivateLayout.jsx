@@ -1,33 +1,28 @@
-import { Outlet } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 import { Navbar } from "../components/private/Navbar"
-import { Sidebar, SidebarItem } from "../components/private/Sidebar"
-import { useEffect, useState } from "react"
-import { HomeIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/solid"
+import { useEffect, useState } from "react";
+import { useAxios } from "../utils/axios.instance";
+
 
 export const PrivateLayout = () => {
-  const [open, setOpen] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  // useEffect(() => {
+  //   async function getCategory() {
+  //     const { data } = await useAxios.get('/category');
+  //     if (data.error) {
+  //       return setIsValid(false);
+  //     }
+  //     if (data.data === 'Invalid Token') {
+  //       return setIsValid(false)
+  //     }
+  //     return setIsValid(true)
+  //   };
+  //   getCategory();
+  // }, []);
 
-  const handleOpen = () => {
-    setOpen(!open)
-    console.log(open)
+  if (!isValid) {
+    return <Navigate to="/login" replace />;
   }
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-
-    const handleMediaChange = (event) => {
-      setOpen(true);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
-    handleMediaChange(mediaQuery);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
-
-
   return (
     <div className="bg-gray-200">
       <Navbar />

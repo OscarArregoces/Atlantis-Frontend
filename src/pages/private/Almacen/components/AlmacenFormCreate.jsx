@@ -15,40 +15,22 @@ import {
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
-import Swal from "sweetalert2";
-
-export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) => {
-
-    const [categories, setCategories] = useState([null]);
-    useEffect(() => {
-        const getCategories = async () => {
-            const { data } = await useAxios.get('/category');
-            if (data.error) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: 'Error en consulta',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            } else {
-                setCategories(data.data)
-            }
-        }
-        getCategories();
-    }, [])
-
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
+import toast, { Toaster } from "react-hot-toast";
+export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, categories, suppliers }) => {
+    const [subcategories, setSubcategories] = useState([]);
+    const [categorySelected, setCategorySelected] = useState(true);
+    const { register, handleSubmit, reset, control, formState: { errors }, setValue, resetField } = useForm({
         defaultValues: {
             name: '',
             brand: '',
             quantity: '',
-            total_price: '',
             unit_price: '',
             unit_cost: '',
             supplier: '',
             img_url: '',
             category: '',
+            subcategory: '',
+            reference: '',
         }
     });
     const onSubmit = async (dataValue) => {
@@ -56,10 +38,8 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
             ...dataValue,
             img_url: dataValue.img_url[0],
             quantity: Number(dataValue.quantity),
-            total_price: Number(dataValue.total_price),
             unit_price: Number(dataValue.unit_price),
             unit_cost: Number(dataValue.unit_cost),
-
         }
         const formData = new FormData();
         for (const fileName in newDataValue) {
@@ -67,27 +47,14 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
         }
         const { data } = await useAxiosWithFile('post', '/product', formData);
         if (data.error) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'error',
-                title: 'Error en consulta',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.error("Error en consulta");
         } else {
             reset();
             setDisplayForm(false);
             getProducts();
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Venta registrada',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            toast.success('Producto guardado')
         }
     }
-
     const handleUpload = () => {
         const inputUpload = document.querySelector('#inputUpload');
         inputUpload.click();
@@ -104,7 +71,16 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
             }
         })
     }
-
+    const onChangeCategory = async (category_id) => {
+        if (!category_id) {
+            setValue("category", "");
+            return setCategorySelected(true);
+        }
+        resetField("subcategory")
+        setCategorySelected(false);
+        const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
+        setSubcategories(data.data);
+    }
     return (
         <>
             <Dialog
@@ -130,7 +106,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                                     src="/assets/img/sinFoto.png"
                                     alt="avatar"
                                     id="avatar"
-                                    variant="rounded"
+                                    variant="square"
                                     size="xxl"
                                     className="m-auto"
                                 />
@@ -150,7 +126,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                                     onClick={handleUpload}
                                 >
                                     <CloudArrowUpIcon className="h-5 w-5" />
-                                    Subir foto
+                                    Cargar foto
                                 </Button>
                                 {errors.img_url && errors.img_url.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Debes cargar una foto</span>
@@ -188,6 +164,16 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                                         <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                     )}
                                 </div>
+                                <div>
+                                    <Input
+                                        type="text"
+                                        label="Codigo referencia"
+                                        {...register('reference', { required: true })}
+                                    />
+                                    {errors.reference && errors.reference.type === "required" && (
+                                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </DialogBody>
@@ -195,26 +181,61 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                     <DialogBody>
                         <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                             <div>
-                                <Input
-                                    type="number"
-                                    label="Cantidad"
-                                    {...register('quantity', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="category"
+                                    rules={{ required: true }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <Select
+                                            label="Categoria"
+                                            onChange={(value) => {
+                                                onChange(value);
+                                                onChangeCategory(value);
+                                            }}
+                                            onBlur={onBlur}
+                                        >
+                                            {
+                                                categories.map(category => (
+                                                    <Option key={category._id} value={category._id}>{category.name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
                                 />
-                                {errors.quantity && errors.quantity.type === "required" && (
+                                {errors.category && errors.category.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
                             <div>
-                                <Input
-                                    type="number"
-                                    label="Precio total"
-                                    {...register('total_price', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="subcategory"
+                                    rules={{ required: true }}
+                                    defaultValue=""
+                                    // render={({ field: { onChange, onBlur, value } }) => {
+                                    render={({ field }) => {
+                                        return (
+                                            <Select
+                                                label="Subcategoria"
+                                                // onChange={onChange}
+                                                // onBlur={onBlur}
+                                                // value={value}
+                                                {...field}
+                                                disabled={categorySelected}
+                                            >
+                                                {
+                                                    subcategories.map(subcategorie => (
+                                                        <Option key={subcategorie._id} value={subcategorie._id}>{subcategorie.name}</Option>
+                                                    ))
+                                                }
+                                            </Select>
+                                        )
+                                    }}
                                 />
-                                {errors.total_price && errors.total_price.type === "required" && (
+                                {errors.subcategory && errors.subcategory.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
-
                             <div>
                                 <Input
                                     type="number"
@@ -237,41 +258,41 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                                 )}
                             </div>
                             <div>
-                                <Input
-                                    type="text"
-                                    label="Provedor"
-                                    {...register('supplier', { required: true })}
+                                <Controller
+                                    control={control}
+                                    name="supplier"
+                                    rules={{ required: true }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <Select
+                                            label="Proveedor"
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                        >
+                                            {
+                                                suppliers.map(supplier => (
+                                                    <Option key={supplier._id} value={supplier._id}>{supplier.name}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
                                 />
                                 {errors.supplier && errors.supplier.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
                             <div>
-                                <Controller
-                                    render={({ field }) => (
-                                        <Select
-                                            label="Selecciona una categoria"
-                                            {...field}
-                                        >
-                                            {
-                                                categories.map(category => (
-                                                    <Option key={category.name} value={category._id}>{category.name}</Option>
-                                                ))
-                                            }
-                                        </Select>
-                                    )}
-                                    rules={{ required: true }}
-                                    name="category"
-                                    control={control}
-                                    defaultValue=""
+                                <Input
+                                    type="number"
+                                    label="Cantidad"
+                                    {...register('quantity', { required: true })}
                                 />
-                                {errors.category && errors.category.type === "required" && (
+                                {errors.quantity && errors.quantity.type === "required" && (
                                     <span className="text-center text-red-500 text-sm">Campo requerido</span>
                                 )}
                             </div>
-
                         </div>
                     </DialogBody>
+                    
                     <DialogFooter>
                         <Button
                             variant="text"
@@ -287,6 +308,11 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts }) 
                     </DialogFooter>
                 </form>
             </Dialog>
+
+            <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
         </>
     );
 }

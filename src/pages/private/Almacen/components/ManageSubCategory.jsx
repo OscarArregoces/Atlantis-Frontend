@@ -1,14 +1,14 @@
-import { Button, Dialog, Card, Typography, CardHeader, CardBody, CardFooter, Tooltip, IconButton, Input } from "@material-tailwind/react"
+import { Button, Dialog, Card, Typography, CardHeader, CardBody, CardFooter, Tooltip, IconButton, Input, Select, Option } from "@material-tailwind/react"
 import { PencilIcon, PlusIcon, TrashIcon, } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
 
-const TABLE_HEAD = ["Categoria", "Acciones"];
+const TABLE_HEAD = ["Subcategoría", "Categoría", "Acciones"];
 
-function CategoryDashboard({ setDisplay }) {
+function SubCategoryDashboard({ setDisplay }) {
     return (
         <>
             <Card className="w-full rounded-none shadow-sm">
@@ -16,10 +16,10 @@ function CategoryDashboard({ setDisplay }) {
                     <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
                         <div>
                             <Typography variant="h5" color="blue-gray">
-                                Listado de las categorias
+                                Listado de las subcategorías
                             </Typography>
                             <Typography color="gray" className="mt-1 font-normal">
-                                Accede a información de las categorias y trabaja con ellas a tu gusto.
+                                Accede a información de las subcategorías y trabaja con ellas a tu gusto.
                             </Typography>
                         </div>
                         <Button
@@ -37,19 +37,19 @@ function CategoryDashboard({ setDisplay }) {
     )
 }
 
-function CategoryTable({ categories, getCategories }) {
+function SubCategoryTable({ subCategories, getSubCategories }) {
     const [displayDelete, setDisplayDelete] = useState(false);
-    const [idCategory, setIdCategory] = useState(null);
-    const handleClick = (idCategory) => {
-        setIdCategory(idCategory);
+    const [idSubCategory, setIdSubCategory] = useState(null);
+    const handleClick = (id) => {
+        setIdSubCategory(id);
         setDisplayDelete(!displayDelete);
     }
     const handleDelete = async () => {
-        const { data } = await useAxios.delete(`/category/${idCategory}`);
+        const { data } = await useAxios.delete(`/subcategory/${idSubCategory}`);
         if (data.error) {
             toast.error("Error en consulta");
         } else {
-            await getCategories();
+            await getSubCategories();
         }
     }
 
@@ -76,9 +76,9 @@ function CategoryTable({ categories, getCategories }) {
                 </thead>
                 <tbody>
                     {
-                        categories.length === 0 ? <tr><td>No hay categorias</td><td>---</td></tr> :
-                            categories.map(({ _id, name }, index) => {
-                                const isLast = index === categories.length - 1;
+                        subCategories.length === 0 ? <tr><td>No hay subcategorias</td><td>---</td></tr> :
+                            subCategories.map(({ _id, name, category }, index) => {
+                                const isLast = index === subCategories.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                                 return (
@@ -90,6 +90,15 @@ function CategoryTable({ categories, getCategories }) {
                                                 className="font-normal"
                                             >
                                                 {name}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal"
+                                            >
+                                                {category.name}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -120,14 +129,27 @@ function CategoryTable({ categories, getCategories }) {
 }
 
 
-function CategoryForm({ getCategories }) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+function SubCategoryForm({ getSubCategories }) {
+    const { register, handleSubmit, reset, formState: { errors }, control } = useForm();
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        async function getCategories() {
+            const { data } = await useAxios.get('/category');
+            if (data.error) {
+                toast.error("Error en consulta");
+            } else {
+                setCategories(data.data)
+            }
+        }
+        getCategories()
+    }, [])
+
     const onSubmit = async (dataValue) => {
-        const { data } = await useAxios.post('/category', dataValue);
+        const { data } = await useAxios.post('/subcategory', dataValue);
         if (data.error) {
             toast.error("Error en consulta");
         } else {
-            await getCategories();
+            await getSubCategories();
             reset();
         }
     }
@@ -140,13 +162,34 @@ function CategoryForm({ getCategories }) {
                     className="mb-4 grid h-28 place-items-center"
                 >
                     <Typography variant="h3" color="white">
-                        Categorias
+                        Subcategorías
                     </Typography>
                 </CardHeader>
                 <CardBody className="flex flex-col gap-4">
                     <Input label="Nombre" size="lg" {...register('name', { required: true })} />
                     {errors.name && errors.name.type === "required" && (
                         <span className="text-start text-red-500 text-sm">Campo requerido</span>
+                    )}
+                    <Controller
+                        rules={{ required: true }}
+                        name="category"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <Select
+                                label="Categoria"
+                                {...field}
+                            >
+                                {
+                                    categories.map(category => (
+                                        <Option key={category._id} value={category._id}>{category.name}</Option>
+                                    ))
+                                }
+                            </Select>
+                        )}
+                    />
+                    {errors.type_document && errors.type_document.type === "required" && (
+                        <span className="text-center text-red-500 text-sm">Campo requerido</span>
                     )}
                 </CardBody>
                 <CardFooter className="pt-0">
@@ -158,28 +201,38 @@ function CategoryForm({ getCategories }) {
         </Card>
     );
 }
-export const MangeCategory = ({ display, setDisplay, getCategories, categories }) => {
+export const MangeSubCategory = ({ display, setDisplay }) => {
+
+    const [subCategories, setSubCategories] = useState([]);
+    const getSubCategories = async () => {
+        const { data } = await useAxios.get('/subcategory');
+        if (data.error) {
+            toast.error("Error en consulta");
+        } else {
+            setSubCategories(data.data)
+        }
+    }
 
     useEffect(() => {
-        getCategories();
+        getSubCategories();
     }, [])
 
 
     return (
         <Dialog open={display} size="xl" className="min-h-[50vh]">
-            <CategoryDashboard
+            <SubCategoryDashboard
                 setDisplay={setDisplay}
             />
             <div className="flex">
                 <div className="w-1/2 flex justify-center items-center">
-                    <CategoryForm
-                        getCategories={getCategories}
+                    <SubCategoryForm
+                        getSubCategories={getSubCategories}
                     />
                 </div>
                 <div className="w-1/2">
-                    <CategoryTable
-                        categories={categories}
-                        getCategories={getCategories}
+                    <SubCategoryTable
+                        subCategories={subCategories}
+                        getSubCategories={getSubCategories}
                     />
                 </div>
             </div>

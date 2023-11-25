@@ -5,47 +5,44 @@ import {
   CardFooter,
   Typography,
   Input,
-  Checkbox,
   Button,
 } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../utils/axios.instance";
-import Swal from "sweetalert2";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import toast, { Toaster } from "react-hot-toast";
 
 export const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (body) => {
-    const { data } = await useAxios.post('/auth/login', body);
-    if (data.error) {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Credenciales incorrectas',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    } else {
-      localStorage.setItem('token', data.data.token)
-      localStorage.setItem('user', JSON.stringify(data.data.user))
-      reset()
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: `Bienvenido ${data.data.user.name}`,
-        showConfirmButton: false,
-        timer: 1500
-      })
-      setTimeout(() => {
-        navigate('/private/dashboard')
-      }, 1500);
-    }
 
+    async function validSesion(body) {
+      const { data } = await useAxios.post('/auth/login', body);
+      return data;
+    }
+    toast.promise(
+      validSesion(body),
+      {
+        loading: 'Verificando...',
+        success: (data) => {
+          if (!data.error) {
+            localStorage.setItem('token', data.data.token)
+            localStorage.setItem('user', JSON.stringify(data.data.user))
+            reset();
+            setTimeout(() => {
+              navigate('/private/dashboard');
+            }, 1000);
+          }
+          return `Bienvenido ${data.data.user.name}`
+        },
+        error: 'Credenciales incorrectas',
+      }
+    );
   }
   return (
     <div className="w-screen h-screen flex justify-center items-center">
@@ -110,6 +107,10 @@ export const Login = () => {
           </CardFooter>
         </form>
       </Card>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
     </div>
 
   );
