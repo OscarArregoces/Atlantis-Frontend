@@ -15,6 +15,14 @@ function SubCategoryDashboard({ setDisplay }) {
                 <CardHeader floated={false} shadow={false} className="rounded-none">
                     <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
                         <div>
+                            <div className="w-full mb-3 flex justify-end md:hidden lg:hidden">
+                                <Button
+                                    color="gray"
+                                    onClick={() => setDisplay(display => !display)}
+                                >
+                                    <span>Salir</span>
+                                </Button>
+                            </div>
                             <Typography variant="h5" color="blue-gray">
                                 Listado de las subcategorías
                             </Typography>
@@ -25,7 +33,7 @@ function SubCategoryDashboard({ setDisplay }) {
                         <Button
                             color="gray"
                             onClick={() => setDisplay(display => !display)}
-                            className="mr-1"
+                            className="mr-1 hidden md:block lg:block"
                         >
                             <span>Salir</span>
                         </Button>
@@ -37,7 +45,7 @@ function SubCategoryDashboard({ setDisplay }) {
     )
 }
 
-function SubCategoryTable({ subCategories, getSubCategories }) {
+function SubCategoryTable({ subCategories, getSubCategories, setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
     const [idSubCategory, setIdSubCategory] = useState(null);
     const handleClick = (id) => {
@@ -51,6 +59,10 @@ function SubCategoryTable({ subCategories, getSubCategories }) {
         } else {
             await getSubCategories();
         }
+    }
+    const handleEdit = async (subcategory) => {
+        if (!subcategory) return;
+        setCurrentEdit(subcategory)
     }
 
     return (
@@ -103,7 +115,11 @@ function SubCategoryTable({ subCategories, getSubCategories }) {
                                         </td>
                                         <td className={classes}>
                                             <Tooltip content="Editar categoria">
-                                                <IconButton variant="text" >
+                                                <IconButton variant="text" onClick={() => handleEdit({
+                                                    _id: _id,
+                                                    name: name,
+                                                    category: category._id,
+                                                })} >
                                                     <PencilIcon className="h-5 w-5" />
                                                 </IconButton>
                                             </Tooltip>
@@ -129,8 +145,8 @@ function SubCategoryTable({ subCategories, getSubCategories }) {
 }
 
 
-function SubCategoryForm({ getSubCategories }) {
-    const { register, handleSubmit, reset, formState: { errors }, control } = useForm();
+function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
+    const { register, handleSubmit, reset, formState: { errors }, control, setValue } = useForm();
     const [categories, setCategories] = useState([]);
     useEffect(() => {
         async function getCategories() {
@@ -143,12 +159,32 @@ function SubCategoryForm({ getSubCategories }) {
         }
         getCategories()
     }, [])
+    useEffect(() => {
+        if (currentEdit) {
+            const { _id, name, category } = currentEdit;
+            setValue("name", name);
+            setValue("category", category);
+        }
+    }, [currentEdit])
 
     const onSubmit = async (dataValue) => {
-        const { data } = await useAxios.post('/subcategory', dataValue);
+        if (!currentEdit) {
+            const { data } = await useAxios.post('/subcategory', dataValue);
+            if (data.error) {
+                return toast.error("Hubo un problema");
+            } else {
+                toast.success("Subcategoria creada");
+                await getSubCategories();
+                return reset();
+            }
+        }
+        const { _id } = currentEdit;
+        const { data } = await useAxios.patch(`/subcategory/${_id}`, dataValue);
         if (data.error) {
-            toast.error("Error en consulta");
+            toast.error("Hubo un problema");
         } else {
+            toast.success("Subcategoria actualizada");
+            setCurrentEdit(null);
             await getSubCategories();
             reset();
         }
@@ -193,8 +229,10 @@ function SubCategoryForm({ getSubCategories }) {
                     )}
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button variant="gradient" type="submit" fullWidth>
-                        Crear
+                    <Button variant="gradient" type="submit" color={currentEdit && "yellow"} fullWidth>
+                       {
+                        currentEdit ? "Actualizar" : "Crear"
+                       }
                     </Button>
                 </CardFooter>
             </form>
@@ -203,6 +241,7 @@ function SubCategoryForm({ getSubCategories }) {
 }
 export const MangeSubCategory = ({ display, setDisplay }) => {
 
+    const [currentEdit, setCurrentEdit] = useState(null)
     const [subCategories, setSubCategories] = useState([]);
     const getSubCategories = async () => {
         const { data } = await useAxios.get('/subcategory');
@@ -219,20 +258,32 @@ export const MangeSubCategory = ({ display, setDisplay }) => {
 
 
     return (
-        <Dialog open={display} size="xl" className="min-h-[50vh]">
+        <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <SubCategoryDashboard
                 setDisplay={setDisplay}
             />
-            <div className="flex">
-                <div className="w-1/2 flex justify-center items-center">
+            <div className="
+                flex flex-col justify-center items-center
+                md:flex md:flex-row
+                lg:flex lg:flex-row
+            ">
+                <div className="
+                     w-full mb-5 md:w-1/2 lg:w-1/2 
+                     flex justify-center items-center
+                ">
                     <SubCategoryForm
                         getSubCategories={getSubCategories}
+                        currentEdit={currentEdit}
+                        setCurrentEdit={setCurrentEdit}
                     />
                 </div>
-                <div className="w-1/2">
+                <div className="
+                     w-full md:w-1/2 lg:w-1/2
+                ">
                     <SubCategoryTable
                         subCategories={subCategories}
                         getSubCategories={getSubCategories}
+                        setCurrentEdit={setCurrentEdit}
                     />
                 </div>
             </div>

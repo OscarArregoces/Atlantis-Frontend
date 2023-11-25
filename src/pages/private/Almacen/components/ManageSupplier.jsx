@@ -11,10 +11,18 @@ const TABLE_HEAD = ["Nombre", "Telefono", "Correo electronico", "Ciudad", "Direc
 function SupplierDashboard({ setDisplay }) {
     return (
         <>
-            <Card className="w-full h-24 rounded-none shadow-sm">
+            <Card className="w-full rounded-none shadow-sm">
                 <CardHeader floated={false} shadow={false} className="rounded-none">
                     <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
                         <div>
+                            <div className="w-full mb-3 flex justify-end md:hidden lg:hidden">
+                                <Button
+                                    color="gray"
+                                    onClick={() => setDisplay(display => !display)}
+                                >
+                                    <span>Salir</span>
+                                </Button>
+                            </div>
                             <Typography variant="h5" color="blue-gray">
                                 Listado de los proveedores
                             </Typography>
@@ -25,7 +33,7 @@ function SupplierDashboard({ setDisplay }) {
                         <Button
                             color="gray"
                             onClick={() => setDisplay(display => !display)}
-                            className="mr-1"
+                            className="mr-1 hidden md:block lg:block"
                         >
                             <span>Salir</span>
                         </Button>
@@ -37,7 +45,7 @@ function SupplierDashboard({ setDisplay }) {
     )
 }
 
-function SupplierTable({ suppliers, getSuppliers }) {
+function SupplierTable({ suppliers, getSuppliers, setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
     const [idSupplier, setIdSupplier] = useState(null);
     const handleClick = (id) => {
@@ -47,14 +55,19 @@ function SupplierTable({ suppliers, getSuppliers }) {
     const handleDelete = async () => {
         const { data } = await useAxios.delete(`/supplier/${idSupplier}`);
         if (data.error) {
-            toast.error("Error en consulta");
+            toast.error("Hubo un problema");
         } else {
             await getSuppliers();
         }
     }
+    const handleEdit = async (supplier) => {
+        if (!supplier) return;
+        setCurrentEdit(supplier);
+    }
 
     return (
-        <Card className="w-full h-[calc(100vh-6rem)]  max-h-[calc(100vh-6  rem)] overflow-y-auto  rounded-none">
+        <Card className="w-full h-[70vh] max-h-[70vh] overflow-y-auto  rounded-none">
+            {/* // <Card className="h-full w-full min-h-[50vh] max-h-[50vh] overflow-y-auto  rounded-none"> */}
             <table className="w-full min-w-max table-auto text-left">
                 <thead>
                     <tr>
@@ -77,7 +90,8 @@ function SupplierTable({ suppliers, getSuppliers }) {
                 <tbody>
                     {
                         suppliers.length === 0 ? <tr><td>No hay proveedores</td><td>---</td></tr> :
-                            suppliers.map(({ _id, name, phone, email, city, address }, index) => {
+                            suppliers.map((supplier, index) => {
+                                const { _id, name, phone, email, city, address } = supplier;
                                 const isLast = index === suppliers.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -130,7 +144,7 @@ function SupplierTable({ suppliers, getSuppliers }) {
                                         </td>
                                         <td className={classes}>
                                             <Tooltip content="Editar proveedor">
-                                                <IconButton variant="text" >
+                                                <IconButton variant="text" onClick={() => handleEdit(supplier)}>
                                                     <PencilIcon className="h-5 w-5" />
                                                 </IconButton>
                                             </Tooltip>
@@ -156,18 +170,43 @@ function SupplierTable({ suppliers, getSuppliers }) {
 }
 
 
-function SupplierForm({ getSuppliers }) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+function SupplierForm({ getSuppliers, currentEdit, setCurrentEdit }) {
+    const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm();
 
     const onSubmit = async (dataValue) => {
-        const { data } = await useAxios.post('/supplier', dataValue);
+        if (!currentEdit) {
+            const { data } = await useAxios.post('/supplier', dataValue);
+            if (data.error) {
+                toast.error("Hubo un problema");
+            } else {
+                toast.success("Proveedor guardado");
+                await getSuppliers();
+                reset();
+            }
+        }
+        const { _id } = currentEdit;
+        const { data } = await useAxios.patch(`/supplier/${_id}`, dataValue);
         if (data.error) {
-            toast.error("Error en consulta");
+            toast.error("Hubo un problema");
         } else {
+            toast.success("Proveedor actualizado");
+            setCurrentEdit(null);
             await getSuppliers();
             reset();
         }
     }
+
+    useEffect(() => {
+        if (currentEdit) {
+            const { name, phone, email, city, address } = currentEdit;
+            setValue("name", name);
+            setValue("phone", phone);
+            setValue("email", email);
+            setValue("city", city);
+            setValue("address", address);
+        }
+    }, [currentEdit])
+
     return (
         <Card className="w-96">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -213,8 +252,10 @@ function SupplierForm({ getSuppliers }) {
                     </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button variant="gradient" type="submit" fullWidth>
-                        Crear
+                    <Button variant="gradient" type="submit" color={ currentEdit && "yellow"} fullWidth>
+                        {
+                            currentEdit ? "Actualizar" : "Crear"
+                        }
                     </Button>
                 </CardFooter>
             </form>
@@ -222,27 +263,37 @@ function SupplierForm({ getSuppliers }) {
     );
 }
 export const ManageSupplier = ({ display, setDisplay, getSuppliers, suppliers }) => {
-
+    const [currentEdit, setCurrentEdit] = useState(null);
     useEffect(() => {
         getSuppliers();
     }, [])
-
-
     return (
-        <Dialog open={display} size="xxl" className="bg-gray-200" >
+        <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <SupplierDashboard
                 setDisplay={setDisplay}
             />
-            <div className="flex">
-                <div className="w-1/3 h-[calc(100vh-6rem)] flex justify-center items-center">
+            <div className="
+                  flex flex-col justify-center items-center
+                  md:flex md:flex-row
+                  lg:flex lg:flex-row
+            ">
+                <div className="
+                    w-full mb-5 md:w-1/3 lg:w-1/3 
+                    flex justify-center items-center
+                ">
                     <SupplierForm
                         getSuppliers={getSuppliers}
+                        currentEdit={currentEdit}
+                        setCurrentEdit={setCurrentEdit}
                     />
                 </div>
-                <div className="w-2/3 h-[calc(100vh-6rem)]">
+                <div className="
+                    w-full md:w-2/3 lg:w-2/3
+                ">
                     <SupplierTable
                         suppliers={suppliers}
                         getSuppliers={getSuppliers}
+                        setCurrentEdit={setCurrentEdit}
                     />
                 </div>
             </div>

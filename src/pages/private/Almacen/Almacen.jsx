@@ -47,7 +47,11 @@ function AlmacenDashboard({ getProducts }) {
     <>
       <Card className="w-full rounded-none">
         <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
+          <div className="
+            mb-4 gap-8 flex flex-col justify-center items-start 
+            md:flex md:flex-row md:items-center md:justify-between 
+            lg:flex lg:flex-row lg:items-center lg:justify-between 
+          ">
             <div>
               <Typography variant="h5" color="blue-gray">
                 Almacen
@@ -60,7 +64,11 @@ function AlmacenDashboard({ getProducts }) {
               <PlusIcon strokeWidth={2} className="h-4 w-4" /> Agregar producto
             </Button>
           </div>
-          <div className="flex flex-col items-center gap-4 md:flex-row mb-5">
+          <div className="
+            flex flex-col items-start gap-2 mb-4 
+            md:flex md:flex-row md:mb-5 
+            lg:flex lg:flex-row lg:mb-5
+          ">
             <Button className="flex items-center gap-3" size="sm" onClick={() => setDisplayCategory(!displayCategory)}>
               <AdjustmentsVerticalIcon strokeWidth={2} className="h-5 w-5" /> Categorias
             </Button>

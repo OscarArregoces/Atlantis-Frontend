@@ -7,9 +7,21 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    height: 8px;
+    width: 8px;  
 }
-
 ::-webkit-scrollbar-thumb {
     background-color: #9CA3AF;
+    border-radius: 4px; 
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    background-color: #1fc1d5;
+}
+::-webkit-scrollbar-thumb:vertical {
+    background-color: #1fc1d5;
+}
+
+::-webkit-scrollbar-thumb:horizontal:hover,::-webkit-scrollbar-thumb:vertical:hover {
+    background-color: #1fc0d5be;
 }

@@ -15,6 +15,14 @@ function CategoryDashboard({ setDisplay }) {
                 <CardHeader floated={false} shadow={false} className="rounded-none">
                     <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
                         <div>
+                            <div className="w-full mb-3 flex justify-end md:hidden lg:hidden">
+                                <Button
+                                    color="gray"
+                                    onClick={() => setDisplay(display => !display)}
+                                >
+                                    <span>Salir</span>
+                                </Button>
+                            </div>
                             <Typography variant="h5" color="blue-gray">
                                 Listado de las categorias
                             </Typography>
@@ -25,7 +33,7 @@ function CategoryDashboard({ setDisplay }) {
                         <Button
                             color="gray"
                             onClick={() => setDisplay(display => !display)}
-                            className="mr-1"
+                            className="mr-1 hidden md:block lg:block"
                         >
                             <span>Salir</span>
                         </Button>
@@ -37,7 +45,7 @@ function CategoryDashboard({ setDisplay }) {
     )
 }
 
-function CategoryTable({ categories, getCategories }) {
+function CategoryTable({ categories, getCategories, setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
     const [idCategory, setIdCategory] = useState(null);
     const handleClick = (idCategory) => {
@@ -51,6 +59,11 @@ function CategoryTable({ categories, getCategories }) {
         } else {
             await getCategories();
         }
+    }
+
+    const handleEdit = (_id, name) => {
+        if (!_id || !name) return;
+        setCurrentEdit({ _id: _id, name: name });
     }
 
     return (
@@ -94,7 +107,7 @@ function CategoryTable({ categories, getCategories }) {
                                         </td>
                                         <td className={classes}>
                                             <Tooltip content="Editar categoria">
-                                                <IconButton variant="text" >
+                                                <IconButton variant="text" onClick={() => handleEdit(_id, name)}>
                                                     <PencilIcon className="h-5 w-5" />
                                                 </IconButton>
                                             </Tooltip>
@@ -120,17 +133,38 @@ function CategoryTable({ categories, getCategories }) {
 }
 
 
-function CategoryForm({ getCategories }) {
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+function CategoryForm({ getCategories, currentEdit, setCurrentEdit }) {
+
+    const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm();
     const onSubmit = async (dataValue) => {
-        const { data } = await useAxios.post('/category', dataValue);
+        if (!currentEdit) {
+            const { data } = await useAxios.post('/category', dataValue);
+            if (data.error) {
+                return toast.error("Hubo un problema");
+            } else {
+                await getCategories();
+                toast.success("Categoria guardada");
+                return reset();
+            }
+        }
+        const { _id } = currentEdit;
+        const { data } = await useAxios.patch(`/category/${_id}`, dataValue);
         if (data.error) {
-            toast.error("Error en consulta");
+            toast.error("Hubo un problema");
         } else {
             await getCategories();
+            setCurrentEdit(null);
+            toast.success("Categoria actualizada");
             reset();
         }
     }
+    useEffect(() => {
+        if (currentEdit) {
+            const { name } = currentEdit;
+            setValue("name", name);
+        }
+    }, [currentEdit])
+
     return (
         <Card className="w-96">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -150,8 +184,10 @@ function CategoryForm({ getCategories }) {
                     )}
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button variant="gradient" type="submit" fullWidth>
-                        Crear
+                    <Button variant="gradient" type="submit" color={currentEdit && "yellow"} fullWidth>
+                        {
+                            currentEdit ? "Actualizar" : "Crear"
+                        }
                     </Button>
                 </CardFooter>
             </form>
@@ -160,26 +196,40 @@ function CategoryForm({ getCategories }) {
 }
 export const MangeCategory = ({ display, setDisplay, getCategories, categories }) => {
 
+    const [currentEdit, setCurrentEdit] = useState(null);
+
     useEffect(() => {
         getCategories();
     }, [])
 
 
     return (
-        <Dialog open={display} size="xl" className="min-h-[50vh]">
+        <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <CategoryDashboard
                 setDisplay={setDisplay}
             />
-            <div className="flex">
-                <div className="w-1/2 flex justify-center items-center">
+            <div className="
+                flex flex-col justify-center items-center
+                md:flex md:flex-row
+                lg:flex lg:flex-row
+            ">
+                <div className="
+                    w-full mb-5 md:w-1/2 lg:w-1/2 
+                    flex justify-center items-center
+                ">
                     <CategoryForm
                         getCategories={getCategories}
+                        setCurrentEdit={setCurrentEdit}
+                        currentEdit={currentEdit}
                     />
                 </div>
-                <div className="w-1/2">
+                <div className="
+                    w-full md:w-1/2 lg:w-1/2
+                ">
                     <CategoryTable
                         categories={categories}
                         getCategories={getCategories}
+                        setCurrentEdit={setCurrentEdit}
                     />
                 </div>
             </div>
