@@ -49,7 +49,7 @@ export const SidebarBtn = () => {
                 </div>
                 <Sidebar>
                     <SidebarItem icon={<HomeIcon className="h-5 w-5" />} text="Inicio" path="dashboard" closeDrawer={closeDrawer} />
-                    <SidebarItem icon={<ShieldCheckIcon className="h-5 w-5" />} text="Admin" path="admin" closeDrawer={closeDrawer} />
+                    {/* <SidebarItem icon={<ShieldCheckIcon className="h-5 w-5" />} text="Admin" path="admin" closeDrawer={closeDrawer} /> */}
                     <SidebarItem icon={<UserIcon className="h-5 w-5" />} text="Usuarios" path="usuarios" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<ShoppingBagIcon className="h-5 w-5" />} text="Ventas" path="ventas" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<ArchiveBoxIcon className="h-5 w-5" />} text="Almacen" path="almacen" closeDrawer={closeDrawer} />
