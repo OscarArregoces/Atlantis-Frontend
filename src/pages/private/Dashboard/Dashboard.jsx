@@ -1,6 +1,6 @@
 import { Chip, Spinner, Typography } from "@material-tailwind/react"
-import { BarGraphic } from "../../../components/private/graphics/BarGraphic"
-import { CheckIcon, CubeIcon, CurrencyDollarIcon, ShoppingCartIcon, TruckIcon } from "@heroicons/react/24/solid";
+import { BarGraphic } from "../../../components/private/BarGraphic"
+import { CubeIcon, CurrencyDollarIcon, ShoppingBagIcon, ShoppingCartIcon, TruckIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useAxios } from "../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
@@ -12,14 +12,14 @@ const DashboardItem = ({ item }) => {
     <div className="
      bg-white w-[90%] p-3 shadow--md rounded-xl m-3
       md:w-1/3 md:p-3 md:shadow-md md:rounded-xl md:mx-3
-      lg:w-1/3 lg:p-3 lg:shadow-md lg:rounded-xl lg:mx-3
+      lg:w-1/3 lg:p-3 lg:shadow-md lg:rounded-xl lg:mx-3 lg:transform lg:hover:scale-105 lg:transition-transform
     ">
       <div className="w-full flex flex-col items-start justify-center">
         <Typography variant="lead" color="black">
           {type}
         </Typography>
         <div className="
-          w-full flex flex-col justify-center items-start gap-4
+          w-full flex flex-row justify-center items-start gap-4
           md:w-full md:flex md:flex-col jmd:ustify-center md:items-start md:gap-4
           lg:w-full lg:flex lg:flex-row jlg:ustify-between lg:items-center lg:gap-4
         ">
@@ -56,9 +56,9 @@ const DashboardItem = ({ item }) => {
           </div>
           <Chip
             value={
-              type === "Productos" ? <CubeIcon className="h-5 w-5" /> :
-                type === "Ingresos" ? <CurrencyDollarIcon className="h-5 w-5" /> :
-                  type === "Ventas" ? <ShoppingCartIcon className="h-5 w-5" /> : <TruckIcon className="h-5 w-5" />
+              type === "Productos" ? <CubeIcon className="h-8 w-8 md:h-5 md:w-5 lg:h-8 lg:w-8" /> :
+                type === "Ingresos" ? <CurrencyDollarIcon className="h-8 w-8 md:h-5 md:w-5 lg:h-8 lg:w-8" /> :
+                  type === "Ventas" ? <ShoppingCartIcon className="h-8 w-8 md:h-5 md:w-5 lg:h-8 lg:w-8" /> : <TruckIcon className="h-8 w-8 md:h-5 md:w-5 lg:h-5 lg:w-5" />
             }
             color={
               type === "Productos" ? "red" :
@@ -77,7 +77,7 @@ const ListItem = ({ nameProduct, totalQuantity, totalRevenue }) => {
       <div className="flex items-center gap-2">
         <Chip
           value={
-            <CheckIcon className="h-5 w-5" />
+            <ShoppingBagIcon className="h-5 w-5" />
           }
           color="indigo"
           variant="gradient"
@@ -85,7 +85,7 @@ const ListItem = ({ nameProduct, totalQuantity, totalRevenue }) => {
         />
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-col justify-center">
-            <Typography variant="paragraph" color="gray">
+            <Typography variant="paragraph" color="deep-purple" className="font-semibold">
               {nameProduct}
             </Typography>
             <Typography variant="small" color="gray">
@@ -136,13 +136,13 @@ export const Dashboard = () => {
   return (
     <div className="
         w-screen max-w-screen h-full 
-        md:w-screen md:max-w-screen md:h-[calc(100vh-3.5rem)] md:max-h-[calc(100vh-3.5rem)]
-        lg:w-screen lg:max-w-screen lg:h-[calc(100vh-3.5rem)] lg:max-h-[calc(100vh-3.5rem)]
+        md:w-screen md:max-w-[99vw] md:h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-3.5rem)]
+        lg:w-screen lg:max-w-[99vw] lg:h-full lg:min-h-[calc(100vh-3.5rem)]
       ">
       <div className="
         w-full flex flex-col justify-center items-center
         md:mb-3 md:flex md:flex-row md:justify-center md:items-center 
-        lg:mb-3 lg:flex lg:flex-row lg:justify-center lg:items-center 
+        lg:mb-3 lg:flex lg:flex-row lg:justify-center lg:items-center
       ">
         {
           dataDashboardItems.length === 0 && [1, 2, 3].map((id) => (
@@ -168,7 +168,7 @@ export const Dashboard = () => {
       <div className="
         w-full flex flex-col justify-center items-center
         md:w-full md:h-full md:flex md:flex-col
-        lg:w-full lg:h-[calc(100vh-15.5rem)] lg:flex lg:flex-row
+        lg:w-full lg:max-w-[99vw] lg:min-h-[calc(100vh-15.5rem)] lg:flex lg:flex-row
       ">
         <div className="
           w-[90%] m-3 bg-white rounded-xl flex flex-col justify-center items-center

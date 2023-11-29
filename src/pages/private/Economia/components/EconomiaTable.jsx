@@ -1,155 +1,162 @@
-import { Card, Typography } from "@material-tailwind/react";
+import { Card, Spinner, Typography } from "@material-tailwind/react";
 
-const TABLE_ROWS = [
-    {
-        description: "Pantalon",
-        cantidad: 5,
-        unit_price: 20000,
-        unit_cost: 15000,
-        line_total: 500000
-    },
-    {
-        description: "Sueter",
-        cantidad: 6,
-        unit_price: 40000,
-        unit_cost: 15588,
-        line_total: 5360000
-    },
-    {
-        description: "Tenis",
-        cantidad: 12,
-        unit_price: 10000,
-        unit_cost: 5000,
-        line_total: 120000
-    },
-    {
-        description: "Camisa",
-        cantidad: 5,
-        unit_price: 20000,
-        unit_cost: 15000,
-        line_total: 500000
-    },
-    {
-        description: "Tacones",
-        cantidad: 6,
-        unit_price: 40000,
-        unit_cost: 15588,
-        line_total: 5360000
-    },
-    {
-        description: "Blusas",
-        cantidad: 12,
-        unit_price: 10000,
-        unit_cost: 5000,
-        line_total: 120000
-    },
-];
-export const EconomiaTable = () => {
+
+export const EconomiaTable = ({ tableRows }) => {
+    if (!tableRows) {
+        return (
+            <div className="flex justify-center items-center">
+                <Spinner />
+            </div>
+        )
+    }
     return (
-        <Card className="h-full w-full rounded-none shadow-none">
+        <Card className="h-full w-full rounded-none shadow-none bg-cyan-100">
             <table className="w-full min-w-max table-auto text-left">
                 <thead className="border-b border-blue-400 text-end">
                     <tr>
-                        <th className="bg-cyan-100 p-4"                        >
+                        <th className="bg-cyan-100 p-4">
                             <Typography
                                 variant="small"
-                                color="black"
-                                className="font-normal leading-none text-start"
+                                className="text-normal text-black font-semibold leading-none text-start"
                             >
-                                Descripción
+                                #
                             </Typography>
                         </th>
-                        <th className="bg-cyan-100 p-4"                        >
+                        <th className="bg-cyan-100 p-4">
                             <Typography
                                 variant="small"
-                                color="black"
-                                className="font-normal leading-none"
+                                className="text-normal text-black font-semibold leading-none text-start"
                             >
-                                Cantidad
+                                Producto
                             </Typography>
                         </th>
-                        <th className="bg-cyan-100 p-4"                        >
+                        <th className="bg-cyan-100 p-4">
                             <Typography
                                 variant="small"
-                                color="black"
-                                className="font-normal leading-none"
+                                className="text-normal text-black font-semibold leading-none text-end"
                             >
-                                Precio unidad
+                                Cantidad actual
                             </Typography>
                         </th>
-                        <th className="bg-cyan-100 p-4"                        >
+                        <th className="bg-cyan-100 p-4">
                             <Typography
                                 variant="small"
-                                color="black"
-                                className="font-normal leading-none"
+                                className="text-normal text-black font-semibold leading-none text-end"
+                            >
+                                Cantidad vendida
+                            </Typography>
+                        </th>
+                        <th className="bg-cyan-100 p-4">
+                            <Typography
+                                variant="small"
+                                className="text-normal text-black font-semibold leading-none text-end"
+                            >
+                                Precio unidadd
+                            </Typography>
+                        </th>
+                        <th className="bg-cyan-100 p-4">
+                            <Typography
+                                variant="small"
+                                className="text-normal text-black font-semibold leading-none text-end"
                             >
                                 Costo unidad
                             </Typography>
                         </th>
-                        <th className="bg-cyan-100 p-4"                        >
+                        <th className="bg-cyan-100 p-4">
                             <Typography
                                 variant="small"
-                                color="black"
-                                className="font-normal leading-none"
+                                className="text-normal text-black font-semibold leading-none text-end"
                             >
-                                Linea total
+                                Ingresos generados
+                            </Typography>
+                        </th>
+                        <th className="bg-cyan-100 p-4">
+                            <Typography
+                                variant="small"
+                                className="text-normal text-black font-semibold leading-none text-end"
+                            >
+                                Ingresos por generar
                             </Typography>
                         </th>
                     </tr>
                 </thead>
-                <tbody className="bg-cyan-100 border-b border-blue-400 text-end">
-                    {TABLE_ROWS.map(({ description, cantidad, unit_price, unit_cost, line_total }, index) => {
-                        const isLast = index === TABLE_ROWS.length - 1;
+                <tbody className="bg-cyan-100 text-end">
+                    {tableRows.map(({ product, current_quantity, quantity_sold, unit_price, unit_cost, generated, to_generate }, index) => {
                         const classes = "p-4";
-
                         return (
-                            <tr key={description}>
+                            <tr key={product}>
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
                                         color="gray"
                                         className="font-normal text-start"
                                     >
-                                        {description}
+                                        {index + 1}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
                                         color="gray"
-                                        className="font-normal"
+                                        className="font-normal text-start"
                                     >
-                                        {cantidad}
+                                        {product}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
                                         color="gray"
-                                        className="font-normal"
+                                        className="font-normal text-end"
                                     >
-                                        {unit_price}
+                                        {current_quantity.toLocaleString()}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
                                         color="gray"
-                                        className="font-normal"
+                                        className="font-normal text-end"
                                     >
-                                        {unit_cost}
+                                        {quantity_sold.toLocaleString()}
                                     </Typography>
                                 </td>
                                 <td className={classes}>
                                     <Typography
                                         variant="small"
                                         color="gray"
-                                        className="font-normal"
+                                        className="font-normal text-end"
                                     >
-                                        {line_total}
+                                        {unit_price.toLocaleString() + " " + "COP"}
                                     </Typography>
                                 </td>
-
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        color="gray"
+                                        className="font-normal text-end"
+                                    >
+                                        {unit_cost.toLocaleString() + " " + "COP"}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        color="gray"
+                                        className="font-normal text-end"
+                                    >
+                                        {generated.toLocaleString() + " " + "COP"}
+                                    </Typography>
+                                </td>
+                                <td className={classes}>
+                                    <Typography
+                                        variant="small"
+                                        color="gray"
+                                        className="font-normal text-end"
+                                    >
+                                        {to_generate.toLocaleString() + " " + "COP"}
+                                    </Typography>
+                                </td>
                             </tr>
                         );
                     })}

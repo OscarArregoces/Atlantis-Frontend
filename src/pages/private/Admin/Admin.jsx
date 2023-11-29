@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Controller, set, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Button,
   Select,
@@ -94,14 +94,12 @@ export const Admin = () => {
                   rules={{ required: true }}
                   defaultValue=""
                   render={({ field: { onChange, onBlur, value } }) => {
-                    // render={({ field }) => {
                     return (
                       <Select
                         label="Subcategoria"
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        // {...field}
                         disabled={categorySelected}
                       >
                         {

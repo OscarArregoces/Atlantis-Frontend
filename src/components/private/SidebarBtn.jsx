@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
     Drawer,
     Typography,
     IconButton,
 } from "@material-tailwind/react";
 import { Sidebar, SidebarItem } from "./Sidebar";
-import { ArchiveBoxIcon, CurrencyDollarIcon, HomeIcon, ShieldCheckIcon, ShoppingBagIcon, UserIcon } from "@heroicons/react/24/solid";
+import { ArchiveBoxIcon, CurrencyDollarIcon, HomeIcon, ShoppingBagIcon, UserIcon } from "@heroicons/react/24/solid";
 
 export const SidebarBtn = () => {
     const [open, setOpen] = useState(false);
@@ -49,7 +49,6 @@ export const SidebarBtn = () => {
                 </div>
                 <Sidebar>
                     <SidebarItem icon={<HomeIcon className="h-5 w-5" />} text="Inicio" path="dashboard" closeDrawer={closeDrawer} />
-                    {/* <SidebarItem icon={<ShieldCheckIcon className="h-5 w-5" />} text="Admin" path="admin" closeDrawer={closeDrawer} /> */}
                     <SidebarItem icon={<UserIcon className="h-5 w-5" />} text="Usuarios" path="usuarios" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<ShoppingBagIcon className="h-5 w-5" />} text="Ventas" path="ventas" closeDrawer={closeDrawer} />
                     <SidebarItem icon={<ArchiveBoxIcon className="h-5 w-5" />} text="Almacen" path="almacen" closeDrawer={closeDrawer} />
