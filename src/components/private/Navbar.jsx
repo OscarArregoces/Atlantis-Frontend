@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useAxios } from '../../utils/axios.instance';
+import { BASE_URL_MEDIA } from '../../environment/env-dev';
 
 const ChangePasswordd = ({ display, setDisplay }) => {
     const navigate = useNavigate();
@@ -119,12 +120,18 @@ const ChangePasswordd = ({ display, setDisplay }) => {
 
 export const Navbar = () => {
     const [display, setDisplay] = useState(false);
+    const [userSesion, setUserSesion] = useState(null);
     const navigate = useNavigate();
     const handleLogOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login')
     }
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        setUserSesion(user);
+    }, [])
+
     return (
         <header>
             <nav className='w-full h-14 bg-cyan-600 flex justify-center items-center'>
@@ -135,7 +142,7 @@ export const Navbar = () => {
                     <Menu>
                         <MenuHandler>
                             <div className='cursor-pointer flex justify-end items-center gap-2 mr-4'>
-                                <Avatar src="/assets/img/avatar.jpg" alt="avatar" size='sm' />
+                                <Avatar src={userSesion ? `${BASE_URL_MEDIA}${userSesion.img_url}` : "/assets/img/avatar.jpg"} alt="avatar" size='sm' />
                             </div>
                         </MenuHandler>
                         <MenuList className='rounded-none mt-1'>

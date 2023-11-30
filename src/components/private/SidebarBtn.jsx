@@ -9,7 +9,7 @@ import { ArchiveBoxIcon, CurrencyDollarIcon, HomeIcon, ShoppingBagIcon, UserIcon
 
 export const SidebarBtn = () => {
     const [open, setOpen] = useState(false);
-
+    
     const openDrawer = () => setOpen(true);
     const closeDrawer = () => {
         setOpen(false)

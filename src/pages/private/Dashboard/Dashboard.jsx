@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAxios } from "../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { refactorDataGrafic } from "../../../utils/refactorDataGraphic";
+import { getCurrentDate } from "../../../utils/GetDate";
 
 const DashboardItem = ({ item }) => {
   const { type } = item;
@@ -110,8 +111,26 @@ export const Dashboard = () => {
     if (data.error) {
       return toast.error("Error en consulta");
     }
-    const dataSorted = await refactorDataGrafic(data.data);
-    setDataGraphic(dataSorted);
+    if (data.data[0]?.name === "Sin productos") {
+      const currentDate = getCurrentDate();
+      const data = {
+        labels: [currentDate],
+        datasets: [
+          {
+            label: 'Sin productos',
+            data: [0],
+            fill: true,
+            backgroundColor: 'rgba(75,192,192,0.2)',
+            borderColor: 'rgba(75,192,192,1)'
+          },
+        ],
+      };
+
+      setDataGraphic(data);
+    } else {
+      const dataSorted = await refactorDataGrafic(data.data);
+      setDataGraphic(dataSorted);
+    }
   }
   const getDataRanking = async () => {
     const { data } = await useAxios.get("/utils/dashboard/rankingProducts");

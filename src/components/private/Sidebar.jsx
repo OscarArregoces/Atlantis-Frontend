@@ -1,9 +1,16 @@
-import { useContext, createContext, useState } from "react"
+import { useContext, createContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
+import { BASE_URL_MEDIA } from "../../environment/env-dev";
 const SidebarContext = createContext()
 
 export const Sidebar = ({ children }) => {
-    const [expanded, setExpanded] = useState(true)
+    const [expanded, setExpanded] = useState(true);
+    const [userSesion, setUserSesion] = useState(null);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        setUserSesion(user);
+    }, [])
 
     return (
         <aside className="h-[calc(100vh-3rem)]">
@@ -15,7 +22,7 @@ export const Sidebar = ({ children }) => {
                 <div className="relative bottom-0">
                     <div className="border-t flex p-3">
                         <img
-                            src="/assets/img/avatar.jpg"
+                            src={userSesion ? `${BASE_URL_MEDIA}${userSesion.img_url}` : "/assets/img/avatar.jpg"}
                             alt=""
                             className="w-10 h-10 rounded-md"
                         />
@@ -25,8 +32,8 @@ export const Sidebar = ({ children }) => {
                             ${expanded ? "w-52 ml-3" : "w-0"}`
                             }>
                             <div className="leading-4">
-                                <h4 className="font-semibold">Admin</h4>
-                                <span className="text-xs text-gray-600">admin@gmail.com</span>
+                                <h4 className="font-semibold">{userSesion ? userSesion.name : "Usuario"}</h4>
+                                <span className="text-xs text-gray-600">{userSesion ? userSesion.email : "Email"}</span>
                             </div>
                         </div>
                     </div>

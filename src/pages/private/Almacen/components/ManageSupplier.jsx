@@ -184,8 +184,7 @@ function SupplierForm({ getSuppliers, currentEdit, setCurrentEdit }) {
                 reset();
             }
         }
-        const { _id } = currentEdit;
-        const { data } = await useAxios.patch(`/supplier/${_id}`, dataValue);
+        const { data } = await useAxios.patch(`/supplier/${currentEdit?._id}`, dataValue);
         if (data.error) {
             toast.error("Hubo un problema");
         } else {
