@@ -1,17 +1,19 @@
 # 💻 SGI - FrontEnd 
 
 ## 🗂️ Set Up
+
+###### With Npm
 ```js
 npm install
 npm run dev
 ```
+###### With Yarn
 ```js
 yarn
 yarn dev
 ```
 ## 🗂️ Folder structure
 ![Folder Structure](/public/readme/Folder.png)
-
 
 ## ⚙️ Environment
 ![Environment](/public/readme/Environment.png)
