@@ -5,7 +5,7 @@
 
 
 #### ⚙️ Environment
-![Folder Structure](/public/readme/Environment.png)
+![Environment](/public/readme/Environment.png)
 
 ```js
 export const BASE_URL = 'http://localhost:3002';
