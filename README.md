@@ -1,11 +1,11 @@
 ## 💻 SGI - FrontEnd 
 
 #### 🗂️ Folder structure
-![Texto alternativo](/public/readme/Movil.png)
+![Folder Structure](/public/readme/Folder.png)
 
 
 #### ⚙️ Environment
-(IMAGEN ENVIRONMENT)
+![Folder Structure](/public/readme/Environment.png)
 
 ```js
 export const BASE_URL = 'http://localhost:3002';
