@@ -1,24 +1,24 @@
-## 💻 SGI - FrontEnd 
+# 💻 SGI - FrontEnd 
 
-#### 🗂️ Folder structure
+## 🗂️ Folder structure
 ![Folder Structure](/public/readme/Folder.png)
 
 
-#### ⚙️ Environment
+## ⚙️ Environment
 ![Environment](/public/readme/Environment.png)
 
 ```js
 export const BASE_URL = 'http://localhost:3002';
 export const BASE_URL_MEDIA = 'http://localhost:3002/static';
 ```
-#### 📸 Screenshots UI
+## 📸 Screenshots UI
 
-###### 🖥️ PC
+### 🖥️ PC
 ![Dashboard](/public/readme/Dashboard.png)
 ![Almacen](/public/readme/Almacen.png)
 
-###### 📱 Tablet
+###  📱 Tablet
 ![Tablet](/public/readme/Tablet.png)
 
-###### 📱 Movil
+###  📱 Movil
 ![Movil](/public/readme/Movil.png)
