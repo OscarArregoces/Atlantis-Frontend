@@ -4,7 +4,7 @@
 (IMAGEN DIRECTORIO)
 
 
-#### 🗂️ Environment
+#### ⚙️ Environment
 (IMAGEN ENVIRONMENT)
 
 ~~~
