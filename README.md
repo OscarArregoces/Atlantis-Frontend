@@ -1,5 +1,14 @@
 # 💻 SGI - FrontEnd 
 
+## 🗂️ Set Up
+```js
+npm install
+npm run dev
+```
+```js
+yarn
+yarn dev
+```
 ## 🗂️ Folder structure
 ![Folder Structure](/public/readme/Folder.png)
 
