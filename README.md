@@ -1,7 +1,7 @@
 ## 💻 SGI - FrontEnd 
 
 #### 🗂️ Folder structure
-(IMAGEN DIRECTORIO)
+![Texto alternativo](/public/readme/Movil.png)
 
 
 #### ⚙️ Environment
