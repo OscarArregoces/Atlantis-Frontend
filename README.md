@@ -1,14 +1,14 @@
 # 💻 SGI - FrontEnd 
 
-## 🗂️ Set Up
+## 📒 Set Up
 
 ###### With Npm
-```js
+```bash
 npm install
 npm run dev
 ```
 ###### With Yarn
-```js
+```bash
 yarn
 yarn dev
 ```
