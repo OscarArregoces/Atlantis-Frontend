@@ -73,7 +73,7 @@ export const Economia = () => {
               </Typography>
             </div>
             <Typography variant="paragraph" color="gray" className="p-2 md:p-0 lg:p-0" >
-              La sección de economía brinda una visión exhaustiva de la salud financiera en tu CRM de ventas. Obtén información detallada sobre cada producto, incluyendo inversiones asociadas, costos y proyecciones de ventas. Con un análisis integral, podrás tomar decisiones informadas para optimizar la rentabilidad. Explora inversiones, evalúa la relación costo-beneficio y sigue de cerca las proyecciones de ganancias, proporcionando una perspectiva holística que impulsa la eficiencia operativa y el crecimiento sostenible del sistema económico.
+              La sección de economía brinda una visión exhaustiva de la salud financiera en tu Sistema de Gestión de Inventario (SGI). Obtén información detallada sobre cada producto, incluyendo inversiones asociadas, costos y proyecciones de ventas. Con un análisis integral, podrás tomar decisiones informadas para optimizar la rentabilidad. Explora inversiones, evalúa la relación costo-beneficio y sigue de cerca las proyecciones de ganancias, proporcionando una perspectiva holística que impulsa la eficiencia operativa y el crecimiento sostenible del sistema económico.
             </Typography>
           </div>
 

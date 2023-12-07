@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
     background-color: #eeeeee;
-}
+} */
 
 ::-webkit-scrollbar {
     height: 8px;

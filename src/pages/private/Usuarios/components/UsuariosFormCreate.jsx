@@ -48,7 +48,6 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
             reset();
             setOpenFormCreate(false);
             await getUsers();
-            toast.error("Error en consulta");
         }
     }
     const handleUpload = () => {

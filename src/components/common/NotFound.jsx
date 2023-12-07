@@ -1,6 +1,6 @@
 import { Button } from '@material-tailwind/react';
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 
 export const NotFound = () => {
     const navigate = useNavigate();
@@ -15,7 +15,8 @@ export const NotFound = () => {
                     <p className="mt-4 mb-8 dark:text-gray-400">Pero no te preocupes, puedes encontrar muchas otras cosas en nuestra página de inicio.</p>
                     <Button
                         variant="gradient"
-                        onClick={() => navigate(-1)}
+                        onClick={() =>  navigate('/login')}
+                    // onClick={() => navigate(-1)}
                     >
                         Volver a la página de inicio
                     </Button>

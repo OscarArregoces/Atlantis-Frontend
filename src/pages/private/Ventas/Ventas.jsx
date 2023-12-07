@@ -11,7 +11,11 @@ function VentasDashboard({ getSales }) {
     <>
       <Card className="w-full rounded-none">
         <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
+          <div className="
+            mb-8 gap-8 flex flex-col justify-center items-start 
+            md:flex md:flex-row md:items-center md:justify-between 
+            lg:flex lg:flex-row lg:items-center lg:justify-between
+          ">
             <div>
               <Typography variant="h5" color="blue-gray">
                 Historial de ventas

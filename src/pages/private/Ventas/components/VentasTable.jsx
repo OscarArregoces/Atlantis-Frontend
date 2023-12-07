@@ -32,7 +32,7 @@ export const VentasTable = ({ sales = [] }) => {
     }
 
     return (
-        <Card className="h-[calc(100vh-221.5px)] w-full max-h-[calc(100vh-221.5px)] rounded-none overflow-scroll">
+        <Card className="h-[calc(100vh-218px)] w-full max-h-[calc(100vh-218px) rounded-none overflow-scroll">
             <CardBody className="px-0">
                 <table className="w-full min-w-max table-auto text-left">
                     <thead>

@@ -15,12 +15,11 @@ import { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TYPE_DOCUMENT } from "../../../const/TYPE_DOCUMENT";
 import { useAxios, useAxiosWithFile } from "../../../utils/axios.instance";
-import toast, { Toaster } from "react-hot-toast";
 import { BASE_URL_MEDIA } from "../../../environment/env-dev";
+import toast, { Toaster } from "react-hot-toast";
 
 
 export const Perfil = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState(null);
   const { register, handleSubmit, control, formState: { errors }, setValue } = useForm();
   const handleGetUser = async (idUser) => {

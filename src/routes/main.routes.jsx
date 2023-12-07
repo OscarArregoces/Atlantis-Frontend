@@ -10,6 +10,7 @@ import { Ventas } from "../pages/private/Ventas/Ventas";
 import { Almacen } from "../pages/private/Almacen/Almacen";
 import { Login } from "../pages/public/Login";
 import { Economia } from "../pages/private/Economia/Economia";
+import { ChangePassword } from "../pages/public/ChangePassword";
 
 
 export const router = createBrowserRouter([
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
     {
         path: "login",
         element: <Login />,
+    },
+    {
+        path: "changePassword",
+        element: <ChangePassword />,
     },
     {
         path: "private",
