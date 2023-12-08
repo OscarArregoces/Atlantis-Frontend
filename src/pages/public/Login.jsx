@@ -60,7 +60,7 @@ export const Login = () => {
           >
             <Avatar src="/assets/img/logo.png" className="h-10 w-10" />
             <Typography variant="h3" color="white">
-              Atlantis
+              DEMO
             </Typography>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
