@@ -78,7 +78,7 @@ export const Perfil = () => {
               <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                 <div className="grid grid-cols-1">
                   <Avatar
-                    src={dataPerfil ? `${BASE_URL_MEDIA}/${dataPerfil.person.img_url}` : '/assets/img/sinFoto.png'}
+                    src={dataPerfil ? dataPerfil.person.img_url : '/assets/img/sinFoto.png'}
                     alt="avatar"
                     id="avatar"
                     size="xxl"

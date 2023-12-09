@@ -1369,7 +1369,7 @@ export const dataPerfil = {
         "country": "Canada",
         "city": "Toronto",
         "phone": "3005008090",
-        "img_url": "/avatars/1701925178453-harry.jpg",
+        "img_url": "/fakeData/harry.jpg",
         "createdAt": "2023-12-07T04:59:38.627Z",
         "updatedAt": "2023-12-07T23:09:34.263Z"
     },
