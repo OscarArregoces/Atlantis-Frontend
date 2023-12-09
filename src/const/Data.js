@@ -1377,136 +1377,240 @@ export const dataPerfil = {
     "updatedAt": "2023-12-07T23:09:34.071Z"
 };
 export const dataDashboard = {
-    dataGraphic: [
+    dataGraphic: {
+        "labels": [
+            "2023-12-07",
+            "2023-12-06",
+            "2023-12-05",
+            "2023-12-04",
+            "2023-12-03",
+            "2023-12-02",
+            "2023-12-01"
+        ],
+        "datasets": [
+            {
+                "label": "Camisa Oversize Blanca",
+                "data": [
+                    1,
+                    2,
+                    2,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "fill": true,
+                "backgroundColor": "#7ED7C1",
+                "borderColor": "#7ED7C1"
+            },
+            {
+                "label": "Pantalon Jean Claro ",
+                "data": [
+                    3,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    5
+                ],
+                "fill": true,
+                "backgroundColor": "#FF8F8F",
+                "borderColor": "#FF8F8F"
+            },
+            {
+                "label": "Microfono Clasico",
+                "data": [
+                    1,
+                    0,
+                    0,
+                    0,
+                    5,
+                    0,
+                    0
+                ],
+                "fill": true,
+                "backgroundColor": "#7071E8",
+                "borderColor": "#7071E8"
+            },
+            {
+                "label": "Shampoo anticaspa",
+                "data": [
+                    1,
+                    0,
+                    0,
+                    3,
+                    5,
+                    4,
+                    6
+                ],
+                "fill": true,
+                "backgroundColor": "#FFCD4B",
+                "borderColor": "#FFCD4B"
+            },
+            {
+                "label": "Off-White Air Jordan 4",
+                "data": [
+                    3,
+                    0,
+                    0,
+                    2,
+                    1,
+                    3,
+                    2
+                ],
+                "fill": true,
+                "backgroundColor": "#FFFB73",
+                "borderColor": "#FFFB73"
+            },
+            {
+                "label": "Carolina Herrera EDP 100 ml para mujer",
+                "data": [
+                    1,
+                    0,
+                    0,
+                    3,
+                    0,
+                    0,
+                    0
+                ],
+                "fill": true,
+                "backgroundColor": "#CDF5FD",
+                "borderColor": "#CDF5FD"
+            }
+        ]
+    },
+    dataDashboardItems:[
         {
-            "fecha": "2023-12-07",
-            "productsInfo": [
-                {
-                    "name": "65714a7d1a14bd383beb0aa0",
-                    "quantity": 1,
-                    "totalValue": 676999
-                },
-                {
-                    "name": "6571498d1a14bd383beb0a87",
-                    "quantity": 3,
-                    "totalValue": 676999
-                },
-                {
-                    "name": "657148fe1a14bd383beb0a7c",
-                    "quantity": 1,
-                    "totalValue": 676999
-                },
-                {
-                    "name": "657147b81a14bd383beb0a66",
-                    "quantity": 1,
-                    "totalValue": 819000
-                },
-                {
-                    "name": "6571480e1a14bd383beb0a71",
-                    "quantity": 3,
-                    "totalValue": 819000
-                },
-                {
-                    "name": "65714a2f1a14bd383beb0a92",
-                    "quantity": 1,
-                    "totalValue": 819000
-                }
-            ]
+            "type": "Productos",
+            "total_productos": 23,
+            "tipo_productos": 6
         },
         {
-            "fecha": "2023-12-06",
-            "productsInfo": [
-                {
-                    "name": "65714a7d1a14bd383beb0aa0",
-                    "quantity": 2,
-                    "totalValue": 631998
-                }
-            ]
+            "type": "Ingresos",
+            "generados": 8159995,
+            "por_generar": 4071000
         },
         {
-            "fecha": "2023-12-05",
-            "productsInfo": [
-                {
-                    "name": "65714a7d1a14bd383beb0aa0",
-                    "quantity": 2,
-                    "totalValue": 631998
-                }
-            ]
+            "type": "Ventas",
+            "generadas": 8,
+            "por_generar": 23
+        }
+    ],
+    dataRanking:[
+        {
+            "totalQuantity": 19,
+            "totalRevenue": 2071000,
+            "productId": "657147b81a14bd383beb0a66",
+            "productDetails": {
+                "_id": "657147b81a14bd383beb0a66",
+                "name": "Camisa Oversize Blanca",
+                "reference": "#FFF150",
+                "brand": "Burberry",
+                "quantity": 6,
+                "unit_price": 109000,
+                "unit_cost": 78000,
+                "img_url": "/products/1701922744505-camisa.png",
+                "subcategory": "657145981a14bd383beb09e7",
+                "supplier": "6571472f1a14bd383beb0a5d",
+                "createdAt": "2023-12-07T04:19:04.508Z",
+                "updatedAt": "2023-12-07T04:43:05.338Z"
+            }
         },
         {
-            "fecha": "2023-12-04",
-            "productsInfo": [
-                {
-                    "name": "65714a2f1a14bd383beb0a92",
-                    "quantity": 3,
-                    "totalValue": 1428000
-                },
-                {
-                    "name": "657147b81a14bd383beb0a66",
-                    "quantity": 3,
-                    "totalValue": 1428000
-                },
-                {
-                    "name": "6571480e1a14bd383beb0a71",
-                    "quantity": 2,
-                    "totalValue": 1428000
-                }
-            ]
+            "totalQuantity": 11,
+            "totalRevenue": 1617000,
+            "productId": "6571480e1a14bd383beb0a71",
+            "productDetails": {
+                "_id": "6571480e1a14bd383beb0a71",
+                "name": "Pantalon Jean Claro ",
+                "reference": "#FFF280",
+                "brand": "KOA",
+                "quantity": 5,
+                "unit_price": 147000,
+                "unit_cost": 115000,
+                "img_url": "/products/1701922830089-pantalon.png",
+                "subcategory": "657145a21a14bd383beb09f5",
+                "supplier": "6571471c1a14bd383beb0a56",
+                "createdAt": "2023-12-07T04:20:30.092Z",
+                "updatedAt": "2023-12-07T04:43:05.429Z"
+            }
         },
         {
-            "fecha": "2023-12-03",
-            "productsInfo": [
-                {
-                    "name": "657147b81a14bd383beb0a66",
-                    "quantity": 5,
-                    "totalValue": 1972000
-                },
-                {
-                    "name": "657148fe1a14bd383beb0a7c",
-                    "quantity": 5,
-                    "totalValue": 1972000
-                },
-                {
-                    "name": "6571480e1a14bd383beb0a71",
-                    "quantity": 1,
-                    "totalValue": 1972000
-                }
-            ]
+            "totalQuantity": 8,
+            "totalRevenue": 280000,
+            "productId": "6571498d1a14bd383beb0a87",
+            "productDetails": {
+                "_id": "6571498d1a14bd383beb0a87",
+                "name": "Shampoo anticaspa",
+                "reference": "#FZT420",
+                "brand": "Head and Shoulders",
+                "quantity": 2,
+                "unit_price": 35000,
+                "unit_cost": 23000,
+                "img_url": "/products/1701923213497-shampoo.png",
+                "subcategory": "657145821a14bd383beb09e0",
+                "supplier": "657146fa1a14bd383beb0a48",
+                "createdAt": "2023-12-07T04:26:53.499Z",
+                "updatedAt": "2023-12-07T04:38:49.086Z"
+            }
         },
         {
-            "fecha": "2023-12-02",
-            "productsInfo": [
-                {
-                    "name": "6571480e1a14bd383beb0a71",
-                    "quantity": 3,
-                    "totalValue": 877000
-                },
-                {
-                    "name": "657147b81a14bd383beb0a66",
-                    "quantity": 4,
-                    "totalValue": 877000
-                }
-            ]
+            "totalQuantity": 6,
+            "totalRevenue": 1536000,
+            "productId": "657148fe1a14bd383beb0a7c",
+            "productDetails": {
+                "_id": "657148fe1a14bd383beb0a7c",
+                "name": "Microfono Clasico",
+                "reference": "#HFF350",
+                "brand": "Samsung",
+                "quantity": 6,
+                "unit_price": 256000,
+                "unit_cost": 193000,
+                "img_url": "/products/1701923070248-microfono.png",
+                "subcategory": "657145f91a14bd383beb0a18",
+                "supplier": "657147091a14bd383beb0a4f",
+                "createdAt": "2023-12-07T04:24:30.251Z",
+                "updatedAt": "2023-12-07T04:41:30.538Z"
+            }
         },
         {
-            "fecha": "2023-12-01",
-            "productsInfo": [
-                {
-                    "name": "657147b81a14bd383beb0a66",
-                    "quantity": 6,
-                    "totalValue": 1123000
-                },
-                {
-                    "name": "6571498d1a14bd383beb0a87",
-                    "quantity": 5,
-                    "totalValue": 1123000
-                },
-                {
-                    "name": "6571480e1a14bd383beb0a71",
-                    "quantity": 2,
-                    "totalValue": 1123000
-                }
-            ]
+            "totalQuantity": 5,
+            "totalRevenue": 1579995,
+            "productId": "65714a7d1a14bd383beb0aa0",
+            "productDetails": {
+                "_id": "65714a7d1a14bd383beb0aa0",
+                "name": "Carolina Herrera EDP 100 ml para mujer",
+                "reference": "#EDP780",
+                "brand": "Carolina Herrera",
+                "quantity": 0,
+                "unit_price": 315999,
+                "unit_cost": 285400,
+                "img_url": "/products/1701923453659-perfume.png",
+                "subcategory": "6571454c1a14bd383beb09cb",
+                "supplier": "6571471c1a14bd383beb0a56",
+                "createdAt": "2023-12-07T04:30:53.661Z",
+                "updatedAt": "2023-12-07T04:44:40.828Z"
+            }
+        },
+        {
+            "totalQuantity": 4,
+            "totalRevenue": 1076000,
+            "productId": "65714a2f1a14bd383beb0a92",
+            "productDetails": {
+                "_id": "65714a2f1a14bd383beb0a92",
+                "name": "Off-White Air Jordan 4",
+                "reference": "#WRT155",
+                "brand": "Nike",
+                "quantity": 4,
+                "unit_price": 269000,
+                "unit_cost": 234000,
+                "img_url": "/products/1701923375778-zapatos.png",
+                "subcategory": "657145d01a14bd383beb0a03",
+                "supplier": "657146df1a14bd383beb0a41",
+                "createdAt": "2023-12-07T04:29:35.781Z",
+                "updatedAt": "2023-12-07T04:43:05.247Z"
+            }
         }
     ]
 };

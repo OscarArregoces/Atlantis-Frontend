@@ -44,7 +44,7 @@ function UsuariosDashboard() {
                 md:flex md:flex-row 
                 lg:flex lg:flex-row
               ">
-                <Button type="submit" className="flex items-center gap-3 max-w-min" size="sm" color="blue">
+                <Button className="flex items-center gap-3 max-w-min" size="sm" color="blue">
                   <PaperAirplaneIcon strokeWidth={2} className="h-4 w-4" /> Buscar
                 </Button>
                 <Button className="flex items-center gap-3 max-w-min" size="sm" color="blue-gray">

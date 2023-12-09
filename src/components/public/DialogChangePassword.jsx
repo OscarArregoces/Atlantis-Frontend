@@ -9,7 +9,6 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAxios } from "../../utils/axios.instance";
 
 export const DialogChangePassword = ({ display, setDisplay }) => {
     const [successful, setSuccessful] = useState(false);
@@ -18,16 +17,11 @@ export const DialogChangePassword = ({ display, setDisplay }) => {
 
 
     const onSubmit = async (dataValue) => {
-        console.log(dataValue);
-        const { data } = await useAxios.post("/auth/forgotPassword", dataValue);
-        if (data.error) return setError(true);
         setError(false);
         setSuccessful(true);
-        setTimeout(() => {
-            setDisplay(!display);
-            setSuccessful(false);
-            reset();
-        }, 1500);
+        setDisplay(!display);
+        setSuccessful(false);
+        reset();
     }
     const handleCancel = () => {
         setSuccessful(false);
@@ -72,8 +66,8 @@ export const DialogChangePassword = ({ display, setDisplay }) => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="flex flex-col justify-center items-center mb-10">
                                 <Input type="email" label="Correo electronico" color="cyan" {...register("email", { required: true })} />
-                                {errors.name && errors.name.type === "required" && (
-                                    <span>This is required</span>
+                                {errors.email && errors.email.type === "required" && (
+                                    <span className="text-red-500">Campo requerido</span>
                                 )}
                             </div>
                             <div className="flex justify-end gap-5">

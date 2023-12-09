@@ -1,11 +1,6 @@
 import { Chip, Spinner, Typography } from "@material-tailwind/react"
 import { BarGraphic } from "../../../components/private/BarGraphic"
 import { CubeIcon, CurrencyDollarIcon, ShoppingBagIcon, ShoppingCartIcon, TruckIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import { useAxios } from "../../../utils/axios.instance";
-import toast, { Toaster } from "react-hot-toast";
-import { refactorDataGrafic } from "../../../utils/refactorDataGraphic";
-import { getCurrentDate } from "../../../utils/GetDate";
 import { dataDashboard } from "../../../const/Data";
 
 const DashboardItem = ({ item }) => {
@@ -104,33 +99,6 @@ const ListItem = ({ nameProduct, totalQuantity, totalRevenue }) => {
   )
 }
 export const Dashboard = () => {
-  const [dataGraphic, setDataGraphic] = useState(null);
-  const [dataRanking, setDataRanking] = useState([]);
-  const [dataDashboardItems, setDashboardItems] = useState([]);
-  const getDataGraphic = async () => {
-    const dataSorted = await refactorDataGrafic(dataDashboard.dataGraphic);
-    setDataGraphic(dataSorted);
-  }
-  const getDataRanking = async () => {
-    const { data } = await useAxios.get("/utils/dashboard/rankingProducts");
-    if (data.error) {
-      return toast.error("Error en consulta");
-    }
-    setDataRanking(data.data);
-  }
-  const getDashboardItems = async () => {
-    const { data } = await useAxios.get("/utils/dashboard/items");
-    if (data.error) {
-      return toast.error("Error en consulta");
-    }
-    setDashboardItems(data.data);
-  }
-  useEffect(() => {
-    getDataGraphic();
-    getDataRanking();
-    getDashboardItems();
-  }, [])
-
   return (
     <div className="
         w-screen max-w-screen h-full 
@@ -143,7 +111,7 @@ export const Dashboard = () => {
         lg:mb-3 lg:flex lg:flex-row lg:justify-center lg:items-center
       ">
         {
-          dataDashboardItems.length === 0 && [1, 2, 3].map((id) => (
+          dataDashboard.dataDashboardItems.length === 0 && [1, 2, 3].map((id) => (
             <DashboardItem
               key={id}
               item={
@@ -155,7 +123,7 @@ export const Dashboard = () => {
           ))
         }
         {
-          dataDashboardItems.map((item) => (
+          dataDashboard.dataDashboardItems.map((item) => (
             <DashboardItem
               key={item.type}
               item={item}
@@ -174,7 +142,7 @@ export const Dashboard = () => {
           lg:w-2/3 lg:mx-3 lg:bg-white lg:rounded-xl lg:flex lg:flex-col lg:justify-center lg:items-center lg:h-[75vh]
         ">
           <Typography variant="lead" className="my-5" >Ventas ultimos 7 días</Typography>
-          <BarGraphic data={dataGraphic} />
+          <BarGraphic data={dataDashboard.dataGraphic} />
         </div>
         <div className="
           w-[90%] m-3 p-3 bg-white rounded-xl flex flex-col justify-start items-center
@@ -185,10 +153,10 @@ export const Dashboard = () => {
             Ranking de productos
           </Typography>
           {
-            dataRanking.length === 0 && <div className="w-full h-full flex justify-center items-center"><Spinner /></div>
+            dataDashboard.dataRanking.length === 0 && <div className="w-full h-full flex justify-center items-center"><Spinner /></div>
           }
           {
-            dataRanking.map(({ totalQuantity, totalRevenue, productDetails }) => (
+            dataDashboard.dataRanking.map(({ totalQuantity, totalRevenue, productDetails }) => (
               <ListItem
                 key={productDetails.name}
                 nameProduct={productDetails.name}
@@ -200,10 +168,6 @@ export const Dashboard = () => {
 
         </div>
       </div>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
     </div>
   )
 }
