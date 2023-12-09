@@ -1,10 +1,10 @@
 import { Button, Dialog, Card, Typography, CardHeader, CardBody, CardFooter, Tooltip, IconButton, Input, Select, Option } from "@material-tailwind/react"
-import { PencilIcon, PlusIcon, TrashIcon, } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon, } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
+import { dataCategorias, dataSubcategorias } from "../../../../const/Data";
 
 const TABLE_HEAD = ["Subcategoría", "Categoría", "Acciones"];
 
@@ -45,20 +45,13 @@ function SubCategoryDashboard({ setDisplay }) {
     )
 }
 
-function SubCategoryTable({ subCategories, getSubCategories, setCurrentEdit }) {
+function SubCategoryTable({ setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
-    const [idSubCategory, setIdSubCategory] = useState(null);
     const handleClick = (id) => {
-        setIdSubCategory(id);
         setDisplayDelete(!displayDelete);
     }
     const handleDelete = async () => {
-        const { data } = await useAxios.delete(`/subcategory/${idSubCategory}`);
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            await getSubCategories();
-        }
+        toast.success("Subcategoria eliminada")
     }
     const handleEdit = async (subcategory) => {
         if (!subcategory) return;
@@ -88,9 +81,9 @@ function SubCategoryTable({ subCategories, getSubCategories, setCurrentEdit }) {
                 </thead>
                 <tbody>
                     {
-                        subCategories.length === 0 ? <tr><td>No hay subcategorias</td><td>---</td></tr> :
-                            subCategories.map(({ _id, name, category }, index) => {
-                                const isLast = index === subCategories.length - 1;
+                        dataSubcategorias.length === 0 ? <tr><td>No hay subcategorias</td><td>---</td></tr> :
+                        dataSubcategorias.map(({ _id, name, category }, index) => {
+                                const isLast = index === dataSubcategorias.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                                 return (
@@ -145,20 +138,9 @@ function SubCategoryTable({ subCategories, getSubCategories, setCurrentEdit }) {
 }
 
 
-function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
+function SubCategoryForm({ currentEdit, setCurrentEdit }) {
     const { register, handleSubmit, reset, formState: { errors }, control, setValue } = useForm();
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        async function getCategories() {
-            const { data } = await useAxios.get('/category');
-            if (data.error) {
-                toast.error("Error en consulta");
-            } else {
-                setCategories(data.data)
-            }
-        }
-        getCategories()
-    }, [])
+
     useEffect(() => {
         if (currentEdit) {
             const { _id, name, category } = currentEdit;
@@ -169,25 +151,12 @@ function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
 
     const onSubmit = async (dataValue) => {
         if (!currentEdit) {
-            const { data } = await useAxios.post('/subcategory', dataValue);
-            if (data.error) {
-                return toast.error("Hubo un problema");
-            } else {
-                toast.success("Subcategoria creada");
-                await getSubCategories();
-                return reset();
-            }
-        }
-        const { _id } = currentEdit;
-        const { data } = await useAxios.patch(`/subcategory/${_id}`, dataValue);
-        if (data.error) {
-            toast.error("Hubo un problema");
+            toast.success("Subcategoria creada");
         } else {
             toast.success("Subcategoria actualizada");
-            setCurrentEdit(null);
-            await getSubCategories();
-            reset();
         }
+        setCurrentEdit(null);
+        reset();
     }
     return (
         <Card className="w-96">
@@ -217,7 +186,7 @@ function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
                                 {...field}
                             >
                                 {
-                                    categories.map(category => (
+                                    dataCategorias.map(category => (
                                         <Option key={category._id} value={category._id}>{category.name}</Option>
                                     ))
                                 }
@@ -230,9 +199,9 @@ function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
                 </CardBody>
                 <CardFooter className="pt-0">
                     <Button variant="gradient" type="submit" color={currentEdit && "yellow"} fullWidth>
-                       {
-                        currentEdit ? "Actualizar" : "Crear"
-                       }
+                        {
+                            currentEdit ? "Actualizar" : "Crear"
+                        }
                     </Button>
                 </CardFooter>
             </form>
@@ -240,23 +209,7 @@ function SubCategoryForm({ getSubCategories, currentEdit, setCurrentEdit }) {
     );
 }
 export const MangeSubCategory = ({ display, setDisplay }) => {
-
     const [currentEdit, setCurrentEdit] = useState(null)
-    const [subCategories, setSubCategories] = useState([]);
-    const getSubCategories = async () => {
-        const { data } = await useAxios.get('/subcategory');
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            setSubCategories(data.data)
-        }
-    }
-
-    useEffect(() => {
-        getSubCategories();
-    }, [])
-
-
     return (
         <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <SubCategoryDashboard
@@ -272,7 +225,6 @@ export const MangeSubCategory = ({ display, setDisplay }) => {
                      flex justify-center items-center
                 ">
                     <SubCategoryForm
-                        getSubCategories={getSubCategories}
                         currentEdit={currentEdit}
                         setCurrentEdit={setCurrentEdit}
                     />
@@ -281,8 +233,6 @@ export const MangeSubCategory = ({ display, setDisplay }) => {
                      w-full md:w-1/2 lg:w-1/2
                 ">
                     <SubCategoryTable
-                        subCategories={subCategories}
-                        getSubCategories={getSubCategories}
                         setCurrentEdit={setCurrentEdit}
                     />
                 </div>

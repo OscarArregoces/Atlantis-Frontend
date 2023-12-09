@@ -1,5 +1,5 @@
 import { Button, Dialog, Card, Typography, CardHeader, CardBody, CardFooter, Tooltip, IconButton, Input } from "@material-tailwind/react"
-import { PencilIcon, PlusIcon, TrashIcon, } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon, } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
@@ -48,10 +48,8 @@ function CategoryDashboard({ setDisplay }) {
 
 function CategoryTable({ setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
-    const [idCategory, setIdCategory] = useState(null);
-    
+
     const handleClick = (idCategory) => {
-        setIdCategory(idCategory);
         setDisplayDelete(!displayDelete);
     }
     const handleDelete = async () => {
@@ -87,7 +85,7 @@ function CategoryTable({ setCurrentEdit }) {
                 <tbody>
                     {
                         dataCategorias.length === 0 ? <tr><td>No hay categorias</td><td>---</td></tr> :
-                        dataCategorias.map(({ _id, name }, index) => {
+                            dataCategorias.map(({ _id, name }, index) => {
                                 const isLast = index === dataCategorias.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -130,30 +128,16 @@ function CategoryTable({ setCurrentEdit }) {
 }
 
 
-function CategoryForm({ getCategories, currentEdit, setCurrentEdit }) {
-
+function CategoryForm({ currentEdit, setCurrentEdit }) {
     const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm();
     const onSubmit = async (dataValue) => {
-        if (!currentEdit) {
-            const { data } = await useAxios.post('/category', dataValue);
-            if (data.error) {
-                return toast.error("Hubo un problema");
-            } else {
-                await getCategories();
-                toast.success("Categoria guardada");
-                return reset();
-            }
-        }
-        const { _id } = currentEdit;
-        const { data } = await useAxios.patch(`/category/${_id}`, dataValue);
-        if (data.error) {
-            toast.error("Hubo un problema");
-        } else {
-            await getCategories();
-            setCurrentEdit(null);
+        if(currentEdit){
             toast.success("Categoria actualizada");
-            reset();
+        }else{
+            toast.success("Categoria creada");
         }
+        setCurrentEdit(null);
+        reset();
     }
     useEffect(() => {
         if (currentEdit) {
@@ -192,6 +176,7 @@ function CategoryForm({ getCategories, currentEdit, setCurrentEdit }) {
     );
 }
 export const MangeCategory = ({ display, setDisplay }) => {
+    const [currentEdit, setCurrentEdit] = useState(null);
     return (
         <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <CategoryDashboard
@@ -206,12 +191,15 @@ export const MangeCategory = ({ display, setDisplay }) => {
                     w-full mb-5 md:w-1/2 lg:w-1/2 
                     flex justify-center items-center
                 ">
-                    <CategoryForm />
+                    <CategoryForm
+                        currentEdit={currentEdit}
+                        setCurrentEdit={setCurrentEdit}
+                    />
                 </div>
                 <div className="
                     w-full md:w-1/2 lg:w-1/2
                 ">
-                    <CategoryTable />
+                    <CategoryTable setCurrentEdit={setCurrentEdit} />
                 </div>
             </div>
             <Toaster

@@ -1,4 +1,3 @@
-export const dataDashboard = [];
 export const dataUsuarios = [
     {
         "_id": "6571513a1a14bd383beb1257",
@@ -122,7 +121,7 @@ export const dataUsuarios = [
         "updatedAt": "2023-12-07T03:53:55.563Z"
     }
 ];
-export const dataCategorias =  [
+export const dataCategorias = [
     {
         "_id": "6571449d1a14bd383beb09b1",
         "name": "Perfumeria",
@@ -166,8 +165,233 @@ export const dataCategorias =  [
         "updatedAt": "2023-12-07T04:01:21.380Z"
     }
 ];
-export const dataSubcategorias = [];
-export const dataProveedor = [];
+export const dataSubcategorias = [
+    {
+        "_id": "657145f91a14bd383beb0a18",
+        "name": "Microfono",
+        "category": {
+            "_id": "657144a91a14bd383beb09b7",
+            "name": "Electronica",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:06:01.577Z",
+            "updatedAt": "2023-12-07T04:06:01.577Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:11:37.863Z",
+        "updatedAt": "2023-12-07T04:11:37.863Z"
+    },
+    {
+        "_id": "657145e91a14bd383beb0a11",
+        "name": "Zapatos para Niños",
+        "category": {
+            "_id": "6571439d1a14bd383beb09ab",
+            "name": "Calzados",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:33.173Z",
+            "updatedAt": "2023-12-07T04:01:33.173Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:11:21.170Z",
+        "updatedAt": "2023-12-07T04:11:21.170Z"
+    },
+    {
+        "_id": "657145d91a14bd383beb0a0a",
+        "name": "Sandalias",
+        "category": {
+            "_id": "6571439d1a14bd383beb09ab",
+            "name": "Calzados",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:33.173Z",
+            "updatedAt": "2023-12-07T04:01:33.173Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:11:05.674Z",
+        "updatedAt": "2023-12-07T04:11:05.674Z"
+    },
+    {
+        "_id": "657145d01a14bd383beb0a03",
+        "name": "Zapatillas Deportivas",
+        "category": {
+            "_id": "6571439d1a14bd383beb09ab",
+            "name": "Calzados",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:33.173Z",
+            "updatedAt": "2023-12-07T04:01:33.173Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:10:56.835Z",
+        "updatedAt": "2023-12-07T04:10:56.835Z"
+    },
+    {
+        "_id": "657145ae1a14bd383beb09fc",
+        "name": "Drill",
+        "category": {
+            "_id": "657143911a14bd383beb09a1",
+            "name": "Pantalones",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:21.380Z",
+            "updatedAt": "2023-12-07T04:01:21.380Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:10:22.670Z",
+        "updatedAt": "2023-12-07T04:10:22.670Z"
+    },
+    {
+        "_id": "657145a21a14bd383beb09f5",
+        "name": "Jeans",
+        "category": {
+            "_id": "657143911a14bd383beb09a1",
+            "name": "Pantalones",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:21.380Z",
+            "updatedAt": "2023-12-07T04:01:21.380Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:10:10.557Z",
+        "updatedAt": "2023-12-07T04:10:10.557Z"
+    },
+    {
+        "_id": "6571459d1a14bd383beb09ee",
+        "name": "Cuello en V",
+        "category": {
+            "_id": "657143891a14bd383beb099b",
+            "name": "Camisas",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:13.319Z",
+            "updatedAt": "2023-12-07T04:01:25.259Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:10:05.223Z",
+        "updatedAt": "2023-12-07T04:10:05.223Z"
+    },
+    {
+        "_id": "657145981a14bd383beb09e7",
+        "name": "Cuello redondo",
+        "category": {
+            "_id": "657143891a14bd383beb099b",
+            "name": "Camisas",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:01:13.319Z",
+            "updatedAt": "2023-12-07T04:01:25.259Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:10:00.017Z",
+        "updatedAt": "2023-12-07T04:10:00.017Z"
+    },
+    {
+        "_id": "657145821a14bd383beb09e0",
+        "name": "Shampoo",
+        "category": {
+            "_id": "657144fb1a14bd383beb09bd",
+            "name": "Productos para el Cuidado del Cabello",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:07:23.510Z",
+            "updatedAt": "2023-12-07T04:07:23.510Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:09:38.554Z",
+        "updatedAt": "2023-12-07T04:09:38.554Z"
+    },
+    {
+        "_id": "6571456e1a14bd383beb09d9",
+        "name": "Fragancias Naturales",
+        "category": {
+            "_id": "6571449d1a14bd383beb09b1",
+            "name": "Perfumeria",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:05:49.143Z",
+            "updatedAt": "2023-12-07T04:08:03.361Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:09:18.682Z",
+        "updatedAt": "2023-12-07T04:09:18.682Z"
+    },
+    {
+        "_id": "657145571a14bd383beb09d2",
+        "name": "Perfumes para Hombre",
+        "category": {
+            "_id": "6571449d1a14bd383beb09b1",
+            "name": "Perfumeria",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:05:49.143Z",
+            "updatedAt": "2023-12-07T04:08:03.361Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:08:55.862Z",
+        "updatedAt": "2023-12-07T04:08:55.862Z"
+    },
+    {
+        "_id": "6571454c1a14bd383beb09cb",
+        "name": "Perfumes para Mujer",
+        "category": {
+            "_id": "6571449d1a14bd383beb09b1",
+            "name": "Perfumeria",
+            "visibility": true,
+            "createdAt": "2023-12-07T04:05:49.143Z",
+            "updatedAt": "2023-12-07T04:08:03.361Z"
+        },
+        "visibility": true,
+        "createdAt": "2023-12-07T04:08:44.235Z",
+        "updatedAt": "2023-12-07T04:08:44.235Z"
+    }
+];
+export const dataProveedor = [
+    {
+        "_id": "6571472f1a14bd383beb0a5d",
+        "name": "Ryan Black",
+        "phone": "5558765",
+        "email": "ryan.black@example.com",
+        "city": "Wonderland",
+        "address": " 654 Cedar Street",
+        "visibility": true,
+        "createdAt": "2023-12-07T04:16:47.613Z",
+        "updatedAt": "2023-12-07T04:16:47.613Z"
+    },
+    {
+        "_id": "6571471c1a14bd383beb0a56",
+        "name": "Emily White",
+        "phone": "5554321",
+        "email": "emily.white@example.com",
+        "city": "Fantasyburg",
+        "address": "321 Pine Road",
+        "visibility": true,
+        "createdAt": "2023-12-07T04:16:28.724Z",
+        "updatedAt": "2023-12-07T04:16:28.724Z"
+    },
+    {
+        "_id": "657147091a14bd383beb0a4f",
+        "name": "Alex Johnson",
+        "phone": "5559876",
+        "email": "alex.johnson@example.com",
+        "city": "Dreamsville",
+        "address": "789 Oak Lane",
+        "visibility": true,
+        "createdAt": "2023-12-07T04:16:09.420Z",
+        "updatedAt": "2023-12-07T04:16:09.420Z"
+    },
+    {
+        "_id": "657146fa1a14bd383beb0a48",
+        "name": "Jane Doe",
+        "phone": "5555678",
+        "email": "jane.doe@example.com",
+        "city": "Imaginarytown",
+        "address": "456 Elm Avenue",
+        "visibility": true,
+        "createdAt": "2023-12-07T04:15:54.034Z",
+        "updatedAt": "2023-12-07T04:15:54.034Z"
+    },
+    {
+        "_id": "657146df1a14bd383beb0a41",
+        "name": "John Smith",
+        "phone": "5551234",
+        "email": "john.smith@example.com",
+        "city": "Ficticiaville",
+        "address": "123 Main Street",
+        "visibility": true,
+        "createdAt": "2023-12-07T04:15:27.597Z",
+        "updatedAt": "2023-12-07T04:15:27.597Z"
+    }
+];
 export const dataProductos = [
     {
         "_id": "65714a7d1a14bd383beb0aa0",
@@ -1063,7 +1287,71 @@ export const dataVentas = [
         "updatedAt": "2023-12-01T04:38:48.902Z"
     }
 ];
-export const dataEconomia = [];
+export const dataEconomia = {
+    "tableRows": [
+        {
+            "product": "Camisa Oversize Blanca",
+            "current_quantity": 6,
+            "quantity_sold": 19,
+            "unit_price": 109000,
+            "unit_cost": 78000,
+            "generated": 2071000,
+            "to_generate": 654000
+        },
+        {
+            "product": "Carolina Herrera EDP 100 ml para mujer",
+            "current_quantity": 0,
+            "quantity_sold": 5,
+            "unit_price": 315999,
+            "unit_cost": 285400,
+            "generated": 1579995,
+            "to_generate": 0
+        },
+        {
+            "product": "Microfono Clasico",
+            "current_quantity": 6,
+            "quantity_sold": 6,
+            "unit_price": 256000,
+            "unit_cost": 193000,
+            "generated": 1536000,
+            "to_generate": 1536000
+        },
+        {
+            "product": "Off-White Air Jordan 4",
+            "current_quantity": 4,
+            "quantity_sold": 4,
+            "unit_price": 269000,
+            "unit_cost": 234000,
+            "generated": 1076000,
+            "to_generate": 1076000
+        },
+        {
+            "product": "Pantalon Jean Claro ",
+            "current_quantity": 5,
+            "quantity_sold": 11,
+            "unit_price": 147000,
+            "unit_cost": 115000,
+            "generated": 1617000,
+            "to_generate": 735000
+        },
+        {
+            "product": "Shampoo anticaspa",
+            "current_quantity": 2,
+            "quantity_sold": 8,
+            "unit_price": 35000,
+            "unit_cost": 23000,
+            "generated": 280000,
+            "to_generate": 70000
+        }
+    ],
+    "deductions": {
+        "revenue_generated": 8159995,
+        "to_generate": 4071000,
+        "current_quantity_products": 23,
+        "quantity_products_sold": 53,
+        "invested": 9635000
+    }
+};
 export const dataPerfil = {
     "_id": "6571513a1a14bd383beb1257",
     "email": "ingoscararregoces@gmail.com",
@@ -1087,4 +1375,138 @@ export const dataPerfil = {
     },
     "createdAt": "2023-12-07T04:59:38.840Z",
     "updatedAt": "2023-12-07T23:09:34.071Z"
+};
+export const dataDashboard = {
+    dataGraphic: [
+        {
+            "fecha": "2023-12-07",
+            "productsInfo": [
+                {
+                    "name": "65714a7d1a14bd383beb0aa0",
+                    "quantity": 1,
+                    "totalValue": 676999
+                },
+                {
+                    "name": "6571498d1a14bd383beb0a87",
+                    "quantity": 3,
+                    "totalValue": 676999
+                },
+                {
+                    "name": "657148fe1a14bd383beb0a7c",
+                    "quantity": 1,
+                    "totalValue": 676999
+                },
+                {
+                    "name": "657147b81a14bd383beb0a66",
+                    "quantity": 1,
+                    "totalValue": 819000
+                },
+                {
+                    "name": "6571480e1a14bd383beb0a71",
+                    "quantity": 3,
+                    "totalValue": 819000
+                },
+                {
+                    "name": "65714a2f1a14bd383beb0a92",
+                    "quantity": 1,
+                    "totalValue": 819000
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-06",
+            "productsInfo": [
+                {
+                    "name": "65714a7d1a14bd383beb0aa0",
+                    "quantity": 2,
+                    "totalValue": 631998
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-05",
+            "productsInfo": [
+                {
+                    "name": "65714a7d1a14bd383beb0aa0",
+                    "quantity": 2,
+                    "totalValue": 631998
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-04",
+            "productsInfo": [
+                {
+                    "name": "65714a2f1a14bd383beb0a92",
+                    "quantity": 3,
+                    "totalValue": 1428000
+                },
+                {
+                    "name": "657147b81a14bd383beb0a66",
+                    "quantity": 3,
+                    "totalValue": 1428000
+                },
+                {
+                    "name": "6571480e1a14bd383beb0a71",
+                    "quantity": 2,
+                    "totalValue": 1428000
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-03",
+            "productsInfo": [
+                {
+                    "name": "657147b81a14bd383beb0a66",
+                    "quantity": 5,
+                    "totalValue": 1972000
+                },
+                {
+                    "name": "657148fe1a14bd383beb0a7c",
+                    "quantity": 5,
+                    "totalValue": 1972000
+                },
+                {
+                    "name": "6571480e1a14bd383beb0a71",
+                    "quantity": 1,
+                    "totalValue": 1972000
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-02",
+            "productsInfo": [
+                {
+                    "name": "6571480e1a14bd383beb0a71",
+                    "quantity": 3,
+                    "totalValue": 877000
+                },
+                {
+                    "name": "657147b81a14bd383beb0a66",
+                    "quantity": 4,
+                    "totalValue": 877000
+                }
+            ]
+        },
+        {
+            "fecha": "2023-12-01",
+            "productsInfo": [
+                {
+                    "name": "657147b81a14bd383beb0a66",
+                    "quantity": 6,
+                    "totalValue": 1123000
+                },
+                {
+                    "name": "6571498d1a14bd383beb0a87",
+                    "quantity": 5,
+                    "totalValue": 1123000
+                },
+                {
+                    "name": "6571480e1a14bd383beb0a71",
+                    "quantity": 2,
+                    "totalValue": 1123000
+                }
+            ]
+        }
+    ]
 };

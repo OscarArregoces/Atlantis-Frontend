@@ -15,34 +15,6 @@ function AlmacenDashboard({ getProducts }) {
   const [displaySubCategory, setDisplaySubCategory] = useState(false);
   const [displayForm, setDisplayForm] = useState(false);
   const [displaySupplier, setDisplaySupplier] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
-
-  const getSuppliers = async () => {
-    const { data } = await useAxios.get('/supplier');
-    if (data.error) {
-      toast.error("Error en consulta");
-    } else {
-      setSuppliers(data.data)
-    }
-  }
-
-  const getCategories = async () => {
-    const { data } = await useAxios.get('/category');
-    if (data.error) {
-      toast.error("Error en consulta");
-    } else {
-      setCategories(data.data)
-    }
-  }
-
-
-  useEffect(() => {
-    getCategories();
-    getSuppliers();
-  }, [])
-
-
   return (
     <>
       <Card className="w-full rounded-none">
@@ -84,8 +56,6 @@ function AlmacenDashboard({ getProducts }) {
       <MangeCategory
         display={displayCategory}
         setDisplay={setDisplayCategory}
-        getCategories={getCategories}
-        categories={categories}
       />
       <MangeSubCategory
         display={displaySubCategory}
@@ -94,43 +64,21 @@ function AlmacenDashboard({ getProducts }) {
       <ManageSupplier
         display={displaySupplier}
         setDisplay={setDisplaySupplier}
-        getSuppliers={getSuppliers}
-        suppliers={suppliers}
       />
       <AlmacenFormCreate
         displayForm={displayForm}
         setDisplayForm={setDisplayForm}
-        getProducts={getProducts}
-        categories={categories}
-        suppliers={suppliers}
       />
     </>
   )
 }
 
 export const Almacen = () => {
-  const [product, setProduct] = useState([]);
-  const getProducts = async () => {
-    const { data } = await useAxios.get('/product');
-    if (data.error) {
-      toast.error("Error en consulta.")
-    } else {
-      setProduct(data.data)
-    }
-  }
-  useEffect(() => {
-    getProducts();
-  }, [])
 
   return (
     < >
-      <AlmacenDashboard
-        getProducts={getProducts}
-      />
-      <AlmacenTable
-        products={product}
-        getProducts={getProducts}
-      />
+      <AlmacenDashboard />
+      <AlmacenTable />
       <Toaster
         position="top-right"
         reverseOrder={false}

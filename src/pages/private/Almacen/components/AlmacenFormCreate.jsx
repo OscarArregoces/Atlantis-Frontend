@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     Button,
@@ -14,7 +14,7 @@ import {
 } from "@material-tailwind/react";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
+import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, categories, suppliers }) => {
     const [subcategories, setSubcategories] = useState([]);
@@ -34,26 +34,9 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
         }
     });
     const onSubmit = async (dataValue) => {
-        const newDataValue = {
-            ...dataValue,
-            img_url: dataValue.img_url[0],
-            quantity: Number(dataValue.quantity),
-            unit_price: Number(dataValue.unit_price),
-            unit_cost: Number(dataValue.unit_cost),
-        }
-        const formData = new FormData();
-        for (const fileName in newDataValue) {
-            formData.append(fileName, newDataValue[fileName]);
-        }
-        const { data } = await useAxiosWithFile('post', '/product', formData);
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            reset();
-            setDisplayForm(false);
-            getProducts();
-            toast.success('Producto guardado')
-        }
+        reset();
+        setDisplayForm(false);
+        toast.success('Producto guardado')
     }
     const handleUpload = () => {
         const inputUpload = document.querySelector('#inputUpload');
@@ -72,14 +55,14 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
         })
     }
     const onChangeCategory = async (category_id) => {
-        if (!category_id) {
-            setValue("category", "");
-            return setCategorySelected(true);
-        }
-        resetField("subcategory")
-        setCategorySelected(false);
-        const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
-        setSubcategories(data.data);
+        // if (!category_id) {
+        //     setValue("category", "");
+        //     return setCategorySelected(true);
+        // }
+        // resetField("subcategory")
+        // setCategorySelected(false);
+        // const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
+        // setSubcategories(data.data);
     }
     return (
         <>
@@ -212,14 +195,10 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
                                     name="subcategory"
                                     rules={{ required: true }}
                                     defaultValue=""
-                                    // render={({ field: { onChange, onBlur, value } }) => {
                                     render={({ field }) => {
                                         return (
                                             <Select
                                                 label="Subcategoria"
-                                                // onChange={onChange}
-                                                // onBlur={onBlur}
-                                                // value={value}
                                                 {...field}
                                                 disabled={categorySelected}
                                             >
@@ -292,7 +271,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
                             </div>
                         </div>
                     </DialogBody>
-                    
+
                     <DialogFooter>
                         <Button
                             variant="text"
@@ -310,9 +289,9 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
             </Dialog>
 
             <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+                position="top-right"
+                reverseOrder={false}
+            />
         </>
     );
 }

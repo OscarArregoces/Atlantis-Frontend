@@ -1,10 +1,10 @@
 import { Button, Dialog, Card, Typography, CardHeader, CardBody, CardFooter, Tooltip, IconButton, Input } from "@material-tailwind/react"
 import { PencilIcon, TrashIcon, } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
+import { dataProveedor } from "../../../../const/Data";
 
 const TABLE_HEAD = ["Nombre", "Telefono", "Correo electronico", "Ciudad", "Direccion", "Acciones"];
 
@@ -45,20 +45,13 @@ function SupplierDashboard({ setDisplay }) {
     )
 }
 
-function SupplierTable({ suppliers, getSuppliers, setCurrentEdit }) {
+function SupplierTable({ setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
-    const [idSupplier, setIdSupplier] = useState(null);
     const handleClick = (id) => {
-        setIdSupplier(id);
         setDisplayDelete(!displayDelete);
     }
     const handleDelete = async () => {
-        const { data } = await useAxios.delete(`/supplier/${idSupplier}`);
-        if (data.error) {
-            toast.error("Hubo un problema");
-        } else {
-            await getSuppliers();
-        }
+        toast.success("Proveedor eliminado");
     }
     const handleEdit = async (supplier) => {
         if (!supplier) return;
@@ -67,7 +60,6 @@ function SupplierTable({ suppliers, getSuppliers, setCurrentEdit }) {
 
     return (
         <Card className="w-full h-[70vh] max-h-[70vh] overflow-y-auto  rounded-none">
-            {/* // <Card className="h-full w-full min-h-[50vh] max-h-[50vh] overflow-y-auto  rounded-none"> */}
             <table className="w-full min-w-max table-auto text-left">
                 <thead>
                     <tr>
@@ -89,10 +81,10 @@ function SupplierTable({ suppliers, getSuppliers, setCurrentEdit }) {
                 </thead>
                 <tbody>
                     {
-                        suppliers.length === 0 ? <tr><td>No hay proveedores</td><td>---</td></tr> :
-                            suppliers.map((supplier, index) => {
+                        dataProveedor.length === 0 ? <tr><td>No hay proveedores</td><td>---</td></tr> :
+                        dataProveedor.map((supplier, index) => {
                                 const { _id, name, phone, email, city, address } = supplier;
-                                const isLast = index === suppliers.length - 1;
+                                const isLast = index === dataProveedor.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                                 return (
@@ -170,29 +162,17 @@ function SupplierTable({ suppliers, getSuppliers, setCurrentEdit }) {
 }
 
 
-function SupplierForm({ getSuppliers, currentEdit, setCurrentEdit }) {
+function SupplierForm({ currentEdit, setCurrentEdit }) {
     const { register, handleSubmit, reset, formState: { errors }, setValue } = useForm();
 
     const onSubmit = async (dataValue) => {
         if (!currentEdit) {
-            const { data } = await useAxios.post('/supplier', dataValue);
-            if (data.error) {
-                toast.error("Hubo un problema");
-            } else {
-                toast.success("Proveedor guardado");
-                await getSuppliers();
-                reset();
-            }
-        }
-        const { data } = await useAxios.patch(`/supplier/${currentEdit?._id}`, dataValue);
-        if (data.error) {
-            toast.error("Hubo un problema");
-        } else {
+            toast.success("Proveedor guardado");
+        }else{
             toast.success("Proveedor actualizado");
-            setCurrentEdit(null);
-            await getSuppliers();
-            reset();
         }
+        setCurrentEdit(null);
+        reset();
     }
 
     useEffect(() => {
@@ -251,7 +231,7 @@ function SupplierForm({ getSuppliers, currentEdit, setCurrentEdit }) {
                     </div>
                 </CardBody>
                 <CardFooter className="pt-0">
-                    <Button variant="gradient" type="submit" color={ currentEdit && "yellow"} fullWidth>
+                    <Button variant="gradient" type="submit" color={currentEdit && "yellow"} fullWidth>
                         {
                             currentEdit ? "Actualizar" : "Crear"
                         }
@@ -261,11 +241,9 @@ function SupplierForm({ getSuppliers, currentEdit, setCurrentEdit }) {
         </Card>
     );
 }
-export const ManageSupplier = ({ display, setDisplay, getSuppliers, suppliers }) => {
+export const ManageSupplier = ({ display, setDisplay }) => {
     const [currentEdit, setCurrentEdit] = useState(null);
-    useEffect(() => {
-        getSuppliers();
-    }, [])
+
     return (
         <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <SupplierDashboard
@@ -281,7 +259,6 @@ export const ManageSupplier = ({ display, setDisplay, getSuppliers, suppliers })
                     flex justify-center items-center
                 ">
                     <SupplierForm
-                        getSuppliers={getSuppliers}
                         currentEdit={currentEdit}
                         setCurrentEdit={setCurrentEdit}
                     />
@@ -290,8 +267,6 @@ export const ManageSupplier = ({ display, setDisplay, getSuppliers, suppliers })
                     w-full md:w-2/3 lg:w-2/3
                 ">
                     <SupplierTable
-                        suppliers={suppliers}
-                        getSuppliers={getSuppliers}
                         setCurrentEdit={setCurrentEdit}
                     />
                 </div>

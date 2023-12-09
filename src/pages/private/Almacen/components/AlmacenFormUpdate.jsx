@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     Button,
@@ -14,11 +14,11 @@ import {
 } from "@material-tailwind/react";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
-import { useAxios, useAxiosWithFile } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
+import { dataCategorias, dataProveedor, dataSubcategorias } from "../../../../const/Data";
 
-export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, getProducts }) => {
+export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm }) => {
     const { register, handleSubmit, reset, control, formState: { errors }, setValue, resetField } = useForm({
         defaultValues: {
             name: '',
@@ -34,38 +34,15 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
         }
     });
 
-    const [categories, setCategories] = useState([]);
-    const [subcategories, setSubcategories] = useState([]);
-    const [suppliers, setSuppliers] = useState([]);
 
-    const getCategories = async () => {
-        const { data } = await useAxios.get('/category');
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            setCategories(data.data)
-        }
-    }
-    const getSuppliers = async () => {
-        const { data } = await useAxios.get('/supplier');
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            setSuppliers(data.data)
-        }
-    }
-    useEffect(() => {
-        getCategories();
-        getSuppliers();
-    }, [])
 
     const onChangeCategory = async (category_id) => {
-        if (!category_id) {
-            setValue("category", "");
-        }
-        resetField("subcategory")
-        const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
-        setSubcategories(data.data);
+        // if (!category_id) {
+        //     setValue("category", "");
+        // }
+        // resetField("subcategory")
+        // const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
+        // setSubcategories(data.data);
     }
 
 
@@ -88,38 +65,11 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
             });
         }
 
-        if (dataProduct) {
-            async function getSubcategory() {
-                const { data } = await useAxios.get(`/subcategory/byCategory/${dataProduct.subcategory.category._id}`);
-                setSubcategories(data.data);
-            }
-            getSubcategory();
-        }
-
     }, [dataProduct])
 
     const onSubmit = async (dataValue) => {
-        const newDataValue = {
-            ...dataValue,
-            img_url: typeof (dataValue.img_url) === 'object' ? dataValue.img_url[0] : dataProduct.img_url,
-            quantity: Number(dataValue.quantity),
-            unit_price: Number(dataValue.unit_price),
-            unit_cost: Number(dataValue.unit_cost),
-            supplier: dataValue.supplier._id,
-        }
-        const formData = new FormData();
-        for (const fileName in newDataValue) {
-            formData.append(fileName, newDataValue[fileName]);
-        }
-        const { data } = await useAxiosWithFile('patch', `/product/${dataProduct._id}`, formData);
-        if (data.error) {
-            toast.error("Hubo un problema");
-        } else {
-            reset();
-            setDisplayForm(false);
-            getProducts();
-            toast.success('Producto actualizado')
-        }
+        setDisplayForm(false);
+        toast.success('Producto actualizado')
     }
 
     const handleUpload = () => {
@@ -252,7 +202,7 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                             onBlur={onBlur}
                                         >
                                             {
-                                                categories.map(category => (
+                                                dataCategorias.map(category => (
                                                     <Option key={category._id} value={category._id}>{category.name}</Option>
                                                 ))
                                             }
@@ -269,19 +219,15 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                     name="subcategory"
                                     rules={{ required: true }}
                                     defaultValue=""
-                                    // render={({ field: { onChange, onBlur, value } }) => {
                                     render={({ field }) => {
                                         return (
                                             <Select
                                                 label="Subcategoria"
                                                 value={dataProduct.subcategory._id}
-                                                // onChange={onChange}
-                                                // onBlur={onBlur}
-                                                // value={value}
                                                 {...field}
                                             >
                                                 {
-                                                    subcategories.map(subcategorie => (
+                                                    dataSubcategorias.map(subcategorie => (
                                                         <Option key={subcategorie._id} value={subcategorie._id}>{subcategorie.name}</Option>
                                                     ))
                                                 }
@@ -327,7 +273,7 @@ export const AlmacenFormUpdate = ({ dataProduct, displayForm, setDisplayForm, ge
                                             value={dataProduct.supplier._id}
                                         >
                                             {
-                                                suppliers.map(supplier => (
+                                                dataProveedor.map(supplier => (
                                                     <Option key={supplier._id} value={supplier._id}>{supplier.name}</Option>
                                                 ))
                                             }

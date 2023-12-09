@@ -6,16 +6,15 @@ import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
 import { AlmacenFormUpdate } from "./AlmacenFormUpdate";
+import { dataProductos } from "../../../../const/Data";
 
 const TABLE_HEAD = ["Producto", "Categoria", "Subcategoria", "Marca", "Cantidad", "Estado", "Precio unidad", "Costo unidad", "Provedor",  ""];
 
-export const AlmacenTable = ({ products, getProducts }) => {
-    const [idProduct, setIdProduct] = useState(null);
+export const AlmacenTable = () => {
     const [currentProduct, setCurrentProduct] = useState(null);
     const [showDelete, setShowDelete] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
     const handleClickDelete = (id) => {
-        setIdProduct(id);
         setShowDelete(!showDelete);
     }
     const handleClickUpdate = (product) => {
@@ -23,12 +22,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
         setShowUpdate(true);
     }
     const handleDelete = async () => {
-        const { data } = await useAxios.delete(`/product/${idProduct}`);
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            getProducts();
-        }
+        toast.success("Producto eliminado");
     }
     return (
         <>
@@ -54,7 +48,7 @@ export const AlmacenTable = ({ products, getProducts }) => {
                     </thead>
                     <tbody>
                         {
-                            products.length === 0 ?
+                            dataProductos.length === 0 ?
                                 <tr>
                                     <td>---</td>
                                     <td>---</td>
@@ -66,9 +60,9 @@ export const AlmacenTable = ({ products, getProducts }) => {
                                     <td>---</td>
                                 </tr>
                                 :
-                                products.map((product, index) => {
+                                dataProductos.map((product, index) => {
                                     const { _id, name, brand, quantity, unit_price, unit_cost, supplier, img_url, subcategory } = product;
-                                    const isLast = index === product.length - 1;
+                                    const isLast = index === dataProductos.length - 1;
                                     const classes = isLast ? "p-4 border-b border-blue-gray-50" : "p-4 border-b border-blue-gray-50";
                                     return (
                                         <tr key={name}>
@@ -189,7 +183,6 @@ export const AlmacenTable = ({ products, getProducts }) => {
                 dataProduct={currentProduct}
                 displayForm={showUpdate}
                 setDisplayForm={setShowUpdate}
-                getProducts={getProducts}
             />
             <Toaster
                 position="top-right"

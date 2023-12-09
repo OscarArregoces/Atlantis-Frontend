@@ -1,10 +1,9 @@
-import { Chip, Spinner, Typography } from "@material-tailwind/react"
+import { Spinner, Typography } from "@material-tailwind/react"
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import { EconomiaTable } from "./components/EconomiaTable";
 import { useEffect, useState } from "react";
-import { useAxios } from "../../../utils/axios.instance";
-import toast, { Toaster } from "react-hot-toast";
 import { getDate } from "../../../utils/GetDate";
+import { dataEconomia } from "../../../const/Data";
 
 const tableCol = [
   'Total ingresos generados',
@@ -17,20 +16,15 @@ const tableCol = [
 export const Economia = () => {
   const [tableRows, setTableRows] = useState(null);
   const [deductions, setDeductions] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
 
   const getEconomyStatistics = async () => {
-    const { data } = await useAxios.get("/utils/economy");
-    if (data.error) return toast.error("Error en consulta");
-    const { tableRows: dataTable, deductions: dataCurrent } = data.data;
+    const { tableRows: dataTable, deductions: dataCurrent } = dataEconomia;
     setTableRows(dataTable);
     setDeductions(dataCurrent);
   }
 
   useEffect(() => {
     getEconomyStatistics();
-    const user = JSON.parse(localStorage.getItem("user"));
-    setUserInfo(user);
   }, [])
 
   return (
@@ -46,12 +40,9 @@ export const Economia = () => {
             </Typography>
           </div>
           <div className="flex flex-col justify-center items-end">
-            {
-              userInfo &&
-              <Typography variant="paragraph" className="text-normal font-semibold" >
-                {userInfo.name}
+          <Typography variant="paragraph" className="text-normal font-semibold" >
+                Harry Potter
               </Typography>
-            }
             <Typography variant="small" color="gray" >
               {
                 getDate()
@@ -95,7 +86,6 @@ export const Economia = () => {
               <div className="flex flex-col">
                 {
                   tableCol.map((name, index) => (
-                    // <Chip variant="ghost" color="green" key={index} value={name} className="my-1" />
                     <Typography variant="small" key={index} className="text-normal font-semibold" >
                       {name}
                     </Typography>
@@ -129,10 +119,6 @@ export const Economia = () => {
         }
 
       </div>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
     </div>
   )
 }
