@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
     Button,
     Dialog,
@@ -11,14 +11,13 @@ import {
     Option,
     Avatar,
 } from "@material-tailwind/react";
-import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
+import { CloudArrowUpIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
 import { TYPE_DOCUMENT } from "../../../../const/TYPE_DOCUMENT";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
-import { useAxiosWithFile } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 
-export const UsuariosFormUpdate = ({ dataUser, openFormUpdate, setOpenFormUpdate, getUsers }) => {
+export const UsuariosFormUpdate = ({ dataUser, openFormUpdate, setOpenFormUpdate }) => {
     const { register, handleSubmit, reset, control, setValue } = useForm({
         defaultValues: {
             email: '',
@@ -71,23 +70,9 @@ export const UsuariosFormUpdate = ({ dataUser, openFormUpdate, setOpenFormUpdate
     }
 
     const onSubmit = async (dataValue) => {
-        const newDataValue = {
-            ...dataValue,
-            img_url: typeof (dataValue.img_url) === 'object' ? dataValue.img_url[0] : dataUser.person.img_url
-        };
-        const formData = new FormData();
-        for (let fileName in newDataValue) {
-            formData.append(fileName, newDataValue[fileName]);
-        };
-        const { data } = await useAxiosWithFile('patch', `/person/${dataUser._id}`, formData)
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            reset();
-            setOpenFormUpdate(false);
-            await getUsers();
-            toast.success('Usuario actualizado')
-        }
+        reset();
+        setOpenFormUpdate(false);
+        toast.success('Usuario actualizado')
     };
 
     return (

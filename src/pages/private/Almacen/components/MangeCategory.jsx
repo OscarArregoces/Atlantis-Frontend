@@ -5,6 +5,7 @@ import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
+import { dataCategorias } from "../../../../const/Data";
 
 const TABLE_HEAD = ["Categoria", "Acciones"];
 
@@ -45,20 +46,16 @@ function CategoryDashboard({ setDisplay }) {
     )
 }
 
-function CategoryTable({ categories, getCategories, setCurrentEdit }) {
+function CategoryTable({ setCurrentEdit }) {
     const [displayDelete, setDisplayDelete] = useState(false);
     const [idCategory, setIdCategory] = useState(null);
+    
     const handleClick = (idCategory) => {
         setIdCategory(idCategory);
         setDisplayDelete(!displayDelete);
     }
     const handleDelete = async () => {
-        const { data } = await useAxios.delete(`/category/${idCategory}`);
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            await getCategories();
-        }
+        toast.success("Categoria eliminada");
     }
 
     const handleEdit = (_id, name) => {
@@ -89,9 +86,9 @@ function CategoryTable({ categories, getCategories, setCurrentEdit }) {
                 </thead>
                 <tbody>
                     {
-                        categories.length === 0 ? <tr><td>No hay categorias</td><td>---</td></tr> :
-                            categories.map(({ _id, name }, index) => {
-                                const isLast = index === categories.length - 1;
+                        dataCategorias.length === 0 ? <tr><td>No hay categorias</td><td>---</td></tr> :
+                        dataCategorias.map(({ _id, name }, index) => {
+                                const isLast = index === dataCategorias.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
                                 return (
@@ -194,15 +191,7 @@ function CategoryForm({ getCategories, currentEdit, setCurrentEdit }) {
         </Card>
     );
 }
-export const MangeCategory = ({ display, setDisplay, getCategories, categories }) => {
-
-    const [currentEdit, setCurrentEdit] = useState(null);
-
-    useEffect(() => {
-        getCategories();
-    }, [])
-
-
+export const MangeCategory = ({ display, setDisplay }) => {
     return (
         <Dialog open={display} size="xl" className="min-h-[50vh] max-h-[90vh] overflow-y-auto">
             <CategoryDashboard
@@ -217,20 +206,12 @@ export const MangeCategory = ({ display, setDisplay, getCategories, categories }
                     w-full mb-5 md:w-1/2 lg:w-1/2 
                     flex justify-center items-center
                 ">
-                    <CategoryForm
-                        getCategories={getCategories}
-                        setCurrentEdit={setCurrentEdit}
-                        currentEdit={currentEdit}
-                    />
+                    <CategoryForm />
                 </div>
                 <div className="
                     w-full md:w-1/2 lg:w-1/2
                 ">
-                    <CategoryTable
-                        categories={categories}
-                        getCategories={getCategories}
-                        setCurrentEdit={setCurrentEdit}
-                    />
+                    <CategoryTable />
                 </div>
             </div>
             <Toaster

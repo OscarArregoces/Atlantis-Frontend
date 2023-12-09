@@ -1,4 +1,4 @@
-import { ClipboardDocumentCheckIcon, ClipboardDocumentListIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { ClipboardDocumentListIcon } from "@heroicons/react/24/solid";
 import {
     Card,
     Typography,
@@ -10,11 +10,12 @@ import {
 import { ConverDate } from "../../../../utils/ConvertDate";
 import { useState } from "react";
 import { VentasDetails } from "./VentasDetails";
+import { dataVentas } from "../../../../const/Data";
 
 const TABLE_HEAD = ["#", "Nombre cliente", "Celular cliente", "Valor", "Fecha", "Detalles"];
 
 
-export const VentasTable = ({ sales = [] }) => {
+export const VentasTable = () => {
 
     const [displayDetails, setDisplayDetails] = useState(false);
     const [dataDetail, setDataDetail] = useState({
@@ -54,7 +55,7 @@ export const VentasTable = ({ sales = [] }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {sales.map(
+                        {dataVentas.map(
                             (
                                 sale,
                                 index,
@@ -66,7 +67,7 @@ export const VentasTable = ({ sales = [] }) => {
                                     createdAt: fecha,
                                     totalSale
                                 } = sale;
-                                const isLast = index === sales.length - 1;
+                                const isLast = index === dataVentas.length - 1;
                                 const classes = isLast
                                     ? "p-4"
                                     : "p-4 border-b border-blue-gray-50";
@@ -110,15 +111,6 @@ export const VentasTable = ({ sales = [] }) => {
                                                 />
                                             </div>
                                         </td>
-                                        {/* <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {totalSale.toLocaleString()} COP
-                                            </Typography>
-                                        </td> */}
                                         <td className={classes}>
                                             <Typography
                                                 variant="small"
@@ -147,15 +139,6 @@ export const VentasTable = ({ sales = [] }) => {
                 setDisplay={setDisplayDetails}
                 dataDetail={dataDetail}
             />
-            {/* {
-                dataDetail
-                &&
-                <VentasDetails
-                    display={displayDetails}
-                    setDisplay={setDisplayDetails}
-                    dataDetail={dataDetail}
-                />
-            } */}
         </Card>
     );
 }

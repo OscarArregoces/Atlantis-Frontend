@@ -1,11 +1,10 @@
 import { Card, CardHeader, Typography, Button, } from "@material-tailwind/react";
-import { AdjustmentsVerticalIcon, ArchiveBoxIcon, PlusIcon, RectangleGroupIcon } from "@heroicons/react/24/solid";
+import { AdjustmentsVerticalIcon, PlusIcon,  } from "@heroicons/react/24/solid";
 import { VentasTable } from "./components/VentasTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { VentasFormCreate } from "./components/VentasFormCreate";
-import { useAxios } from "../../../utils/axios.instance";
 
-function VentasDashboard({ getSales }) {
+function VentasDashboard() {
   const [displayFormCreate, setDisplayFormCreate] = useState(false);
   return (
     <>
@@ -42,30 +41,16 @@ function VentasDashboard({ getSales }) {
       <VentasFormCreate
         display={displayFormCreate}
         setDisplay={setDisplayFormCreate}
-        getSales={getSales}
       />
     </>
   )
 }
 
 export const Ventas = () => {
-  const [sales, setSales] = useState([]);
-  const getSales = async () => {
-    const { data } = await useAxios.get("/sale");
-    setSales(data.data);
-  }
-  useEffect(() => {
-    getSales();
-  }, [])
-
   return (
     < >
-      <VentasDashboard
-        getSales={getSales}
-      />
-      <VentasTable
-        sales={sales}
-      />
+      <VentasDashboard />
+      <VentasTable />
     </>
   )
 }

@@ -7,20 +7,19 @@ import { useAxios } from "../../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import toast, { Toaster } from "react-hot-toast";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
+import { dataUsuarios } from "../../../../const/Data";
 
 const TABLE_HEAD = ["Miembro", "Pais", "Ciudad", "Correo", "Telefono", "Acciones"];
 
-export const UsuariosTable = ({ data, getUsers }) => {
+export const UsuariosTable = () => {
 
     const [openFormUpdate, setOpenFormUpdate] = useState(false);
     const [openFormDelete, setOpenFormDelete] = useState(false);
     const [openDetails, setOpenDetails] = useState(false);
-    const [userId, setUserId] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
 
-    const handelDelete = (id) => {
+    const handelDelete = () => {
         setOpenFormDelete(true);
-        setUserId(id)
     }
     const handleUpdate = (user) => {
         setOpenFormUpdate(!openFormUpdate);
@@ -31,16 +30,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
         setCurrentUser(user)
     }
     const deleteUser = async () => {
-        if (userId) {
-            const { data } = await useAxios.delete(`/person/${userId}`)
-            if (data.error) {
-                toast.error("Error en consulta");
-            }
-            setTimeout(() => {
-                toast.success('Eliminaddo exitosamente')
-            }, 1000);
-            await getUsers()
-        }
+        toast.success('Eliminaddo exitosamente')
     };
     return (
         <Card className="h-[calc(100vh-221.5px)] w-full max-h-[calc(100vh-221.5px)] rounded-none overflow-scroll">
@@ -64,10 +54,10 @@ export const UsuariosTable = ({ data, getUsers }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((member, index) => {
+                    {dataUsuarios.map((member, index) => {
                         const { _id, email, person } = member;
                         const { name, surname, no_document, country, city, phone, img_url } = person;
-                        const isLast = index === data.length - 1;
+                        const isLast = index === dataUsuarios.length - 1;
                         const classes = isLast ? "p-4 border-b border-blue-gray-50" : "p-4 border-b border-blue-gray-50";
                         return (
                             <tr key={email}>
@@ -134,7 +124,7 @@ export const UsuariosTable = ({ data, getUsers }) => {
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip content="Eliminar usuario">
-                                        <IconButton variant="text" onClick={() => handelDelete(_id)}>
+                                        <IconButton variant="text" onClick={handelDelete}>
                                             <TrashIcon className="h-5 w-5" />
                                         </IconButton>
                                     </Tooltip>
@@ -149,7 +139,6 @@ export const UsuariosTable = ({ data, getUsers }) => {
                 dataUser={currentUser}
                 openFormUpdate={openFormUpdate}
                 setOpenFormUpdate={setOpenFormUpdate}
-                getUsers={getUsers}
             />
             <ModalDelete
                 display={openFormDelete}

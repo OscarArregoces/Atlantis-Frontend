@@ -1,4 +1,4 @@
-import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
+import { CloudArrowUpIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import {
   Card,
   CardHeader,
@@ -11,67 +11,37 @@ import {
   Select,
   Option,
 } from "@material-tailwind/react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TYPE_DOCUMENT } from "../../../const/TYPE_DOCUMENT";
-import { useAxios, useAxiosWithFile } from "../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../environment/env-dev";
 import toast, { Toaster } from "react-hot-toast";
+import { dataPerfil } from "../../../const/Data";
 
 
 export const Perfil = () => {
-  const [user, setUser] = useState(null);
   const { register, handleSubmit, control, formState: { errors }, setValue } = useForm();
-  const handleGetUser = async (idUser) => {
-    const { data } = await useAxios.get(`/person/${idUser}`);
-    if (data.error) {
-      toast.error("Error en consulta");
-    } else {
-      setUser(data.data)
-    }
-  }
-  useEffect(() => {
-    const userSession = JSON.parse(localStorage.getItem('user'));
-    handleGetUser(userSession._id)
-  }, []);
-  useEffect(() => {
-    if (user) {
-      const newData = {
-        email: user.email,
-        name: user.person.name,
-        surname: user.person.surname,
-        type_document: user.person.type_document,
-        no_document: user.person.no_document,
-        country: user.person.country,
-        city: user.person.city,
-        phone: user.person.phone,
-        birthday: user.person.birthday,
-        img_url: user.person.img_url,
-      }
-      Object.keys(newData).forEach((fieldName) => {
-        setValue(fieldName, newData[fieldName]);
-      });
 
+  useEffect(() => {
+    const newData = {
+      email: dataPerfil.email,
+      name: dataPerfil.person.name,
+      surname: dataPerfil.person.surname,
+      type_document: dataPerfil.person.type_document,
+      no_document: dataPerfil.person.no_document,
+      country: dataPerfil.person.country,
+      city: dataPerfil.person.city,
+      phone: dataPerfil.person.phone,
+      birthday: dataPerfil.person.birthday,
+      img_url: dataPerfil.person.img_url,
     }
-  }, [user]);
+    Object.keys(newData).forEach((fieldName) => {
+      setValue(fieldName, newData[fieldName]);
+    });
+  }, []);
 
   const onSubmit = async (dataValue) => {
-    const newDataValue = {
-      ...dataValue,
-      img_url: typeof (dataValue.img_url) === 'object' ? dataValue.img_url[0] : user.person.img_url
-    };
-    const formData = new FormData();
-    for (let fileName in newDataValue) {
-      formData.append(fileName, newDataValue[fileName]);
-    };
-    const { data } = await useAxiosWithFile('patch', `/person/${user._id}`, formData)
-    if (data.error) {
-      toast.error("Error en consulta");
-    } else {
-      toast.error("Error en consulta");
-      const userSession = JSON.parse(localStorage.getItem('user'));
-      handleGetUser(userSession._id);
-    }
+    toast.success("Perfil actualizado");
   };
 
 
@@ -108,7 +78,7 @@ export const Perfil = () => {
               <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                 <div className="grid grid-cols-1">
                   <Avatar
-                    src={user ? `${BASE_URL_MEDIA}/${user.person.img_url}` : '/assets/img/sinFoto.png'}
+                    src={dataPerfil ? `${BASE_URL_MEDIA}/${dataPerfil.person.img_url}` : '/assets/img/sinFoto.png'}
                     alt="avatar"
                     id="avatar"
                     size="xxl"
@@ -258,7 +228,7 @@ export const Perfil = () => {
                   </div>
                   <div>
                     <Input
-                      type="text"
+                      type="date"
                       label="Fecha de nacimiento"
                       {...register('birthday', { required: true })}
                     />

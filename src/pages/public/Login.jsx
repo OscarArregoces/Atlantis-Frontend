@@ -19,35 +19,23 @@ import "./css/Login.css"
 import { DialogChangePassword } from "../../components/public/DialogChangePassword";
 export const Login = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    defaultValues: {
+      email:'HarryPotter@gmail.com',
+      password:'123456789'
+    }
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [display, setDisplay] = useState(false);
 
   const onSubmit = async (body) => {
-
-    async function validSesion(body) {
-      const { data } = await useAxios.post('/auth/login', body);
-      return data;
-    }
-    toast.promise(
-      validSesion(body),
-      {
-        loading: 'Verificando...',
-        success: (data) => {
-          if (!data.error) {
-            localStorage.setItem('token', data.data.token)
-            localStorage.setItem('user', JSON.stringify(data.data.user))
-            reset();
-            setTimeout(() => {
-              navigate('/private/dashboard');
-            }, 1000);
-          }
-          return `Bienvenido ${data.data.user.name}`
-        },
-        error: 'Credenciales incorrectas',
-      }
-    );
+    toast.success("Bienvenido Harry Potter");
+    setTimeout(() => {
+      navigate('/private/dashboard');
+    }, 1500);
   }
+
+
   return (
     <div className="w-screen h-screen p-5 flex justify-center items-center">
       <img id="LoginFondo" src={LoginFondo} alt="LoginFondo" />
@@ -69,10 +57,6 @@ export const Login = () => {
               label="Correo electronico"
               {...register('email', { required: true })}
             />
-            {errors.email && errors.email.type === "required" && (
-              <span className="text-start text-red-500 text-sm">Campo requerido</span>
-            )}
-
             <Input
               label="Contraseña"
               {...register('password', { required: true })}
@@ -87,9 +71,7 @@ export const Login = () => {
                   <EyeIcon className="h-5 w-5 cursor-pointer" onClick={() => setShowPassword(!showPassword)} />
               }
             />
-            {errors.password && errors.password.type === "required" && (
-              <span className="text-start text-red-500 text-sm">Campo requerido</span>
-            )}
+
           </CardBody>
           <CardFooter className="pt-0">
             <Button variant="gradient" type="submit" color="cyan" fullWidth>
@@ -103,7 +85,7 @@ export const Login = () => {
                 variant="small"
                 color="blue-gray"
                 className="ml-1 font-bold"
-                onClick={ () => setDisplay(!display)}
+                onClick={() => setDisplay(!display)}
               >
                 Recuperala aquí
               </Typography>
@@ -115,7 +97,7 @@ export const Login = () => {
         position="top-right"
         reverseOrder={false}
       />
-      <DialogChangePassword 
+      <DialogChangePassword
         display={display}
         setDisplay={setDisplay}
       />

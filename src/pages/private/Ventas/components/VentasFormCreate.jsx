@@ -16,10 +16,11 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useAxios } from "../../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
-import { ArrowSmallDownIcon, ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { dataProductos } from "../../../../const/Data";
 
-export const VentasFormCreate = ({ display, setDisplay, getSales }) => {
-    const [products, setProducts] = useState([]);
+export const VentasFormCreate = ({ display, setDisplay }) => {
+
     const [product, setProduct] = useState(null);
     const [cart, setCart] = useState([]);
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -29,24 +30,9 @@ export const VentasFormCreate = ({ display, setDisplay, getSales }) => {
         }
     });
 
-    const getProducts = async () => {
-        const { data } = await useAxios.get("/product");
-        if (data.error) {
-            return toast.error('Error en consulta');
-        }
-        setProducts(data.data);
-    }
-
-    useEffect(() => {
-        getProducts();
-    }, [])
-
     const onChangeProducts = async (idProduct) => {
-        const { data } = await useAxios.get(`/product/${idProduct}`);
-        if (data.error) {
-            return toast.error('Error en consulta');
-        }
-        setProduct(data.data);
+        const product =  dataProductos.find( pro => pro._id === idProduct)
+        setProduct(product);
     }
     const handleAddCart = () => {
         if (!product) return;
@@ -73,7 +59,7 @@ export const VentasFormCreate = ({ display, setDisplay, getSales }) => {
         setCart(newCart);
     }
     const onSubmit = async (dataValue) => {
-        if (cart.length === 0) return toast.error('No hay productos');
+        if (cart.length === 0) return toast.error('Tu carrito esta vacio');
         let totalSale = 0;
         const newCart = cart.map((item) => {
             totalSale += item.totalPrice;
@@ -82,13 +68,9 @@ export const VentasFormCreate = ({ display, setDisplay, getSales }) => {
         dataValue.products = newCart;
         dataValue.totalSale = totalSale;
 
-        const { data } = await useAxios.post("/sale", dataValue);
-        if (data.error) return toast.error(data.data);
-
         reset();
         setCart([]);
         setProduct(null);
-        getSales();
         toast.success('Venta registrada');
         setTimeout(() => {
             setDisplay(!display)
@@ -129,7 +111,7 @@ export const VentasFormCreate = ({ display, setDisplay, getSales }) => {
                                         </Typography>
                                         <Select label="Producto" onChange={(e) => onChangeProducts(e)}>
                                             {
-                                                products.map((product) => (
+                                                dataProductos.map((product) => (
                                                     <Option key={product._id} value={product._id}>{product.name}</Option>
                                                 ))
                                             }

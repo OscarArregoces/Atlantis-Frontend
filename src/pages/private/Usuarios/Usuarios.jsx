@@ -1,33 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardHeader, Input, Typography, Button, } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { ArrowPathIcon, PaperAirplaneIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-
-import { useAxios } from "../../../utils/axios.instance";
 import { UsuariosTable } from "./components/UsuariosTable"
 import { UsuariosFormCreate } from "./components/UsuariosFormCreate";
-import toast, { Toaster } from "react-hot-toast";
-import { useForm } from "react-hook-form";
 
-
-function UsuariosDashboard({ getUsers, data, setData }) {
+function UsuariosDashboard() {
   const [openFormCreate, setOpenFormCreate] = useState(false);
-  const { handleSubmit, reset, register } = useForm();
-
-  const onSubmit = (dataValue) => {
-    const match = data.filter(user => user.email === dataValue.email);
-    setData(match);
-  }
-  const handleReset = () => {
-    reset();
-    getUsers();
-  }
-
   return (
     <>
       <Card className="w-full rounded-none">
         <CardHeader floated={false} shadow={false} className="rounded-none">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <div className="mb-8 gap-8 flex flex-col justify-center items-start md:flex md:flex-row md:items-center md:justify-between lg:flex lg:flex-row lg:items-center lg:justify-between ">
               <div>
                 <Typography variant="h5" color="blue-gray">
@@ -52,7 +36,6 @@ function UsuariosDashboard({ getUsers, data, setData }) {
                 <Input
                   type="email"
                   label="Buscar por correo electronico"
-                  {...register("email", { required: true })}
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 />
               </div>
@@ -64,7 +47,7 @@ function UsuariosDashboard({ getUsers, data, setData }) {
                 <Button type="submit" className="flex items-center gap-3 max-w-min" size="sm" color="blue">
                   <PaperAirplaneIcon strokeWidth={2} className="h-4 w-4" /> Buscar
                 </Button>
-                <Button className="flex items-center gap-3 max-w-min" size="sm" color="blue-gray" onClick={handleReset}>
+                <Button className="flex items-center gap-3 max-w-min" size="sm" color="blue-gray">
                   <ArrowPathIcon strokeWidth={2} className="h-4 w-4" /> Reiniciar
                 </Button>
               </div>
@@ -75,50 +58,16 @@ function UsuariosDashboard({ getUsers, data, setData }) {
       <UsuariosFormCreate
         openFormCreate={openFormCreate}
         setOpenFormCreate={setOpenFormCreate}
-        getUsers={getUsers}
       />
     </>
   )
 }
 
 export const Usuarios = () => {
-  const [data, setData] = useState([]);
-
-  const getUsers = async () => {
-    const { data } = await useAxios.get('/person');
-    if (data.erorr) {
-      toast.error("Error en consulta");
-    } else {
-      if (typeof data.data === String) return;
-      setData(data.data);
-    }
-  }
-
-  useEffect(() => {
-    getUsers();
-  }, [])
-
   return (
     <>
-      <UsuariosDashboard
-        getUsers={getUsers}
-        data={data}
-        setData={setData}
-      />
-      <UsuariosTable
-        data={data}
-        getUsers={getUsers}
-      />
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+      <UsuariosDashboard />
+      <UsuariosTable />
     </>
   )
 }
-
-// data = [1,2,3,4,5]   ||    data = [2]
-// dataCopy = [1,2,3,4,5]   ||    dataCopy = [1,2,3,4,5
-
-
-//Busqueda => 2

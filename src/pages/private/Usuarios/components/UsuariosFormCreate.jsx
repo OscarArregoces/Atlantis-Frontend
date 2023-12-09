@@ -13,11 +13,10 @@ import {
 } from "@material-tailwind/react";
 import { CloudArrowUpIcon, EyeIcon, EyeSlashIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Controller, useForm } from "react-hook-form";
-import { useAxiosWithFile } from "../../../../utils/axios.instance";
 import { TYPE_DOCUMENT } from "../../../../const/TYPE_DOCUMENT";
 import toast, { Toaster } from "react-hot-toast";
 
-export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers }) => {
+export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate }) => {
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, reset, control, formState: { errors } } = useForm({
         defaultValues: {
@@ -35,20 +34,9 @@ export const UsuariosFormCreate = ({ openFormCreate, setOpenFormCreate, getUsers
         }
     });
     const onSubmit = async (dataValue) => {
-        const newDataValue = { ...dataValue, img_url: dataValue.img_url[0] };
-        const formData = new FormData();
-        for (let clave in newDataValue) {
-            formData.append(clave, newDataValue[clave]);
-        }
-
-        const { data } = await useAxiosWithFile('post', '/person/createMember', formData);
-        if (data.error) {
-            toast.error("Error en consulta");
-        } else {
-            reset();
-            setOpenFormCreate(false);
-            await getUsers();
-        }
+        reset();
+        setOpenFormCreate(false);
+        toast.success("Usuario creado")
     }
     const handleUpload = () => {
         const inputUpload = document.querySelector('#inputUpload');

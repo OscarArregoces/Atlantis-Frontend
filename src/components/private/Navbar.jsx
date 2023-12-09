@@ -12,35 +12,18 @@ const ChangePasswordd = ({ display, setDisplay }) => {
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
-    const [userSesion, setuserSesion] = useState(null);
     const { register, reset, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
             password: "",
             newPassword: "",
         }
     });
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user) {
-            setuserSesion(user);
-        }
-    }, [])
 
 
     const onSubmit = async (dataValue) => {
-        if (!userSesion) return toast.error("Usuario no valido");
-
-        const { data } = await useAxios.patch(`/auth/changePassword/${userSesion._id}`, dataValue);
-        if (data.error) return toast.error("Las contraseñas no coinciden");
-
         toast.success("Contraseña actualizada");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
         reset();
         setDisplay(!display);
-        setTimeout(() => {
-            navigate('/');
-        }, 1500);
     }
     return (
         <Dialog open={display}>
@@ -120,17 +103,13 @@ const ChangePasswordd = ({ display, setDisplay }) => {
 
 export const Navbar = () => {
     const [display, setDisplay] = useState(false);
-    const [userSesion, setUserSesion] = useState(null);
     const navigate = useNavigate();
     const handleLogOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         navigate('/login')
     }
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        setUserSesion(user);
-    }, [])
+
 
     return (
         <header>
@@ -142,7 +121,7 @@ export const Navbar = () => {
                     <Menu>
                         <MenuHandler>
                             <div className='cursor-pointer flex justify-end items-center gap-2 mr-4'>
-                                <Avatar src={userSesion ? `${BASE_URL_MEDIA}${userSesion.img_url}` : "/assets/img/avatar.jpg"} alt="avatar" size='sm' />
+                                <Avatar src="/assets/img/avatar.jpg" alt="avatar" size='sm' />
                             </div>
                         </MenuHandler>
                         <MenuList className='rounded-none mt-1'>
