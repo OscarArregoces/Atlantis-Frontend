@@ -3,13 +3,14 @@ import {
     Drawer,
     Typography,
     IconButton,
+    Avatar,
 } from "@material-tailwind/react";
 import { Sidebar, SidebarItem } from "./Sidebar";
 import { ArchiveBoxIcon, CurrencyDollarIcon, HomeIcon, ShoppingBagIcon, UserIcon } from "@heroicons/react/24/solid";
 
 export const SidebarBtn = () => {
     const [open, setOpen] = useState(false);
-    
+
     const openDrawer = () => setOpen(true);
     const closeDrawer = () => {
         setOpen(false)
@@ -18,17 +19,18 @@ export const SidebarBtn = () => {
     return (
         <>
             <Typography
-                variant="h5"
+                variant="h4"
                 color="white"
                 className='hover:scale-110 ease-in duration-200 block cursor-pointer'
                 onClick={openDrawer}
             >
-                EMPRESA
+                Atlantis
             </Typography>
             <Drawer open={open} onClose={closeDrawer} className="p-4">
                 <div className="flex items-center justify-between">
                     <Typography variant="h5" color="blue-gray">
-                        Empresa
+                    <Avatar src="/assets/img/logo.png" className="h-10 w-10" />
+                        Atlantis
                     </Typography>
                     <IconButton variant="text" color="blue-gray" onClick={closeDrawer}>
                         <svg

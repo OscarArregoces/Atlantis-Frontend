@@ -14,7 +14,6 @@ import {
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TYPE_DOCUMENT } from "../../../const/TYPE_DOCUMENT";
-import { BASE_URL_MEDIA } from "../../../environment/env-dev";
 import toast, { Toaster } from "react-hot-toast";
 import { dataPerfil } from "../../../const/Data";
 
@@ -63,8 +62,12 @@ export const Perfil = () => {
   }
   return (
     <>
-      <div className="w-full h-[calc(100vh-3.5rem)] flex justify-center items-center pt-6">
-        <Card className="w-full max-w-[834px]">
+      <div className="
+        w-full min-h-[calc(100vh-3.5rem)] flex justify-center items-center py-10
+        md:w-full md:min-h-[calc(100vh-3.5rem)] md:flex md:justify-center md:items-center md:pt-6
+        lg:w-full lg:h-[calc(100vh-3.5rem)] lg:flex lg:justify-center lg:items-center lg:pt-6
+      ">
+        <Card className="w-full max-w-[90%] md:max-w-[90%] lg:max-w-[834px]">
           <CardHeader color="cyan" variant="gradient">
             <Typography
               variant="h1"

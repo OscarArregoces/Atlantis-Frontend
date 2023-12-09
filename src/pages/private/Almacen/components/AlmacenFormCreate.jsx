@@ -55,16 +55,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
             }
         })
     }
-    const onChangeCategory = async (category_id) => {
-        // if (!category_id) {
-        //     setValue("category", "");
-        //     return setCategorySelected(true);
-        // }
-        // resetField("subcategory")
-        // setCategorySelected(false);
-        // const { data } = await useAxios.get(`/subcategory/byCategory/${category_id}`);
-        // setSubcategories(data.data);
-    }
+    const onChangeCategory = async (category_id) => {}
     return (
         <>
             <Dialog

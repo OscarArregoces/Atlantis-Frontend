@@ -1354,7 +1354,7 @@ export const dataEconomia = {
 };
 export const dataPerfil = {
     "_id": "6571513a1a14bd383beb1257",
-    "email": "ingoscararregoces@gmail.com",
+    "email": "harrypotter@gmail.com",
     "password": "$2a$08$w3WQow.x5kTQyAlNDI1gHuZ5ZZ2.js2cSHY4yn8pb6BPr9Et.jbiy",
     "roles": [
         "65712b07eac0a702931db6fc"
