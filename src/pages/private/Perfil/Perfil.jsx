@@ -258,7 +258,7 @@ export const Perfil = () => {
                   </div>
                   <div>
                     <Input
-                      type="text"
+                      type="date"
                       label="Fecha de nacimiento"
                       {...register('birthday', { required: true })}
                     />
