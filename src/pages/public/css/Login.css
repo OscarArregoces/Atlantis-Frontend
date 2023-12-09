@@ -14,3 +14,19 @@
     background-color: #0e4166;
     background-image: linear-gradient(to bottom, rgba(14, 65, 102, 0.86), #0e4166);
 }
+
+@keyframes scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2); 
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .animate-scale {
+    animation: scale 1.5s infinite; 
+  }
