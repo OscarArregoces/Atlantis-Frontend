@@ -121,7 +121,7 @@ export const Navbar = () => {
                     <Menu>
                         <MenuHandler>
                             <div className='cursor-pointer flex justify-end items-center gap-2 mr-4'>
-                                <Avatar src="/assets/img/avatar.jpg" alt="avatar" size='sm' />
+                                <Avatar src="/fakeData/harry.jpg" alt="avatar" size='sm' />
                             </div>
                         </MenuHandler>
                         <MenuList className='rounded-none mt-1'>

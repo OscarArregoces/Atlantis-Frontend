@@ -87,7 +87,7 @@ export const VentasDetails = ({ display, setDisplay, dataDetail }) => {
                                 <div className="my-3 flex justify-center items-center">
                                     <div className="w-1/2">
                                         <Avatar
-                                            src={BASE_URL_MEDIA + img_url}
+                                            src={img_url}
                                             color="gray"
                                             alt="avatar"
                                             size="xxl"

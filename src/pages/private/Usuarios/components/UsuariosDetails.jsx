@@ -74,7 +74,7 @@ export const UsuariosDetails = ({ openDetails, setOpenDetails, dataUser }) => {
                 <div className="grid grid-cols-1 gap-4 md:grid md:grid-cols-2 md:gap-4 lg:grid lg:grid-cols-2 lg:gap-4">
                         <div className="grid grid-cols-1">
                             <Avatar
-                                src={dataUser ? `${BASE_URL_MEDIA}/${dataUser.person.img_url}` : '/assets/img/sinFoto.png'}
+                                src={dataUser ? dataUser.person.img_url : '/assets/img/sinFoto.png'}
                                 alt="avatar"
                                 size="xxl"
                                 className="m-auto"

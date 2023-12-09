@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Button,
     Dialog,
@@ -14,7 +14,6 @@ import {
 } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import { useAxios } from "../../../../utils/axios.instance";
 import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { dataProductos } from "../../../../const/Data";
@@ -122,7 +121,7 @@ export const VentasFormCreate = ({ display, setDisplay }) => {
                                                 <div className="flex">
                                                     <div className="w-1/2">
                                                         <Avatar
-                                                            src={BASE_URL_MEDIA + product.img_url}
+                                                            src={product.img_url}
                                                             alt="avatar"
                                                             size="xxl"
                                                             color="blue"
@@ -187,7 +186,7 @@ export const VentasFormCreate = ({ display, setDisplay }) => {
                                             <div className="my-3 flex justify-center items-center">
                                                 <div className="w-1/2">
                                                     <Avatar
-                                                        src={BASE_URL_MEDIA + img_url}
+                                                        src={img_url}
                                                         color="green"
                                                         alt="avatar"
                                                         size="xxl"

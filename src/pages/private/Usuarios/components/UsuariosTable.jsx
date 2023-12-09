@@ -3,8 +3,6 @@ import { Avatar, Card, IconButton, Tooltip, Typography } from "@material-tailwin
 import { useState } from "react";
 import { UsuariosFormUpdate } from "./UsuariosFormUpdate";
 import { UsuariosDetails } from "./UsuariosDetails";
-import { useAxios } from "../../../../utils/axios.instance";
-import { BASE_URL_MEDIA } from "../../../../environment/env-dev";
 import toast, { Toaster } from "react-hot-toast";
 import { ModalDelete } from "../../../../components/private/ModalDelete";
 import { dataUsuarios } from "../../../../const/Data";
@@ -63,8 +61,8 @@ export const UsuariosTable = () => {
                             <tr key={email}>
                                 <td className={`${classes} flex justify-start items-center`}>
                                     <Avatar
-                                        src={img_url ? `${BASE_URL_MEDIA}${img_url}` : '/assets/img/sinFoto.png'}
-                                        title={img_url ? 'Perfil' : 'Sin perfil'}
+                                        src={img_url}
+                                        title="Perfil"
                                         alt="avatar"
                                         size="md"
                                     />

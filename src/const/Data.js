@@ -16,7 +16,7 @@ export const dataUsuarios = [
             "country": "Canada",
             "city": "Toronto",
             "phone": "3005008090",
-            "img_url": "/avatars/1701925178453-harry.jpg",
+            "img_url": "/fakeData/harry.jpg",
             "createdAt": "2023-12-07T04:59:38.627Z",
             "updatedAt": "2023-12-07T23:09:34.263Z"
         },
@@ -40,7 +40,7 @@ export const dataUsuarios = [
             "country": "Portugal",
             "city": "Funchal",
             "phone": "3003004040",
-            "img_url": "/avatars/1701921612795-cristiano.jpg",
+            "img_url": "/fakeData/cristiano.jpg",
             "createdAt": "2023-12-07T04:00:12.971Z",
             "updatedAt": "2023-12-07T04:00:12.971Z"
         },
@@ -64,7 +64,7 @@ export const dataUsuarios = [
             "country": "Brasil",
             "city": "São Paulo",
             "phone": "3002003030",
-            "img_url": "/avatars/1701921363405-neymar.jpg",
+            "img_url": "/fakeData/neymar.jpg",
             "createdAt": "2023-12-07T03:56:03.590Z",
             "updatedAt": "2023-12-07T03:56:03.590Z"
         },
@@ -88,7 +88,7 @@ export const dataUsuarios = [
             "country": "Argentina",
             "city": "Rosario",
             "phone": "3001002020",
-            "img_url": "/avatars/1701921093713-messi.jpg",
+            "img_url": "/fakeData/messi.jpg",
             "createdAt": "2023-12-07T03:51:33.906Z",
             "updatedAt": "2023-12-07T03:54:05.664Z"
         },
@@ -105,7 +105,7 @@ export const dataUsuarios = [
         ],
         "person": {
             "_id": "65712b07eac0a702931db702",
-            "name": "User",
+            "name": "User Admin",
             "surname": "Admin",
             "birthday": "2023-12-28",
             "type_document": "cc",
@@ -113,7 +113,7 @@ export const dataUsuarios = [
             "country": "Colombia",
             "city": "Riohacha",
             "phone": "1111111111",
-            "img_url": "/static/default.jfif",
+            "img_url": "/assets/img/avatar.jpg",
             "createdAt": "2023-12-07T02:16:39.408Z",
             "updatedAt": "2023-12-07T03:53:55.656Z"
         },
@@ -401,7 +401,7 @@ export const dataProductos = [
         "quantity": 0,
         "unit_price": 315999,
         "unit_cost": 285400,
-        "img_url": "/products/1701923453659-perfume.png",
+        "img_url": "/fakeData/perfume.png",
         "subcategory": {
             "_id": "6571454c1a14bd383beb09cb",
             "name": "Perfumes para Mujer",
@@ -438,7 +438,7 @@ export const dataProductos = [
         "quantity": 5,
         "unit_price": 147000,
         "unit_cost": 115000,
-        "img_url": "/products/1701922830089-pantalon.png",
+        "img_url": "/fakeData/pantalon.png",
         "subcategory": {
             "_id": "657145a21a14bd383beb09f5",
             "name": "Jeans",
@@ -475,7 +475,7 @@ export const dataProductos = [
         "quantity": 6,
         "unit_price": 109000,
         "unit_cost": 78000,
-        "img_url": "/products/1701922744505-camisa.png",
+        "img_url": "/fakeData/camisa.png",
         "subcategory": {
             "_id": "657145981a14bd383beb09e7",
             "name": "Cuello redondo",
@@ -512,7 +512,7 @@ export const dataProductos = [
         "quantity": 4,
         "unit_price": 269000,
         "unit_cost": 234000,
-        "img_url": "/products/1701923375778-zapatos.png",
+        "img_url": "/fakeData/zapatos.png",
         "subcategory": {
             "_id": "657145d01a14bd383beb0a03",
             "name": "Zapatillas Deportivas",
@@ -549,7 +549,7 @@ export const dataProductos = [
         "quantity": 6,
         "unit_price": 256000,
         "unit_cost": 193000,
-        "img_url": "/products/1701923070248-microfono.png",
+        "img_url": "/fakeData/microfono.png",
         "subcategory": {
             "_id": "657145f91a14bd383beb0a18",
             "name": "Microfono",
@@ -586,7 +586,7 @@ export const dataProductos = [
         "quantity": 2,
         "unit_price": 35000,
         "unit_cost": 23000,
-        "img_url": "/products/1701923213497-shampoo.png",
+        "img_url": "/fakeData/shampoo.png",
         "subcategory": {
             "_id": "657145821a14bd383beb09e0",
             "name": "Shampoo",
@@ -632,7 +632,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 109000,
                     "unit_cost": 78000,
-                    "img_url": "/products/1701922744505-camisa.png",
+                    "img_url": "/fakeData/camisa.png",
                     "subcategory": {
                         "_id": "657145981a14bd383beb09e7",
                         "name": "Cuello redondo",
@@ -663,7 +663,7 @@ export const dataVentas = [
                     "quantity": 5,
                     "unit_price": 147000,
                     "unit_cost": 115000,
-                    "img_url": "/products/1701922830089-pantalon.png",
+                    "img_url": "/fakeData/pantalon.png",
                     "subcategory": {
                         "_id": "657145a21a14bd383beb09f5",
                         "name": "Jeans",
@@ -694,7 +694,7 @@ export const dataVentas = [
                     "quantity": 4,
                     "unit_price": 269000,
                     "unit_cost": 234000,
-                    "img_url": "/products/1701923375778-zapatos.png",
+                    "img_url": "/fakeData/zapatos.png",
                     "subcategory": {
                         "_id": "657145d01a14bd383beb0a03",
                         "name": "Zapatillas Deportivas",
@@ -735,7 +735,7 @@ export const dataVentas = [
                     "quantity": 0,
                     "unit_price": 315999,
                     "unit_cost": 285400,
-                    "img_url": "/products/1701923453659-perfume.png",
+                    "img_url": "/fakeData/perfume.png",
                     "subcategory": {
                         "_id": "6571454c1a14bd383beb09cb",
                         "name": "Perfumes para Mujer",
@@ -766,7 +766,7 @@ export const dataVentas = [
                     "quantity": 2,
                     "unit_price": 35000,
                     "unit_cost": 23000,
-                    "img_url": "/products/1701923213497-shampoo.png",
+                    "img_url": "/fakeData/shampoo.png",
                     "subcategory": {
                         "_id": "657145821a14bd383beb09e0",
                         "name": "Shampoo",
@@ -797,7 +797,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 256000,
                     "unit_cost": 193000,
-                    "img_url": "/products/1701923070248-microfono.png",
+                    "img_url": "/fakeData/microfono.png",
                     "subcategory": {
                         "_id": "657145f91a14bd383beb0a18",
                         "name": "Microfono",
@@ -838,7 +838,7 @@ export const dataVentas = [
                     "quantity": 0,
                     "unit_price": 315999,
                     "unit_cost": 285400,
-                    "img_url": "/products/1701923453659-perfume.png",
+                    "img_url": "/fakeData/perfume.png",
                     "subcategory": {
                         "_id": "6571454c1a14bd383beb09cb",
                         "name": "Perfumes para Mujer",
@@ -879,7 +879,7 @@ export const dataVentas = [
                     "quantity": 0,
                     "unit_price": 315999,
                     "unit_cost": 285400,
-                    "img_url": "/products/1701923453659-perfume.png",
+                    "img_url": "/fakeData/perfume.png",
                     "subcategory": {
                         "_id": "6571454c1a14bd383beb09cb",
                         "name": "Perfumes para Mujer",
@@ -920,7 +920,7 @@ export const dataVentas = [
                     "quantity": 4,
                     "unit_price": 269000,
                     "unit_cost": 234000,
-                    "img_url": "/products/1701923375778-zapatos.png",
+                    "img_url": "/fakeData/zapatos.png",
                     "subcategory": {
                         "_id": "657145d01a14bd383beb0a03",
                         "name": "Zapatillas Deportivas",
@@ -951,7 +951,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 109000,
                     "unit_cost": 78000,
-                    "img_url": "/products/1701922744505-camisa.png",
+                    "img_url": "/fakeData/camisa.png",
                     "subcategory": {
                         "_id": "657145981a14bd383beb09e7",
                         "name": "Cuello redondo",
@@ -982,7 +982,7 @@ export const dataVentas = [
                     "quantity": 5,
                     "unit_price": 147000,
                     "unit_cost": 115000,
-                    "img_url": "/products/1701922830089-pantalon.png",
+                    "img_url": "/fakeData/pantalon.png",
                     "subcategory": {
                         "_id": "657145a21a14bd383beb09f5",
                         "name": "Jeans",
@@ -1023,7 +1023,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 109000,
                     "unit_cost": 78000,
-                    "img_url": "/products/1701922744505-camisa.png",
+                    "img_url": "/fakeData/camisa.png",
                     "subcategory": {
                         "_id": "657145981a14bd383beb09e7",
                         "name": "Cuello redondo",
@@ -1054,7 +1054,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 256000,
                     "unit_cost": 193000,
-                    "img_url": "/products/1701923070248-microfono.png",
+                    "img_url": "/fakeData/microfono.png",
                     "subcategory": {
                         "_id": "657145f91a14bd383beb0a18",
                         "name": "Microfono",
@@ -1085,7 +1085,7 @@ export const dataVentas = [
                     "quantity": 5,
                     "unit_price": 147000,
                     "unit_cost": 115000,
-                    "img_url": "/products/1701922830089-pantalon.png",
+                    "img_url": "/fakeData/pantalon.png",
                     "subcategory": {
                         "_id": "657145a21a14bd383beb09f5",
                         "name": "Jeans",
@@ -1126,7 +1126,7 @@ export const dataVentas = [
                     "quantity": 5,
                     "unit_price": 147000,
                     "unit_cost": 115000,
-                    "img_url": "/products/1701922830089-pantalon.png",
+                    "img_url": "/fakeData/pantalon.png",
                     "subcategory": {
                         "_id": "657145a21a14bd383beb09f5",
                         "name": "Jeans",
@@ -1157,7 +1157,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 109000,
                     "unit_cost": 78000,
-                    "img_url": "/products/1701922744505-camisa.png",
+                    "img_url": "/fakeData/camisa.png",
                     "subcategory": {
                         "_id": "657145981a14bd383beb09e7",
                         "name": "Cuello redondo",
@@ -1198,7 +1198,7 @@ export const dataVentas = [
                     "quantity": 6,
                     "unit_price": 109000,
                     "unit_cost": 78000,
-                    "img_url": "/products/1701922744505-camisa.png",
+                    "img_url": "/fakeData/camisa.png",
                     "subcategory": {
                         "_id": "657145981a14bd383beb09e7",
                         "name": "Cuello redondo",
@@ -1229,7 +1229,7 @@ export const dataVentas = [
                     "quantity": 2,
                     "unit_price": 35000,
                     "unit_cost": 23000,
-                    "img_url": "/products/1701923213497-shampoo.png",
+                    "img_url": "/fakeData/shampoo.png",
                     "subcategory": {
                         "_id": "657145821a14bd383beb09e0",
                         "name": "Shampoo",
@@ -1260,7 +1260,7 @@ export const dataVentas = [
                     "quantity": 5,
                     "unit_price": 147000,
                     "unit_cost": 115000,
-                    "img_url": "/products/1701922830089-pantalon.png",
+                    "img_url": "/fakeData/pantalon.png",
                     "subcategory": {
                         "_id": "657145a21a14bd383beb09f5",
                         "name": "Jeans",
@@ -1510,7 +1510,7 @@ export const dataDashboard = {
                 "quantity": 6,
                 "unit_price": 109000,
                 "unit_cost": 78000,
-                "img_url": "/products/1701922744505-camisa.png",
+                "img_url": "/fakeData/camisa.png",
                 "subcategory": "657145981a14bd383beb09e7",
                 "supplier": "6571472f1a14bd383beb0a5d",
                 "createdAt": "2023-12-07T04:19:04.508Z",
@@ -1529,7 +1529,7 @@ export const dataDashboard = {
                 "quantity": 5,
                 "unit_price": 147000,
                 "unit_cost": 115000,
-                "img_url": "/products/1701922830089-pantalon.png",
+                "img_url": "/fakeData/pantalon.png",
                 "subcategory": "657145a21a14bd383beb09f5",
                 "supplier": "6571471c1a14bd383beb0a56",
                 "createdAt": "2023-12-07T04:20:30.092Z",
@@ -1548,7 +1548,7 @@ export const dataDashboard = {
                 "quantity": 2,
                 "unit_price": 35000,
                 "unit_cost": 23000,
-                "img_url": "/products/1701923213497-shampoo.png",
+                "img_url": "/fakeData/shampoo.png",
                 "subcategory": "657145821a14bd383beb09e0",
                 "supplier": "657146fa1a14bd383beb0a48",
                 "createdAt": "2023-12-07T04:26:53.499Z",
@@ -1567,7 +1567,7 @@ export const dataDashboard = {
                 "quantity": 6,
                 "unit_price": 256000,
                 "unit_cost": 193000,
-                "img_url": "/products/1701923070248-microfono.png",
+                "img_url": "/fakeData/microfono.png",
                 "subcategory": "657145f91a14bd383beb0a18",
                 "supplier": "657147091a14bd383beb0a4f",
                 "createdAt": "2023-12-07T04:24:30.251Z",
@@ -1586,7 +1586,7 @@ export const dataDashboard = {
                 "quantity": 0,
                 "unit_price": 315999,
                 "unit_cost": 285400,
-                "img_url": "/products/1701923453659-perfume.png",
+                "img_url": "/fakeData/perfume.png",
                 "subcategory": "6571454c1a14bd383beb09cb",
                 "supplier": "6571471c1a14bd383beb0a56",
                 "createdAt": "2023-12-07T04:30:53.661Z",
@@ -1605,7 +1605,7 @@ export const dataDashboard = {
                 "quantity": 4,
                 "unit_price": 269000,
                 "unit_cost": 234000,
-                "img_url": "/products/1701923375778-zapatos.png",
+                "img_url": "/fakeData/zapatos.png",
                 "subcategory": "657145d01a14bd383beb0a03",
                 "supplier": "657146df1a14bd383beb0a41",
                 "createdAt": "2023-12-07T04:29:35.781Z",

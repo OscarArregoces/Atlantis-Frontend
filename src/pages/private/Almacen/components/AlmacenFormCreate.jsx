@@ -16,6 +16,7 @@ import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import { useAxios } from "../../../../utils/axios.instance";
 import toast, { Toaster } from "react-hot-toast";
+import { dataCategorias, dataProveedor, dataSubcategorias } from "../../../../const/Data";
 export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, categories, suppliers }) => {
     const [subcategories, setSubcategories] = useState([]);
     const [categorySelected, setCategorySelected] = useState(true);
@@ -178,7 +179,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
                                             onBlur={onBlur}
                                         >
                                             {
-                                                categories.map(category => (
+                                                dataCategorias.map(category => (
                                                     <Option key={category._id} value={category._id}>{category.name}</Option>
                                                 ))
                                             }
@@ -203,7 +204,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
                                                 disabled={categorySelected}
                                             >
                                                 {
-                                                    subcategories.map(subcategorie => (
+                                                    dataSubcategorias.map(subcategorie => (
                                                         <Option key={subcategorie._id} value={subcategorie._id}>{subcategorie.name}</Option>
                                                     ))
                                                 }
@@ -248,7 +249,7 @@ export const AlmacenFormCreate = ({ displayForm, setDisplayForm, getProducts, ca
                                             onBlur={onBlur}
                                         >
                                             {
-                                                suppliers.map(supplier => (
+                                                dataProveedor.map(supplier => (
                                                     <Option key={supplier._id} value={supplier._id}>{supplier.name}</Option>
                                                 ))
                                             }

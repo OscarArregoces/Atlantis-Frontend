@@ -1,6 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import { BASE_URL_MEDIA } from "../../environment/env-dev";
 const SidebarContext = createContext()
 
 export const Sidebar = ({ children }) => {
@@ -22,7 +21,7 @@ export const Sidebar = ({ children }) => {
                 <div className="relative bottom-0">
                     <div className="border-t flex p-3">
                         <img
-                            src={userSesion ? `${BASE_URL_MEDIA}${userSesion.img_url}` : "/assets/img/avatar.jpg"}
+                            src="/fakeData/harry.jpg"
                             alt=""
                             className="w-10 h-10 rounded-md"
                         />
@@ -32,8 +31,8 @@ export const Sidebar = ({ children }) => {
                             ${expanded ? "w-52 ml-3" : "w-0"}`
                             }>
                             <div className="leading-4">
-                                <h4 className="font-semibold">{userSesion ? userSesion.name : "Usuario"}</h4>
-                                <span className="text-xs text-gray-600">{userSesion ? userSesion.email : "Email"}</span>
+                                <h4 className="font-semibold">Harry Potter</h4>
+                                <span className="text-xs text-gray-600">harry@gmail.com</span>
                             </div>
                         </div>
                     </div>

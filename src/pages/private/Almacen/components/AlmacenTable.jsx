@@ -68,7 +68,7 @@ export const AlmacenTable = () => {
                                         <tr key={name}>
                                             <td className={`${classes} flex justify-start items-center`}>
                                                 <Avatar
-                                                    src={img_url ? `${BASE_URL_MEDIA}${img_url}` : '/assets/img/sinFoto.png'}
+                                                    src={img_url ? img_url : '/assets/img/sinFoto.png'}
                                                     title={img_url ? 'Perfil' : 'Sin perfil'}
                                                     alt="avatar"
                                                     size="md"
